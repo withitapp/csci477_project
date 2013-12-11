@@ -1,4 +1,4 @@
-csci477_project
+WithIt iOS App
 ===============
 
-CSCI 477a project - Status app for iPhone
+Realtime polling for iPhone

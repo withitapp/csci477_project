@@ -154,7 +154,7 @@
 - (void)loginViewFetchedUserInfo:(FBLoginView *)loginView
                             user:(id<FBGraphUser>)user {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    //appDelegate.profilePicture = user.id;
+    appDelegate.userID = user.id;
     NSLog(@"Logged in user %@", user.name);
     appDelegate.username = user.name;
 }

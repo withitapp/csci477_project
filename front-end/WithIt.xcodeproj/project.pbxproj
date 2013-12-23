@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D16751A1868265000A839D3 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D1675191868265000A839D3 /* placeholder.png */; };
+		1D16751C186828C100A839D3 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D16751B186828C100A839D3 /* placeholder.png */; };
 		1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BC1863846C00904F8F /* Foundation.framework */; };
 		1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BE1863846D00904F8F /* CoreGraphics.framework */; };
 		1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892C01863846D00904F8F /* UIKit.framework */; };
@@ -47,7 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D1675191868265000A839D3 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = ../csci477_project/placeholder.png; sourceTree = "<group>"; };
+		1D16751B186828C100A839D3 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = WithIt/placeholder.png; sourceTree = "<group>"; };
 		1DA892B91863846C00904F8F /* WithIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DA892BC1863846C00904F8F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DA892BE1863846D00904F8F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -109,6 +109,7 @@
 		1DA892B01863846C00904F8F = {
 			isa = PBXGroup;
 			children = (
+				1D16751B186828C100A839D3 /* placeholder.png */,
 				1DA892C21863846D00904F8F /* WithIt */,
 				1DA892E11863846D00904F8F /* WithItTests */,
 				1DA892BB1863846C00904F8F /* Frameworks */,
@@ -155,7 +156,6 @@
 				1DA893111864117C00904F8F /* Poll.m */,
 				1DA8931418641B0300904F8F /* PollDataController.h */,
 				1DA8931518641B0300904F8F /* PollDataController.m */,
-				1D1675191868265000A839D3 /* placeholder.png */,
 				1DA892D41863846D00904F8F /* Images.xcassets */,
 				1DA892C31863846D00904F8F /* Supporting Files */,
 			);
@@ -268,7 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA892D51863846D00904F8F /* Images.xcassets in Resources */,
-				1D16751A1868265000A839D3 /* placeholder.png in Resources */,
+				1D16751C186828C100A839D3 /* placeholder.png in Resources */,
 				1DA892C71863846D00904F8F /* InfoPlist.strings in Resources */,
 				1DA892D01863846D00904F8F /* Main.storyboard in Resources */,
 			);

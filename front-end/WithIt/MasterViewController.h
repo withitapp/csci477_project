@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UITableView *pollTableView;
 @property (strong, nonatomic) UILabel *usernameLabel;
+@property (strong, nonatomic) UIImageView *profilePictureView;
 
 // Data
 @property NSDictionary *polls;

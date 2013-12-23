@@ -57,9 +57,7 @@
         //NSDate *date = [dateFormat dateFromString:poll[@"pollName"]];
         NSDate *date = [NSDate date];
         poll = [[Poll alloc] initWithName:thePoll[@"pollName"] creatorName:thePoll[@"creatorName"] dateCreated:date];
-        NSLog(@"Poll created.");
         [self.dataController addPollWithPoll:poll];
-        NSLog(@"Poll added.");
     }
 }
 
@@ -80,11 +78,27 @@
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, appDelegate.screenWidth, 100)];
     
+    // Add user profile picture
+    self.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
+    dispatch_async(dispatch_get_global_queue(0,0), ^{
+        NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", appDelegate.userID]]];
+        if (!imageData){
+            NSLog(@"Failed to download user profile picture.");
+            return;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.profilePictureView.image = [UIImage imageWithData: imageData];
+        });
+    });
+    
+    [self.headerView addSubview:self.profilePictureView];
+    
     // Add user welcome label
-    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(20, 50, 150, 30) ];
+    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(65, 10, (appDelegate.screenWidth - 75), 20) ];
     self.usernameLabel.textColor = [UIColor blackColor];
+    //self.usernameLabel.backgroundColor = [UIColor greenColor];
     self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
-    self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:12];
+    self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
     [self.headerView addSubview:self.usernameLabel];
     
     [self.view addSubview:self.headerView];
@@ -161,7 +175,6 @@
     
     switch (indexPath.section) {
         case 0:
-            NSLog(@"Creating cell in section 0.");
             if (!formatter) {
                 formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateStyle:NSDateFormatterMediumStyle];
@@ -173,7 +186,6 @@
             break;
             
         case 1:
-            NSLog(@"Creating cell in section 1.");
             if (!formatter) {
                 formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateStyle:NSDateFormatterMediumStyle];

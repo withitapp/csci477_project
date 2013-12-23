@@ -25,7 +25,7 @@
 
 // Facebook user info
 @property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) UIImage *profilePicture;
+@property (strong, nonatomic) NSString *userID;
 
 - (void)resetMainViewController;
 

@@ -91,9 +91,11 @@
     
     // Set up poll table view
     self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, appDelegate.screenWidth, (appDelegate.screenHeight-100))];
+    self.pollTableView.delegate = self;
+    self.pollTableView.dataSource = self;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
-    [self loadData];
     [self.view addSubview:self.pollTableView];
+    [self loadData];
     
 }
 
@@ -129,9 +131,11 @@
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
+            NSLog(@"Number of friends' polls: %d.", numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
+            NSLog(@"Number of created polls: %d.", numRows);
             break;
     }
     return numRows;
@@ -141,11 +145,23 @@
     
     static NSString *CellIdentifier = @"PollCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(!cell){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //UILabel * nameLabel = [[UILabel alloc] initWithFrame: CGRectMake( 0, 15, box.size.width, 19.0f)];
+        //nameLabel.tag = NAME_LABEL_TAG;
+        //[nameLabel setTextColor: [UIColor colorWithRed: 79.0f/255.0f green:79.0f/255.0f blue:79.0f/255.0f alpha:1.0f]];
+        //[nameLabel setFont: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 18.0f]];
+        //[nameLabel setBackgroundColor: [UIColor clearColor]];
+        //nameLabel.textAlignment = NSTextAlignmentCenter;
+        //[cell.contentView addSubview: nameLabel];
+    }
     static NSDateFormatter *formatter = nil;
     Poll *pollAtIndex;
     
     switch (indexPath.section) {
         case 0:
+            NSLog(@"Creating cell in section 0.");
             if (!formatter) {
                 formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateStyle:NSDateFormatterMediumStyle];
@@ -157,6 +173,7 @@
             break;
             
         case 1:
+            NSLog(@"Creating cell in section 1.");
             if (!formatter) {
                 formatter = [[NSDateFormatter alloc] init];
                 [formatter setDateStyle:NSDateFormatterMediumStyle];

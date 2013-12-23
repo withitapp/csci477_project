@@ -126,15 +126,16 @@
     return 2;
 }
 
+// HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *sectionName;
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@"Friends' polls:", @"Friends' polls:");
+            sectionName = NSLocalizedString(@" Friends' polls:", @" Friends' polls:");
             break;
         case 1:
-            sectionName = NSLocalizedString(@"My polls:", @"My polls:");
+            sectionName = NSLocalizedString(@" My polls:", @" My polls:");
             break;
     }
     return sectionName;

@@ -185,6 +185,9 @@
             break;
     }
     cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
+    UISwitch *toggleSwitch = [[UISwitch alloc] init];
+    cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
+    [cell.accessoryView addSubview:toggleSwitch];
     return cell;
 }
 

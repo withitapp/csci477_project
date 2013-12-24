@@ -10,6 +10,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "LoginViewController.h"
 #import "MasterViewController.h"
+#import "PollDetailViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
 
@@ -17,6 +18,7 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) LoginViewController *loginViewController;
 @property (strong, nonatomic) MasterViewController *masterViewController;
+@property (strong, nonatomic) PollDetailViewController *detailViewController;
 @property BOOL isNavigatingAwayFromLogin;
 
 // Display info

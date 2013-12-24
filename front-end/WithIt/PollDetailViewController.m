@@ -24,6 +24,16 @@
     return self;
 }
 
+-(void)setPollDetails:(Poll *)pollAtIndex
+{
+    if(!pollAtIndex){
+        NSLog(@"Poll is null.");
+        return;
+    }
+    self.poll = pollAtIndex;
+    NSLog(@"Set poll %@.", self.poll.name);
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

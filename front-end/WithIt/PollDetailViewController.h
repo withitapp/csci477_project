@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Poll.h"
 
 @interface PollDetailViewController : UIViewController
 
-@property (strong, nonatomic) NSIndexPath *pollIndex;
+@property (strong, nonatomic) Poll *poll;
+
+-(void)setPollDetails:(Poll*)poll;
 
 @end

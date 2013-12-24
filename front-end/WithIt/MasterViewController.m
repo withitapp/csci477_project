@@ -219,11 +219,29 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Selecting row.");
+    NSLog(@"Selected row %d in section %d.", indexPath.row, indexPath.section);
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
-    [appDelegate.navigationController pushViewController:detailViewController animated:YES];
+    Poll *pollAtIndex;
+    switch (indexPath.section) {
+        case 0:
+            pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
+            break;
+            
+        case 1:
+            pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
+            break;
+            
+        default:
+            NSLog(@"Something went wrong!");
+            return;
+    }
+    
+    NSLog(@"Selected poll: %@.", pollAtIndex.name);
+    
     [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [appDelegate.detailViewController setPollDetails:pollAtIndex];
+    [appDelegate.navigationController pushViewController:appDelegate.detailViewController animated:YES];
 }
 
 

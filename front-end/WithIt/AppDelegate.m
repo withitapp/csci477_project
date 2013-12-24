@@ -60,6 +60,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self resetMainViewController];
     
     // Initialize view controllers
+    self.detailViewController = [[PollDetailViewController alloc] init];
     self.loginViewController = [[LoginViewController alloc] init];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.loginViewController];
     self.navigationController.delegate = self;

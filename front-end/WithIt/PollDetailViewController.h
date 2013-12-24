@@ -10,4 +10,6 @@
 
 @interface PollDetailViewController : UIViewController
 
+@property (strong, nonatomic) NSIndexPath *pollIndex;
+
 @end

@@ -8,6 +8,7 @@
 
 #import "MasterViewController.h"
 #import "CreatePollViewController.h"
+#import "PollDetailViewController.h"
 #import "AppDelegate.h"
 #import "Poll.h"
 
@@ -214,6 +215,15 @@
             return YES;
     }
     return YES;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"Selecting row.");
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
+    [appDelegate.navigationController pushViewController:detailViewController animated:YES];
+    [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

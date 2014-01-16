@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1D16751C186828C100A839D3 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D16751B186828C100A839D3 /* placeholder.png */; };
+		1DA6DB3D188763A000B6113C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA6DB3C188763A000B6113C /* FacebookSDK.framework */; };
+		1DA6DB3E188763A000B6113C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA6DB3C188763A000B6113C /* FacebookSDK.framework */; };
 		1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BC1863846C00904F8F /* Foundation.framework */; };
 		1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BE1863846D00904F8F /* CoreGraphics.framework */; };
 		1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892C01863846D00904F8F /* UIKit.framework */; };
@@ -22,8 +24,6 @@
 		1DA892DE1863846D00904F8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892C01863846D00904F8F /* UIKit.framework */; };
 		1DA892E61863846D00904F8F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1DA892E41863846D00904F8F /* InfoPlist.strings */; };
 		1DA892E81863846D00904F8F /* WithItTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA892E71863846D00904F8F /* WithItTests.m */; };
-		1DA892F21863862500904F8F /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892F11863862500904F8F /* FacebookSDK.framework */; };
-		1DA892F31863862500904F8F /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892F11863862500904F8F /* FacebookSDK.framework */; };
 		1DA892FE1863E7FE00904F8F /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA892FD1863E7FE00904F8F /* MasterViewController.m */; };
 		1DA892FF1863E7FE00904F8F /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA892FD1863E7FE00904F8F /* MasterViewController.m */; };
 		1DA893061863F2F700904F8F /* PollDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA893051863F2F700904F8F /* PollDetailViewController.m */; };
@@ -48,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		1D16751B186828C100A839D3 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = WithIt/placeholder.png; sourceTree = "<group>"; };
+		1DA6DB3C188763A000B6113C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		1DA892B91863846C00904F8F /* WithIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DA892BC1863846C00904F8F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DA892BE1863846D00904F8F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -67,7 +68,6 @@
 		1DA892E31863846D00904F8F /* WithItTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WithItTests-Info.plist"; sourceTree = "<group>"; };
 		1DA892E51863846D00904F8F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1DA892E71863846D00904F8F /* WithItTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WithItTests.m; sourceTree = "<group>"; };
-		1DA892F11863862500904F8F /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		1DA892FC1863E7FE00904F8F /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		1DA892FD1863E7FE00904F8F /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		1DA893041863F2F700904F8F /* PollDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollDetailViewController.h; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */,
-				1DA892F21863862500904F8F /* FacebookSDK.framework in Frameworks */,
+				1DA6DB3D188763A000B6113C /* FacebookSDK.framework in Frameworks */,
 				1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */,
 				1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */,
 			);
@@ -97,7 +97,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA892DC1863846D00904F8F /* XCTest.framework in Frameworks */,
-				1DA892F31863862500904F8F /* FacebookSDK.framework in Frameworks */,
+				1DA6DB3E188763A000B6113C /* FacebookSDK.framework in Frameworks */,
 				1DA892DE1863846D00904F8F /* UIKit.framework in Frameworks */,
 				1DA892DD1863846D00904F8F /* Foundation.framework in Frameworks */,
 			);
@@ -129,7 +129,7 @@
 		1DA892BB1863846C00904F8F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1DA892F11863862500904F8F /* FacebookSDK.framework */,
+				1DA6DB3C188763A000B6113C /* FacebookSDK.framework */,
 				1DA892BC1863846C00904F8F /* Foundation.framework */,
 				1DA892BE1863846D00904F8F /* CoreGraphics.framework */,
 				1DA892C01863846D00904F8F /* UIKit.framework */,
@@ -430,7 +430,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/Francesca/Documents/senior_year_2013-2014/WithIt",
+					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -447,7 +447,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/Francesca/Documents/senior_year_2013-2014/WithIt",
+					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -467,6 +467,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/WithIt",
+					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -491,6 +492,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/WithIt",
+					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";

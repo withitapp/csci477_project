@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Poll.h"
 
-@interface PollDetailViewController : UIViewController
+@interface PollDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) Poll *poll;
 @property (strong, nonatomic) UIView *detailsView;
@@ -17,7 +17,7 @@
 @property (strong, nonatomic) UILabel *timeRemainingLabel;
 @property (strong, nonatomic) UILabel *creatorNameLabel;
 
-@property (strong, nonatomic) UITableView *membersView;
+@property (strong, nonatomic) UITableView *memberTableView;
 
 -(void)setPollDetails:(Poll*)poll;
 

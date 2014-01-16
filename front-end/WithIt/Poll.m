@@ -13,9 +13,9 @@
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName dateCreated:(NSDate *)dateCreated{
     self = [super init];
     if (self) {
-        _name = name;
-        _creatorName = creatorName;
-        _dateCreated = dateCreated;
+        _title = name;
+        _creatorID = creatorName;
+        //_dateCreated = dateCreated;
         return self;
     }
     return nil;

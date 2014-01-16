@@ -140,12 +140,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 - (void)resetMainViewController {
-    self.masterViewController = [[MasterViewController alloc] init];
-#ifdef __IPHONE_7_0
-    if ([self.masterViewController respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
-        self.masterViewController.edgesForExtendedLayout &= ~UIRectEdgeTop;
+    // Sometimes the facebook login will execute twice. Without the if statement, the app crashes when that happens.
+    if(!self.masterViewController){
+        self.masterViewController = [[MasterViewController alloc] init];
+    #ifdef __IPHONE_7_0
+        if ([self.masterViewController respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
+            self.masterViewController.edgesForExtendedLayout &= ~UIRectEdgeTop;
+        }
+    #endif
     }
-#endif
 }
 
 @end

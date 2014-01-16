@@ -79,6 +79,7 @@
     // Size main view appropriately
     [appDelegate resetMainViewController];
     [self.navigationController pushViewController:appDelegate.masterViewController animated:YES];
+    NSLog(@"Transitioning to main view");
 }
 
 #pragma mark - FBLoginView delegate
@@ -158,7 +159,7 @@
                             user:(id<FBGraphUser>)user {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.userID = user.id;
-    NSLog(@"Logged in user %@", user.name);
+    NSLog(@"Logged in user %@ with ID %@", user.name, user.id);
     appDelegate.username = user.name;
     
     [self transitionToMainViewController];

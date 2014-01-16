@@ -12,7 +12,8 @@
 #import "AppDelegate.h"
 #import "Poll.h"
 
-#define pollTestURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
+#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
+#define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
 
 @interface MasterViewController ()
 
@@ -36,29 +37,72 @@
         self.preferredContentSize = CGSizeMake(320.0, 500.0);
     }
     [super awakeFromNib];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.dataController = [[PollDataController alloc] init];
     
-    NSData *pollsData = [[NSData alloc] initWithContentsOfURL:pollTestURL];
-    NSError *error;
-    self.polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&error][@"polls"];
-	
-    if(error){
-        NSLog(@"Error loading JSON: %@", [error localizedDescription]);
+    // Get user data including polls
+    NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
+    NSError *userDataError;
+    NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
+    
+    if(userDataError){
+        NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
     }
     else {
-        NSLog(@"JSON data loaded.");
-        NSLog(@"%@", self.polls);
+        NSLog(@"JSON user data loaded.");
+        //NSLog(@"%@", users);
     }
     
-    Poll *poll;
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyyMMdd"];
+    // Parse user data
+    for(NSDictionary *theUser in users){
+        NSString *theID = theUser[@"id"];
+            if([theID isEqualToString:appDelegate.userID]){
+                self.userID = theUser[@"id"];
+                self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
+                self.userFriendsList = theUser[@"friends"];
+                self.userPollsList = theUser[@"polls"];
+                break;
+            }
+    }
     
-    for(NSDictionary *thePoll in self.polls){
-        //NSDate *date = [dateFormat dateFromString:poll[@"pollName"]];
-        NSDate *date = [NSDate date];
-        poll = [[Poll alloc] initWithName:thePoll[@"pollName"] creatorName:thePoll[@"creatorName"] dateCreated:date];
-        [self.dataController addPollWithPoll:poll];
+    // Get poll data
+    NSData *pollsData = [[NSData alloc] initWithContentsOfURL:pollDataURL];
+    NSError *pollDataError;
+    NSDictionary *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError][@"polls"];
+	
+    if(pollDataError){
+        NSLog(@"Error loading poll data JSON: %@", [pollDataError localizedDescription]);
+    }
+    else {
+        NSLog(@"JSON poll data loaded.");
+        //NSLog(@"%@", polls);
+    }
+    
+    // Parse poll data
+    Poll *poll;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMdd"];
+    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:@"hhmmss"];
+    
+    for(NSDictionary *thePoll in polls){
+        NSString *pollID = thePoll[@"id"];
+        for(NSString *theID in self.userPollsList){
+            if([pollID isEqualToString:theID]){
+                poll = [[Poll alloc] init];
+                poll.pollID = pollID;
+                poll.title = thePoll[@"title"];
+                poll.description = thePoll[@"description"];
+                poll.creatorID = thePoll[@"creator"];
+                //poll.endDate = [dateFormatter dateFromString:thePoll[@"endDate"]];
+                //poll.endTime = [timeFormatter dateFromString:thePoll[@"endTime"]];
+                //poll.members = thePoll[@"members"];
+                //NSLog(@"Member list %@", poll.members);
+                [self.dataController addPollWithPoll:poll];
+                break;
+            }
+        }
     }
 }
 
@@ -172,8 +216,11 @@
         //nameLabel.textAlignment = NSTextAlignmentCenter;
         //[cell.contentView addSubview: nameLabel];
     }
+    
+    // Only create the date formatter once
     static NSDateFormatter *formatter = nil;
     Poll *pollAtIndex;
+    UISwitch *toggleSwitch = [[UISwitch alloc] init];
     
     switch (indexPath.section) {
         case 0:
@@ -183,8 +230,13 @@
             }
             
             pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
-            [[cell textLabel] setText:pollAtIndex.name];
-            [[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            [[cell textLabel] setText:pollAtIndex.title];
+            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            
+            // Add toggle switch to polls the user did not create
+            cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
+            [cell.accessoryView addSubview:toggleSwitch];
+            
             break;
             
         case 1:
@@ -194,14 +246,12 @@
             }
             
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
-            [[cell textLabel] setText:pollAtIndex.name];
-            [[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            [[cell textLabel] setText:pollAtIndex.title];
+            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
             break;
     }
     cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
-    UISwitch *toggleSwitch = [[UISwitch alloc] init];
-    cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-    [cell.accessoryView addSubview:toggleSwitch];
+
     return cell;
 }
 
@@ -220,7 +270,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"Selected row %d in section %d.", indexPath.row, indexPath.section);
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     Poll *pollAtIndex;
     switch (indexPath.section) {
         case 0:
@@ -236,15 +285,15 @@
             return;
     }
     
-    NSLog(@"Selected poll: %@.", pollAtIndex.name);
+    NSLog(@"Selected poll: %@.", pollAtIndex.title);
     
     [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
     [detailViewController setPollDetails:pollAtIndex];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationController pushViewController:detailViewController animated:YES];
 }
-
 
 - (void)didReceiveMemoryWarning
 {

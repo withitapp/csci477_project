@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface Poll : NSObject
-@property NSString *name;
-@property NSString *creatorName;
-@property NSUInteger *size;
-@property NSDate *dateCreated;
+
+@property NSString *pollID;
+@property NSString *title;
+@property NSString *description;
+@property NSString *creatorID;
+@property NSDate *endDate;
+@property NSDate *endTime;
 @property NSMutableArray *members;
 
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName dateCreated:(NSDate *)dateCreated;

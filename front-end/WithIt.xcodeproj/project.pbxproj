@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1D16751C186828C100A839D3 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D16751B186828C100A839D3 /* placeholder.png */; };
-		1DA6DB3D188763A000B6113C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA6DB3C188763A000B6113C /* FacebookSDK.framework */; };
-		1DA6DB3E188763A000B6113C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA6DB3C188763A000B6113C /* FacebookSDK.framework */; };
 		1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BC1863846C00904F8F /* Foundation.framework */; };
 		1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BE1863846D00904F8F /* CoreGraphics.framework */; };
 		1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892C01863846D00904F8F /* UIKit.framework */; };
@@ -34,6 +32,8 @@
 		1DA893131864117C00904F8F /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA893111864117C00904F8F /* Poll.m */; };
 		1DA8931618641B0300904F8F /* PollDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA8931518641B0300904F8F /* PollDataController.m */; };
 		1DA8931718641B0300904F8F /* PollDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA8931518641B0300904F8F /* PollDataController.m */; };
+		B6A04CA51888967300E5CC7E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A04CA41888967300E5CC7E /* FacebookSDK.framework */; };
+		B6A04CA61888967300E5CC7E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A04CA41888967300E5CC7E /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +48,6 @@
 
 /* Begin PBXFileReference section */
 		1D16751B186828C100A839D3 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = WithIt/placeholder.png; sourceTree = "<group>"; };
-		1DA6DB3C188763A000B6113C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		1DA892B91863846C00904F8F /* WithIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DA892BC1863846C00904F8F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DA892BE1863846D00904F8F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -78,6 +77,7 @@
 		1DA893111864117C00904F8F /* Poll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
 		1DA8931418641B0300904F8F /* PollDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollDataController.h; sourceTree = "<group>"; };
 		1DA8931518641B0300904F8F /* PollDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollDataController.m; sourceTree = "<group>"; };
+		B6A04CA41888967300E5CC7E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */,
-				1DA6DB3D188763A000B6113C /* FacebookSDK.framework in Frameworks */,
+				B6A04CA51888967300E5CC7E /* FacebookSDK.framework in Frameworks */,
 				1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */,
 				1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */,
 			);
@@ -97,7 +97,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA892DC1863846D00904F8F /* XCTest.framework in Frameworks */,
-				1DA6DB3E188763A000B6113C /* FacebookSDK.framework in Frameworks */,
+				B6A04CA61888967300E5CC7E /* FacebookSDK.framework in Frameworks */,
 				1DA892DE1863846D00904F8F /* UIKit.framework in Frameworks */,
 				1DA892DD1863846D00904F8F /* Foundation.framework in Frameworks */,
 			);
@@ -129,7 +129,7 @@
 		1DA892BB1863846C00904F8F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1DA6DB3C188763A000B6113C /* FacebookSDK.framework */,
+				B6A04CA41888967300E5CC7E /* FacebookSDK.framework */,
 				1DA892BC1863846C00904F8F /* Foundation.framework */,
 				1DA892BE1863846D00904F8F /* CoreGraphics.framework */,
 				1DA892C01863846D00904F8F /* UIKit.framework */,
@@ -431,6 +431,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
+					"/Users/pettang123/Desktop/CS477-\\ Project/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -448,6 +449,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
+					"/Users/pettang123/Desktop/CS477-\\ Project/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -468,6 +470,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/WithIt",
 					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
+					"/Users/pettang123/Desktop/CS477-\\ Project/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -493,6 +496,7 @@
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/WithIt",
 					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
+					"/Users/pettang123/Desktop/CS477-\\ Project/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";

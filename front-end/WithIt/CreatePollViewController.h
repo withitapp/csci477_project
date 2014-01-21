@@ -8,6 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CreatePollViewController : UIViewController
+@interface CreatePollViewController : UIViewController <UITextFieldDelegate>
+
+@property (strong, nonatomic) UIView *detailsView;
+
+//For input data
+@property (strong, nonatomic) UITextField *PollTitleTextField;
+@property (strong, nonatomic) UITextField *PollDescriptionTextField;
+@property (strong, nonatomic) UIDatePicker *PollExpirationDatePicker;
+
+//Labels
+@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
+
+
+- (void)CreatePoll:(id)sender;
+
 
 @end

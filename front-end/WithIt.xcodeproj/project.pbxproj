@@ -32,6 +32,8 @@
 		1DA893131864117C00904F8F /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA893111864117C00904F8F /* Poll.m */; };
 		1DA8931618641B0300904F8F /* PollDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA8931518641B0300904F8F /* PollDataController.m */; };
 		1DA8931718641B0300904F8F /* PollDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA8931518641B0300904F8F /* PollDataController.m */; };
+		B6136DC11890D46B0081B2AB /* PublishPollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6136DC01890D46B0081B2AB /* PublishPollViewController.m */; };
+		B6136DC21890D46B0081B2AB /* PublishPollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6136DC01890D46B0081B2AB /* PublishPollViewController.m */; };
 		B6A04CA51888967300E5CC7E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A04CA41888967300E5CC7E /* FacebookSDK.framework */; };
 		B6A04CA61888967300E5CC7E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A04CA41888967300E5CC7E /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
@@ -77,6 +79,8 @@
 		1DA893111864117C00904F8F /* Poll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
 		1DA8931418641B0300904F8F /* PollDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollDataController.h; sourceTree = "<group>"; };
 		1DA8931518641B0300904F8F /* PollDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollDataController.m; sourceTree = "<group>"; };
+		B6136DBF1890D46B0081B2AB /* PublishPollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishPollViewController.h; sourceTree = "<group>"; };
+		B6136DC01890D46B0081B2AB /* PublishPollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishPollViewController.m; sourceTree = "<group>"; };
 		B6A04CA41888967300E5CC7E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -152,6 +156,8 @@
 				1DA893051863F2F700904F8F /* PollDetailViewController.m */,
 				1DA893081863F38100904F8F /* CreatePollViewController.h */,
 				1DA893091863F38100904F8F /* CreatePollViewController.m */,
+				B6136DBF1890D46B0081B2AB /* PublishPollViewController.h */,
+				B6136DC01890D46B0081B2AB /* PublishPollViewController.m */,
 				1DA893101864117C00904F8F /* Poll.h */,
 				1DA893111864117C00904F8F /* Poll.m */,
 				1DA8931418641B0300904F8F /* PollDataController.h */,
@@ -297,6 +303,7 @@
 				1DA893061863F2F700904F8F /* PollDetailViewController.m in Sources */,
 				1DA893121864117C00904F8F /* Poll.m in Sources */,
 				1DA892C91863846D00904F8F /* main.m in Sources */,
+				B6136DC11890D46B0081B2AB /* PublishPollViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +314,7 @@
 				1DA893131864117C00904F8F /* Poll.m in Sources */,
 				1DA893071863F2F700904F8F /* PollDetailViewController.m in Sources */,
 				1DA892FF1863E7FE00904F8F /* MasterViewController.m in Sources */,
+				B6136DC21890D46B0081B2AB /* PublishPollViewController.m in Sources */,
 				1DA892E81863846D00904F8F /* WithItTests.m in Sources */,
 				1DA8931718641B0300904F8F /* PollDataController.m in Sources */,
 				1DA8930B1863F38100904F8F /* CreatePollViewController.m in Sources */,

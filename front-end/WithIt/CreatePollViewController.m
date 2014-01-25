@@ -7,6 +7,7 @@
 //
 
 #import "CreatePollViewController.h"
+#import "PublishPollViewController.h"
 #import "AppDelegate.h"
 
 @interface CreatePollViewController ()
@@ -38,9 +39,13 @@
     [super viewDidLoad];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    //Cancel Button
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(Cancel)];
     self.navigationItem.leftBarButtonItem = cancelButton;
+    //Next Page Button
+    UIBarButtonItem *nextCreatePollButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(goPublishNewPoll)];
+    self.navigationItem.rightBarButtonItem = nextCreatePollButton;
+    
     [self.navigationController.navigationItem setTitle:@"WithIt"];
     
     //Add detailsView to the main view
@@ -97,17 +102,6 @@
     [self.detailsView addSubview:self.PollExpirationDatePicker];
     // [self.PollExpirationDatePicker release];
     
-
-     NSLog(@"Before create Poll button.");
-    //Add button for create poll - going to the next page
-    UIButton *PollCreateButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    PollCreateButton.frame = CGRectMake(((appDelegate.screenWidth/2)-40), (appDelegate.screenHeight- 100), 80.0, 30);
-    PollCreateButton.backgroundColor = [UIColor whiteColor];
-    [PollCreateButton setTitle:@"Create Poll" forState:UIControlStateNormal];
-    //[PollCreateButton addTarget:self.detailsView action:@selector(CreatePoll:) forControlEvents:UIControlEventTouchUpInside];
-    [self.detailsView addSubview:PollCreateButton];
-    NSLog(@"After create Poll button.");
-    
     
 }
 
@@ -120,11 +114,12 @@
 
 
 //action for PollCreateButton pressed - going to the next create poll page
-
-- (void)CreatePoll:(id)sender
+- (IBAction)goPublishNewPoll
 {
-    NSLog(@"button was clicked");
+    PublishPollViewController *publishPollViewController = [[PublishPollViewController alloc] init];
+    [self.navigationController pushViewController:publishPollViewController animated:YES];
 }
+
 
 
 - (void)didReceiveMemoryWarning

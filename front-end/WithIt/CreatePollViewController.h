@@ -21,7 +21,6 @@
 @property (strong, nonatomic) UILabel *PollExpirationDateLabel;
 
 
-- (void)CreatePoll:(id)sender;
 
 
 @end

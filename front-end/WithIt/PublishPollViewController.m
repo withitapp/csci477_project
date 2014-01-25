@@ -7,6 +7,7 @@
 //
 
 #import "PublishPollViewController.h"
+#import "AppDelegate.h"
 
 @interface PublishPollViewController ()
 
@@ -26,9 +27,24 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+   // AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.view.backgroundColor = [UIColor whiteColor];
+    //Back Button
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
+    self.navigationItem.leftBarButtonItem = backButton;
+    [self.navigationController.navigationItem setTitle:@"WithIt"];
+    
 }
+
+//Back button
+- (IBAction)Back
+{
+    NSLog(@"Back button pressed.");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -96,6 +96,7 @@
     self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 155, (appDelegate.screenWidth - 20), 60)];
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDate;
     self.PollExpirationDatePicker.date = [NSDate date];
+    [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];
     //  [self.PollExpirationDatePicker addTarget:self
     //                action:@selector(changeDateInLabel:)
     //    forControlEvents:UIControlEventValueChanged];

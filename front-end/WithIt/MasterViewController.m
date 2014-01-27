@@ -191,11 +191,11 @@
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %d.", numRows);
+            NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %d.", numRows);
+            NSLog(@"Number of created polls: %luu.",(unsigned long) numRows);
             break;
     }
     return numRows;
@@ -269,7 +269,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Selected row %d in section %d.", indexPath.row, indexPath.section);
+    NSLog(@"Selected row %ld in section %ld.", (long)indexPath.row, (long)indexPath.section);
     Poll *pollAtIndex;
     switch (indexPath.section) {
         case 0:

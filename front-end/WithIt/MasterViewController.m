@@ -200,11 +200,11 @@
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %d.", numRows);
+            NSLog(@"Number of friends' polls: %lu.", numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %d.", numRows);
+            NSLog(@"Number of created polls: %lu.", numRows);
             break;
     }
     return numRows;
@@ -264,7 +264,7 @@
     return cell;
 }
 
-- (void)setEditing:(BOOL)flag animated:(BOOL)animated
+/*- (void)setEditing:(BOOL)flag animated:(BOOL)animated
 
 {
     [super setEditing:flag animated:animated];
@@ -276,7 +276,7 @@
     else {
         [self.pollTableView setEditing:NO animated:NO];
     }
-}
+}*/
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {

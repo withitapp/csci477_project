@@ -23,6 +23,7 @@
 
 @synthesize selectedFriendsView = _friendResultText;
 @synthesize friendPickerController = _friendPickerController;
+@synthesize InviteFriendsButton, PublishPollButton;
 
 #pragma mark View lifecycle
 
@@ -30,7 +31,7 @@
 {
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-
+    
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -40,9 +41,21 @@
     [self.view addSubview:self.detailsView];
     
     
-    NSLog(@"Before create Friends Invited Text Field.");
-    self.FriendsInvitedTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 40, 220, 200)];
+    //Add Invite Friends Button
+    self.InviteFriendsButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.InviteFriendsButton.frame = CGRectMake(30, 60, (self.screenWidth - 60), 30);
+    [self.InviteFriendsButton setTitle:@"Invite Friends" forState:UIControlStateNormal];
+    //add action to capture when the button is released
+    /*[self.InviteFriendsButton addTarget:self
+     action:@selector(buttonIsReleased:)
+     forControlEvents:UIControlEventTouchUpInside];
+     */
+    [self.detailsView addSubview:self.InviteFriendsButton];
     
+    
+    NSLog(@"Before create Friends Invited Text Field.");
+    self.FriendsInvitedTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 120, (self.screenWidth-40), 200)];
+    self.FriendsInvitedTextField.textAlignment = NSTextAlignmentLeft;
     self.FriendsInvitedTextField.backgroundColor=[UIColor whiteColor];
     self.FriendsInvitedTextField.textColor = [UIColor blackColor];
     self.FriendsInvitedTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -62,6 +75,8 @@
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
     
     
+    
+    
     //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
     // self.FriendsInvitedTextField.delegate = self;
     [self.detailsView addSubview:self.FriendsInvitedTextField];
@@ -76,6 +91,19 @@
     
     //[self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
     NSLog(@"Done create Friends Invited Text Field.");
+    
+    
+    //Add Publish Poll Button
+    self.PublishPollButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.PublishPollButton.frame = CGRectMake(30, (self.screenHeight - 200), (self.screenWidth - 60), 30);
+    [self.PublishPollButton setTitle:@"Publish Poll" forState:UIControlStateNormal];
+    
+    //add action to capture when the button is released
+    /*[self.PublishPollButton addTarget:self
+     action:@selector(buttonIsReleased:)
+     forControlEvents:UIControlEventTouchUpInside];
+     */
+    [self.detailsView addSubview:self.PublishPollButton];
     
 }
 

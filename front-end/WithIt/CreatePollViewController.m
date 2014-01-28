@@ -38,7 +38,7 @@
     NSLog(@"Loading CreatePoll view.");
     [super viewDidLoad];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.view.backgroundColor = [UIColor whiteColor];
+
     //Cancel Button
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(Cancel)];
     self.navigationItem.leftBarButtonItem = cancelButton;
@@ -46,7 +46,6 @@
     UIBarButtonItem *nextCreatePollButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(goPublishNewPoll)];
     self.navigationItem.rightBarButtonItem = nextCreatePollButton;
     
-    [self.navigationController.navigationItem setTitle:@"WithIt"];
     
     //Add detailsView to the main view
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, appDelegate.screenWidth, appDelegate.screenHeight)];

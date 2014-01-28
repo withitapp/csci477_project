@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WIViewController.h"
 
-@interface PublishPollViewController : UIViewController
+@interface PublishPollViewController : WIViewController
 
 @end

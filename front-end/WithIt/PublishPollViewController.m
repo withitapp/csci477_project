@@ -30,7 +30,7 @@
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
    // AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.view.backgroundColor = [UIColor whiteColor];
+
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WIViewController.h"
 
-@interface CreatePollViewController : UIViewController <UITextFieldDelegate>
+@interface CreatePollViewController : WIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) UIView *detailsView;
 

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WIViewController.h"
 #import "PollDataController.h"
 
-@interface MasterViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface MasterViewController : WIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) PollDataController *dataController;
 @property (strong, nonatomic) UIView *headerView;

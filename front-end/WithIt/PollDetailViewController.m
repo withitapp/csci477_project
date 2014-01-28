@@ -7,6 +7,7 @@
 //
 
 #import "PollDetailViewController.h"
+#import "WIViewController.h"
 #import "CreatePollViewController.h"
 #import "AppDelegate.h"
 
@@ -42,8 +43,7 @@
     [super viewDidLoad];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [self.navigationController.navigationItem setTitle:@"WithIt"];
-    self.view.backgroundColor = [UIColor whiteColor];
+    //[self.navigationController.navigationItem setTitle:@"WithIt"];
     
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, appDelegate.screenWidth, appDelegate.screenHeight)];
     

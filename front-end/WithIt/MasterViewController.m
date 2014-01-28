@@ -10,7 +10,6 @@
 #import "CreatePollViewController.h"
 #import "PollDetailViewController.h"
 #import "AppDelegate.h"
-#import "Poll.h"
 
 #define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
 #define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
@@ -110,8 +109,6 @@
 {
     [super viewDidLoad];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    self.view.backgroundColor = [UIColor whiteColor];
     
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;

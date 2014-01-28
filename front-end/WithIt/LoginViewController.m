@@ -79,7 +79,6 @@
     // Size main view appropriately
     [appDelegate resetMainViewController];
     [self.navigationController pushViewController:appDelegate.masterViewController animated:YES];
-    NSLog(@"Transitioning to main view");
 }
 
 #pragma mark - FBLoginView delegate

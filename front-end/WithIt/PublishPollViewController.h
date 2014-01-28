@@ -7,8 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "WIViewController.h"
 
-@interface PublishPollViewController : WIViewController
+@interface PublishPollViewController : WIViewController <FBFriendPickerDelegate>
+
+- (IBAction)pickFriendsButtonClick:(id)sender;
+
+
+@property (strong, nonatomic) UIView *detailsView;
+
+
+//For input data
+@property (strong, nonatomic) UITextField *FriendsInvitedTextField;
+//@property (strong, nonatomic) UITextField *PollDescriptionTextField;
+
+//Labels
+@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
 
 @end

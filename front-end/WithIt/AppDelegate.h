@@ -11,6 +11,7 @@
 #import "LoginViewController.h"
 #import "MasterViewController.h"
 #import "PollDetailViewController.h"
+#import "PublishPollViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
 

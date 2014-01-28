@@ -64,7 +64,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     
     [self.window makeKeyAndVisible];
-    NSLog(@"Finished launching.");
     return YES;
 }
 

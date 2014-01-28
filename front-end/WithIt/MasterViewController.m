@@ -264,6 +264,20 @@
     return cell;
 }
 
+- (void)setEditing:(BOOL)flag animated:(BOOL)animated
+
+{
+    [super setEditing:flag animated:animated];
+    
+    if (flag == YES){
+        [self.pollTableView setEditing:YES animated:YES];
+    }
+    
+    else {
+        [self.pollTableView setEditing:NO animated:NO];
+    }
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.

@@ -41,24 +41,23 @@
 {
     NSLog(@"Loading detail view for poll %@.", self.poll.title);
     [super viewDidLoad];
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     //[self.navigationController.navigationItem setTitle:@"WithIt"];
     
-    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, appDelegate.screenWidth, appDelegate.screenHeight)];
+    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, self.screenHeight)];
     
     // Add poll title label
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 80, (appDelegate.screenWidth - 10), 30)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 80, (self.screenWidth - 10), 30)];
     [self.titleLabel setText:self.poll.title];
     [self.detailsView addSubview:self.titleLabel];
     
     // Add poll creator name label
-    self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 110, (appDelegate.screenWidth - 10), 30)];
+    self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 110, (self.screenWidth - 10), 30)];
     [self.creatorNameLabel setText:self.poll.creatorID];
     [self.detailsView addSubview:self.creatorNameLabel];
     
     // Add time remaining for poll label
-    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 140, (appDelegate.screenWidth - 10), 30)];
+    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 140, (self.screenWidth - 10), 30)];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     //[self.timeRemainingLabel setText:[dateFormatter stringFromDate:self.poll.dateCreated]]; // FIX ME!
@@ -67,7 +66,7 @@
     [self.view addSubview:self.detailsView];
     
     // Set up poll table view
-    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 180, appDelegate.screenWidth, (appDelegate.screenHeight-180))];
+    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 180, self.screenWidth, (self.screenHeight-180))];
     self.memberTableView.delegate = self;
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];

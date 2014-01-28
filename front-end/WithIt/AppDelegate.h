@@ -20,10 +20,6 @@
 @property (strong, nonatomic) MasterViewController *masterViewController;
 @property BOOL isNavigatingAwayFromLogin;
 
-// Display info
-@property (nonatomic) CGFloat screenWidth;
-@property (nonatomic) CGFloat screenHeight;
-
 // Facebook user info
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *userID;

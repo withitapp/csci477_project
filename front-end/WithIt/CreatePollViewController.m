@@ -37,7 +37,6 @@
 {
     NSLog(@"Loading CreatePoll view.");
     [super viewDidLoad];
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
     //Cancel Button
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(Cancel)];
@@ -48,12 +47,12 @@
     
     
     //Add detailsView to the main view
-    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, appDelegate.screenWidth, appDelegate.screenHeight)];
+    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, self.screenWidth, self.screenHeight)];
     [self.view addSubview:self.detailsView];
     
     //Add input text field for Poll Title
      NSLog(@"Before create Poll Title Text Field.");
-    self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (appDelegate.screenWidth - 40), 30)];
+    self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (self.screenWidth - 40), 30)];
     self.PollTitleTextField.placeholder = @"Poll Title";
     self.PollTitleTextField.backgroundColor=[UIColor whiteColor];
     self.PollTitleTextField.textColor = [UIColor blackColor];
@@ -69,7 +68,7 @@
     
     //Add input text field for Poll Description
     NSLog(@"Before create Poll Description Text Field.");
-    self.PollDescriptionTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 100, (appDelegate.screenWidth - 40), 150)];
+    self.PollDescriptionTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 150)];
     self.PollDescriptionTextField.placeholder = @"Poll Description";
     self.PollDescriptionTextField.backgroundColor=[UIColor whiteColor];
     self.PollDescriptionTextField.textColor = [UIColor blackColor];
@@ -92,7 +91,7 @@
 
     
     //Add date selection datepicker for Poll Expiration
-    self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (appDelegate.screenWidth - 20), 60)];
+    self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (self.screenWidth - 20), 60)];
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];

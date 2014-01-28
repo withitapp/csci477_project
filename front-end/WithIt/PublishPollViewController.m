@@ -29,7 +29,6 @@
 {
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-   // AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];

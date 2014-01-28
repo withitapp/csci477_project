@@ -30,15 +30,13 @@
 {
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.view.backgroundColor = [UIColor whiteColor];
+
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
-    self.title = @"WithIt";
     
     //Add detailsView to the main view
-    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, appDelegate.screenWidth, appDelegate.screenHeight)];
+    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, self.screenWidth, self.screenHeight)];
     [self.view addSubview:self.detailsView];
     
     

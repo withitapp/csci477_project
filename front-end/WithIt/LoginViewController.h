@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
+#import "WIViewController.h"
 
-@interface LoginViewController : UIViewController <FBLoginViewDelegate>
+@interface LoginViewController : WIViewController <FBLoginViewDelegate>
 
 @property (unsafe_unretained, nonatomic) IBOutlet FBLoginView *FBLoginView;
 

@@ -114,12 +114,9 @@
     self.navigationItem.rightBarButtonItem = newPollButton;
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    //withit title
-    self.title = @"WithIt";
-    //[self.navigationController.navigationItem setTitleView:@"WithIt"];
     
     // Set up header view
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, appDelegate.screenWidth, 100)];
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];
     
     // Add user profile picture
     self.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
@@ -137,7 +134,7 @@
     [self.headerView addSubview:self.profilePictureView];
     
     // Add user welcome label
-    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(65, 10, (appDelegate.screenWidth - 75), 20) ];
+    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(65, 10, (self.screenWidth - 75), 20) ];
     self.usernameLabel.textColor = [UIColor blackColor];
     //self.usernameLabel.backgroundColor = [UIColor greenColor];
     self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
@@ -147,7 +144,7 @@
     [self.view addSubview:self.headerView];
     
     // Set up poll table view
-    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, appDelegate.screenWidth, (appDelegate.screenHeight-100))];
+    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-100))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
@@ -189,11 +186,11 @@
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
+            NSLog(@"Number of friends' polls: %d.", numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %luu.",(unsigned long) numRows);
+            NSLog(@"Number of created polls: %d.", numRows);
             break;
     }
     return numRows;

@@ -45,12 +45,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"Launching WithItApp.");
     
-    self.screenWidth = [UIScreen mainScreen].bounds.size.width;
-    NSLog(@"Initializing display for screen of width: %f.", self.screenWidth);
-    
-    self.screenHeight = [UIScreen mainScreen].bounds.size.height;
-    NSLog(@"Initializing display for screen of height: %f.", self.screenHeight);
-    
     // Initialize FBLoginView
     [FBLoginView class];
     
@@ -70,7 +64,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     
     [self.window makeKeyAndVisible];
-    NSLog(@"Finished launching.");
     return YES;
 }
 

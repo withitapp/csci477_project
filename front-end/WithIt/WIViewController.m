@@ -28,7 +28,8 @@
 {
     [super viewDidLoad];
 	
-    // 
+    self.screenWidth = [UIScreen mainScreen].bounds.size.width;
+    self.screenHeight = [UIScreen mainScreen].bounds.size.height;
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"WithIt";
     

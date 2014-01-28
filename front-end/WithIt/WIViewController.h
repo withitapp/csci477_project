@@ -10,6 +10,7 @@
 
 @interface WIViewController : UIViewController
 
-@property NSString *appTitle;
+@property (nonatomic) CGFloat screenWidth;
+@property (nonatomic) CGFloat screenHeight;
 
 @end

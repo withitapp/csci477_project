@@ -10,7 +10,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "WIViewController.h"
 
-@interface PublishPollViewController : UIViewController <FBFriendPickerDelegate>
+@interface PublishPollViewController : WIViewController <FBFriendPickerDelegate>
 
 - (IBAction)pickFriendsButtonClick:(id)sender;
 

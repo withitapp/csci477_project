@@ -88,11 +88,11 @@
     self.PollExpirationDateLabel.backgroundColor = [UIColor whiteColor];
     self.PollExpirationDateLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:(16.0)];
     [self.detailsView addSubview:self.PollExpirationDateLabel];
-    self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End At : "];
+    self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End Date : "];
 
     
     //Add date selection datepicker for Poll Expiration
-    self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (appDelegate.screenWidth - 20), 60)];
+    self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 155, (appDelegate.screenWidth - 20), 60)];
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];

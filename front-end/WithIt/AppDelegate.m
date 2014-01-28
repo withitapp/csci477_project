@@ -21,6 +21,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @implementation AppDelegate
 
 @synthesize window = _window;
+//@synthesize rootViewController = _rootViewController
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation
 {
@@ -55,7 +56,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [FBLoginView class];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+    //set title
+    //self.rootViewController.navigationItem.title = @"Friend Picker";
     // Initialize view controllers
     self.loginViewController = [[LoginViewController alloc] init];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.loginViewController];

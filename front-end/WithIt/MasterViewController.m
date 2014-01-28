@@ -9,6 +9,7 @@
 #import "MasterViewController.h"
 #import "CreatePollViewController.h"
 #import "PollDetailViewController.h"
+#import "PublishPollViewController.h"
 #import "AppDelegate.h"
 
 #define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
@@ -115,7 +116,9 @@
     
     UIBarButtonItem *editPollsButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.leftBarButtonItem = editPollsButton;
-    [self.navigationController.navigationItem setTitle:@"WithIt"];
+    //withit title
+    self.title = @"WithIt";
+    //[self.navigationController.navigationItem setTitleView:@"WithIt"];
     
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, appDelegate.screenWidth, 100)];

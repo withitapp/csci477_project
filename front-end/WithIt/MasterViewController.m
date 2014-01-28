@@ -9,7 +9,6 @@
 #import "MasterViewController.h"
 #import "CreatePollViewController.h"
 #import "PollDetailViewController.h"
-#import "PublishPollViewController.h"
 #import "AppDelegate.h"
 
 #define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
@@ -114,8 +113,7 @@
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;
     
-    UIBarButtonItem *editPollsButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
-    self.navigationItem.leftBarButtonItem = editPollsButton;
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     //withit title
     self.title = @"WithIt";
     //[self.navigationController.navigationItem setTitleView:@"WithIt"];
@@ -255,14 +253,28 @@
     return cell;
 }
 
+- (void)setEditing:(BOOL)flag animated:(BOOL)animated
+
+{
+    [super setEditing:flag animated:animated];
+    
+    if (flag == YES){
+        [self.pollTableView setEditing:YES animated:YES];
+    }
+    
+    else {
+        [self.pollTableView setEditing:NO animated:NO];
+    }
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     switch (indexPath.section){
         case 0:
-            return NO;
-        case 1:
             return YES;
+        case 1:
+            return NO;
     }
     return YES;
 }

@@ -1,9 +1,9 @@
 //
-//  PublishPollViewController.m
-//  WithIt
+// PublishPollViewController.m
+// WithIt
 //
-//  Created by Peggy Tang on 22/1/14.
-//  Copyright (c) 2014 WithIt. All rights reserved.
+// Created by Peggy Tang on 22/1/14.
+// Copyright (c) 2014 WithIt. All rights reserved.
 //
 
 #import "PublishPollViewController.h"
@@ -30,8 +30,8 @@
 {
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-   // AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.view.backgroundColor = [UIColor whiteColor];
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -63,24 +63,22 @@
     
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
     
-
-    //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
-   // self.FriendsInvitedTextField.delegate = self;
-    [self.detailsView addSubview:self.FriendsInvitedTextField];
- /*
-    NSMutableString *text = [[NSMutableString alloc] init];
     
- 
-    for (id<FBGraphUser> user in self.friendPickerController.selection) {
-        if ([text length]) {
-            [text appendString:@", "];
-        }
-        [text appendString:user.name];
-    }*/
+    //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
+    // self.FriendsInvitedTextField.delegate = self;
+    [self.detailsView addSubview:self.FriendsInvitedTextField];
+    /*
+     NSMutableString *text = [[NSMutableString alloc] init];
+     for (id<FBGraphUser> user in self.friendPickerController.selection) {
+     if ([text length]) {
+     [text appendString:@", "];
+     }
+     [text appendString:user.name];
+     }*/
     
     //[self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
     NSLog(@"Done create Friends Invited Text Field.");
-
+    
 }
 
 

@@ -17,12 +17,14 @@
 
 @property (strong, nonatomic) UIView *detailsView;
 
+//Buttons
+@property (nonatomic, strong) UIButton *InviteFriendsButton, *PublishPollButton;
 
-//For input data
+//For Data
 @property (strong, nonatomic) UITextField *FriendsInvitedTextField;
 //@property (strong, nonatomic) UITextField *PollDescriptionTextField;
 
 //Labels
-@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
+//@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
 
 @end

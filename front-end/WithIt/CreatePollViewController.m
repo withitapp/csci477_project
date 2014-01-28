@@ -37,7 +37,7 @@
 {
     NSLog(@"Loading CreatePoll view.");
     [super viewDidLoad];
-
+    
     //Cancel Button
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(Cancel)];
     self.navigationItem.leftBarButtonItem = cancelButton;
@@ -50,7 +50,7 @@
     [self.view addSubview:self.detailsView];
     
     //Add input text field for Poll Title
-     NSLog(@"Before create Poll Title Text Field.");
+    NSLog(@"Before create Poll Title Text Field.");
     self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (self.screenWidth - 40), 30)];
     self.PollTitleTextField.placeholder = @"Poll Title";
     self.PollTitleTextField.backgroundColor=[UIColor whiteColor];
@@ -62,7 +62,7 @@
     //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
     self.PollTitleTextField.delegate = self;
     [self.detailsView addSubview:self.PollTitleTextField];
-      NSLog(@"Done create Poll Title Text Field.");
+    NSLog(@"Done create Poll Title Text Field.");
     
     
     //Add input text field for Poll Description
@@ -75,19 +75,19 @@
     self.PollDescriptionTextField.returnKeyType = UIReturnKeyDone;
     self.PollDescriptionTextField.borderStyle = UITextBorderStyleRoundedRect;
     self.PollDescriptionTextField.tag= 2;
-    //self.PollDescriptionTextField.textAlignment = UITextAlignmentLeft;
+    self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;
     [self.detailsView addSubview:self.PollDescriptionTextField];
     NSLog(@"Done create Poll Description Text Field.");
     
     //Add date selection label for Poll Expiration
-    self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 260, 100, 30)];
+    self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 260, 300, 30)];
     self.PollExpirationDateLabel.textColor = [UIColor lightGrayColor];
     self.PollExpirationDateLabel.backgroundColor = [UIColor whiteColor];
     self.PollExpirationDateLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:(16.0)];
     [self.detailsView addSubview:self.PollExpirationDateLabel];
     self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End Date : "];
-
+    
     
     //Add date selection datepicker for Poll Expiration
     self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (self.screenWidth - 20), 60)];
@@ -127,3 +127,4 @@
 }
 
 @end
+

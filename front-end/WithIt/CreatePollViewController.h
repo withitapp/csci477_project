@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PublishPollViewController.h"
 
 @interface CreatePollViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) UIView *detailsView;
+//publish page controller
+@property (strong, nonatomic) PublishPollViewController *publishViewController;
 
 //For input data
 @property (strong, nonatomic) UITextField *PollTitleTextField;

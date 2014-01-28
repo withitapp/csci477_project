@@ -46,7 +46,7 @@
     UIBarButtonItem *nextCreatePollButton = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleBordered target:self action:@selector(goPublishNewPoll)];
     self.navigationItem.rightBarButtonItem = nextCreatePollButton;
     
-    [self.navigationController.navigationItem setTitle:@"WithIt"];
+    self.title = @"WithIt";
     
     //Add detailsView to the main view
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, appDelegate.screenWidth, appDelegate.screenHeight)];
@@ -89,12 +89,12 @@
     self.PollExpirationDateLabel.backgroundColor = [UIColor whiteColor];
     self.PollExpirationDateLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:(16.0)];
     [self.detailsView addSubview:self.PollExpirationDateLabel];
-    self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End At : "];
+    self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End Date : "];
 
     
     //Add date selection datepicker for Poll Expiration
     self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 155, (appDelegate.screenWidth - 20), 60)];
-    self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDate;
+    self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];
     //  [self.PollExpirationDatePicker addTarget:self

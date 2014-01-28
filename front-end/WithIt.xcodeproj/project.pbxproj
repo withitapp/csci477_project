@@ -448,6 +448,7 @@
 					"$(inherited)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
 					"/Users/pettang123/Desktop/CS477-\\ Project/ios-app/front-end",
+					"/Users/polarpatbear/Desktop/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";
@@ -466,6 +467,7 @@
 					"$(inherited)",
 					"/Users/Francesca/Documents/senior_year_2013-2014/ios-app/front-end",
 					"/Users/pettang123/Desktop/CS477-\\ Project/ios-app/front-end",
+					"/Users/polarpatbear/Desktop/ios-app/front-end",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WithIt/WithIt-Prefix.pch";

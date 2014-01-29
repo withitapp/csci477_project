@@ -12,8 +12,8 @@
 
 @interface PublishPollViewController : WIViewController <FBFriendPickerDelegate>
 
-- (IBAction)pickFriendsButtonClick:(id)sender;
-
+//- (IBAction)pickFriendsButtonClick:(id)sender;
+- (void)inviteFriendsButtonClick:(id)sender;
 
 @property (strong, nonatomic) UIView *detailsView;
 

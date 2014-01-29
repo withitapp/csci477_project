@@ -37,6 +37,10 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
     
+    //Publish Page Button in navigation bar
+    UIBarButtonItem *navPublishPollButton = [[UIBarButtonItem alloc] initWithTitle:@"Publish" style:UIBarButtonItemStyleBordered target:self action:@selector(PublishPoll)];
+    self.navigationItem.rightBarButtonItem = navPublishPollButton;
+    
     //Add detailsView to the main view
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 30, self.screenWidth, self.screenHeight)];
     [self.view addSubview:self.detailsView];
@@ -215,6 +219,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+//Publish Poll
+- (IBAction)PublishPoll
+{
+    NSLog(@"Publish button pressed.");
+   
+}
 
 - (void)didReceiveMemoryWarning
 {

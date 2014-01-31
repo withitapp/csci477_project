@@ -93,37 +93,6 @@
 }
 
 
-
-#pragma mark UI handlers
-//FACEBOOK CODE THAT CAN EVENTUALLY BE DELETED
-/*
-- (IBAction)pickFriendsButtonClick:(id)sender {
-    // FBSample logic
-    // if the session is open, then load the data for our view controller
-    if (!FBSession.activeSession.isOpen) {
-        // if the session is closed, then we open it here, and establish a handler for state changes
-        [FBSession openActiveSessionWithReadPermissions:nil
-                                           allowLoginUI:YES
-                                      completionHandler:^(FBSession *session,
-                                                          FBSessionState state,
-                                                          NSError *error) {
-                                          if (error) {
-                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                                                  message:error.localizedDescription
-                                                                                                 delegate:nil
-                                                                                        cancelButtonTitle:@"OK"
-                                                                                        otherButtonTitles:nil];
-                                              [alertView show];
-                                          } else if (session.isOpen) {
-                                              [self pickFriendsButtonClick:sender];
-                                          }
-                                      }];
-        return;
-    }
-    
-    
-}*/
-
 - (void)inviteFriendsButtonClick:(id)sender {
     // FBSample logic
     // if the session is open, then load the data for our view controller
@@ -222,7 +191,16 @@
 //Publish Poll
 - (IBAction)PublishPoll
 {
+    
     NSLog(@"Publish button pressed.");
+    
+  //  [masterPollsCreatedList addPollCreatedWithPoll:currentPoll];
+    
+    //pop view controllers twice
+    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
+    
+    /*[self.navigationController popViewControllerAnimated:YES];
+     [self.navigationController popViewControllerAnimated:YES];*/
    
 }
 

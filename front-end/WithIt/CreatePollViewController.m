@@ -114,6 +114,22 @@
 //action for PollCreateButton pressed - going to the next create poll page
 - (IBAction)goPublishNewPoll
 {
+   /* AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    Poll *currentPoll = [[Poll alloc] init:appDelegate.username];
+    
+    
+    //Create current poll Object
+    if(![_PollTitleTextField.text  isEqualToString: @"Poll Title"]){
+        currentPoll.title = _PollTitleTextField.text;
+    }
+    
+    if(![_PollDescriptionTextField.text isEqualToString: @"Poll Description"]){
+        currentPoll.description = _PollDescriptionTextField.text;
+    }*/
+    
+    
+    
+    
     PublishPollViewController *publishPollViewController = [[PublishPollViewController alloc] init];
     [self.navigationController pushViewController:publishPollViewController animated:YES];
 }

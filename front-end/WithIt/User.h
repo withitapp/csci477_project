@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Poll : NSObject
-
+@interface User : NSObject
+//probably don't even need this class...
 @property NSInteger *ID;
 @property NSDate *createdAt;
 @property NSDate *updateAt;
@@ -23,5 +23,4 @@
 @property NSMutableArray *membershipID;
 
 
--(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName dateCreated:(NSDate *)dateCreated;
 @end

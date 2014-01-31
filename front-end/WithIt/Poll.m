@@ -10,15 +10,38 @@
 
 @implementation Poll
 
--(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName dateCreated:(NSDate *)dateCreated{
+-(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description{
     self = [super init];
     if (self) {
         _title = name;
         _creatorID = creatorName;
-        //_dateCreated = dateCreated;
+        _description = description;
+        _createDate = [[NSDate alloc] init];
         return self;
     }
     return nil;
 }
+
+- (id)init:(NSString *)creatorName {
+    // Forward to the "designated" initialization method
+    return [self initWithName:@"Untitled Poll" creatorName:creatorName description:@"No Description Given"];
+}
+
+-(void)populateMembers:(NSArray *) users{
+    _members = [[NSMutableArray alloc] init];
+    _members = [users mutableCopy];
+}
+
+-(void)addMember:(NSObject *) user{
+    [_members addObject:user];
+}
+
+-(void)removeMember:(NSObject *) user{
+    [_members removeObject:user];
+}
+/*
+-(void)setDescription:(NSString *) description{
+    _description = description;
+}*/
 
 @end

@@ -16,6 +16,7 @@
 @implementation PollDataController
 
 - (void)initializeDefaultDataList {
+    
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];
     self.masterPollsList = pollsList;
     
@@ -23,10 +24,11 @@
     self.masterPollsCreatedList = createdPollsList;
     
     Poll *poll;
-    NSDate *today = [NSDate date];
-    poll = [[Poll alloc] initWithName:@"Default member poll" creatorName:@"Francesca" dateCreated:today];
+  //  NSDate *today = [NSDate date];
+    poll = [[Poll alloc] initWithName:@"Default member poll" creatorName:@"Francesca" description:@"No description given"];
     [self addPollWithPoll:poll];
-    poll = [[Poll alloc] initWithName:@"Default creator poll" creatorName:@"Francesca" dateCreated:today];
+    //why is there a poll "created with" poll?
+    poll = [[Poll alloc] initWithName:@"Default creator poll" creatorName:@"Francesca" description:@"No description given"];
     [self addPollCreatedWithPoll:poll];
 }
 

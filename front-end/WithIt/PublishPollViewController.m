@@ -77,19 +77,19 @@
     //[self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
     NSLog(@"Done create Friends Invited Text Field.");
     
-    
+    /*
     //Add Publish Poll Button
     self.PublishPollButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.PublishPollButton.frame = CGRectMake(30, (self.screenHeight - 200), (self.screenWidth - 60), 30);
     [self.PublishPollButton setTitle:@"Publish Poll" forState:UIControlStateNormal];
     
     //add action to capture when the button is released
-    /*[self.PublishPollButton addTarget:self
+    [self.PublishPollButton addTarget:self
      action:@selector(buttonIsReleased:)
      forControlEvents:UIControlEventTouchUpInside];
-     */
+     
     [self.detailsView addSubview:self.PublishPollButton];
-    
+     */
 }
 
 

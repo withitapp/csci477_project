@@ -37,6 +37,7 @@
     [super awakeFromNib];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    // Use sharedInstance instead of init to ensure use of singleton
     self.dataController = [PollDataController sharedInstance];
     
     // Get user data including polls

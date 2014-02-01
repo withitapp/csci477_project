@@ -200,11 +200,11 @@
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %lu.", numRows);
+            NSLog(@"Number of friends' polls: %d.", numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %lu.", numRows);
+            NSLog(@"Number of created polls: %d.", numRows);
             break;
     }
     return numRows;

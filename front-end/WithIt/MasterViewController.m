@@ -37,7 +37,7 @@
     [super awakeFromNib];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.dataController = [[PollDataController alloc] init];
+    self.dataController = [PollDataController sharedInstance];
     
     // Get user data including polls
     NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
@@ -264,28 +264,14 @@
     return cell;
 }
 
-/*- (void)setEditing:(BOOL)flag animated:(BOOL)animated
-
-{
-    [super setEditing:flag animated:animated];
-    
-    if (flag == YES){
-        [self.pollTableView setEditing:YES animated:YES];
-    }
-    
-    else {
-        [self.pollTableView setEditing:NO animated:NO];
-    }
-}*/
-
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     switch (indexPath.section){
         case 0:
-            return YES;
-        case 1:
             return NO;
+        case 1:
+            return YES;
     }
     return YES;
 }

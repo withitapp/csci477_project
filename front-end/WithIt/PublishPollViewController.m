@@ -75,7 +75,7 @@
     
     NSLog(@"Done create Friends Invited Text Field.");
     
-    /*
+    
     //Add Publish Poll Button
     self.PublishPollButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     self.PublishPollButton.frame = CGRectMake(30, (self.screenHeight - 200), (self.screenWidth - 60), 30);

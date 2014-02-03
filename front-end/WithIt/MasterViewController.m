@@ -37,7 +37,8 @@
     [super awakeFromNib];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.dataController = [[PollDataController alloc] init];
+    // Use sharedInstance instead of init to ensure use of singleton
+    self.dataController = [PollDataController sharedInstance];
     
     // Get user data including polls
     NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
@@ -200,11 +201,11 @@
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %lu.", numRows);
+            NSLog(@"Number of friends' polls: %d.", numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %lu.", numRows);
+            NSLog(@"Number of created polls: %d.", numRows);
             break;
     }
     return numRows;
@@ -264,28 +265,14 @@
     return cell;
 }
 
-/*- (void)setEditing:(BOOL)flag animated:(BOOL)animated
-
-{
-    [super setEditing:flag animated:animated];
-    
-    if (flag == YES){
-        [self.pollTableView setEditing:YES animated:YES];
-    }
-    
-    else {
-        [self.pollTableView setEditing:NO animated:NO];
-    }
-}*/
-
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     switch (indexPath.section){
         case 0:
-            return YES;
-        case 1:
             return NO;
+        case 1:
+            return YES;
     }
     return YES;
 }

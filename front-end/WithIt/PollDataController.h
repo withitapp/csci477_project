@@ -20,4 +20,6 @@
 - (Poll *)objectInCreatedListAtIndex:(NSUInteger)theIndex;
 - (void)addPollCreatedWithPoll:(Poll *)poll;
 
++ (PollDataController*)sharedInstance;
+    
 @end

@@ -10,6 +10,7 @@
 
 @implementation Poll
 
+// Use this init when testing
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description{
     self = [super init];
     if (self) {
@@ -22,9 +23,10 @@
     return nil;
 }
 
+// Use this init when the user decides to create a new poll
 - (id)init:(NSString *)creatorName {
     // Forward to the "designated" initialization method
-    return [self initWithName:@"Untitled Poll" creatorName:creatorName description:@"No Description Given"];
+    return [self initWithName:@"Untitled Poll" creatorName:creatorName description:@"No description given"];
 }
 
 -(void)populateMembers:(NSArray *) users{

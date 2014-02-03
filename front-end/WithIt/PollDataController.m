@@ -15,6 +15,17 @@
 
 @implementation PollDataController
 
+// Ensure that only instance of PollDataController is ever instantiated
++ (PollDataController*)sharedInstance
+{
+    static PollDataController *_sharedInstance = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        _sharedInstance = [[PollDataController alloc] init];
+    });
+    return _sharedInstance;
+}
+    
 - (void)initializeDefaultDataList {
     
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];

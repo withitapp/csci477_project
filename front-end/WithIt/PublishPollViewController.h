@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "WIViewController.h"
+#import "Poll.h"
 
-@interface PublishPollViewController : WIViewController <FBFriendPickerDelegate>
+
+@interface PublishPollViewController : WIViewController <FBFriendPickerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 //- (IBAction)pickFriendsButtonClick:(id)sender;
 - (void)inviteFriendsButtonClick:(id)sender;
@@ -23,6 +25,10 @@
 //For Data
 @property (strong, nonatomic) UITextField *FriendsInvitedTextField;
 //@property (strong, nonatomic) UITextField *PollDescriptionTextField;
+
+@property (strong, nonatomic) UITableView *memberTableView;
+
+-(void)setPollDetails:(Poll*)poll;
 
 //Labels
 //@property (strong, nonatomic) UILabel *PollExpirationDateLabel;

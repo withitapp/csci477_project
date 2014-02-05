@@ -43,6 +43,12 @@
     [super viewDidLoad];
     
     //[self.navigationController.navigationItem setTitle:@"WithIt"];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
+    self.navigationItem.rightBarButtonItem = editButton;
+
     
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, self.screenHeight)];
     
@@ -184,6 +190,26 @@
     PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
     [detailViewController setPollDetails:pollAtIndex];
     [appDelegate.navigationController pushViewController:detailViewController animated:YES];*/
+}
+
+//Back button
+- (IBAction)Back
+{
+    NSLog(@"Back button pressed.");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+//Edit button
+- (IBAction)Edit
+{
+    NSLog(@"Edit button in polldetailview pressed.");
+    [self editPoll];
+    //[self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)editPoll
+{
+    
 }
 
 - (void)didReceiveMemoryWarning

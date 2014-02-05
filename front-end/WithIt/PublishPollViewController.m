@@ -81,9 +81,9 @@
     self.PublishPollButton.frame = CGRectMake(30, (self.screenHeight - 200), (self.screenWidth - 60), 30);
     [self.PublishPollButton setTitle:@"Publish Poll" forState:UIControlStateNormal];
     
-    //add action to capture when the button is released
+    //add action to capture when the button is released...this can probably be taken out later as we already have a selector for publish button
     [self.PublishPollButton addTarget:self
-     action:@selector(buttonIsReleased:)
+     action:@selector(buttonIsReleased)
      forControlEvents:UIControlEventTouchUpInside];
      
     [self.detailsView addSubview:self.PublishPollButton];
@@ -291,6 +291,11 @@
 {
     NSLog(@"Back button pressed.");
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)buttonIsReleased
+{
+    [self PublishPoll];
 }
 
 //Publish Poll

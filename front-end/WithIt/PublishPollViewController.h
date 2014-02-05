@@ -28,7 +28,7 @@
 
 @property (strong, nonatomic) UITableView *memberTableView;
 
--(void)setPollDetails:(Poll*)poll;
+//-(void)setPollDetails:(Poll*)poll;
 
 //Labels
 //@property (strong, nonatomic) UILabel *PollExpirationDateLabel;

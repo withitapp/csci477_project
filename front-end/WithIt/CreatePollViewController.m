@@ -114,22 +114,23 @@
 //action for PollCreateButton pressed - going to the next create poll page
 - (IBAction)goPublishNewPoll
 {
-    NSLog(@"Moving to PublishView.");
+    
     if([_PollTitleTextField.text isEqualToString: @"Poll Title"] ||
        [_PollTitleTextField.text isEqualToString: @""] ||
        [_PollDescriptionTextField.text isEqualToString: @"Poll Description"] ){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a poll title." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             NSLog(@"Invalid input, alerting user.");
-            return;
     }
+    else {
+        NSLog(@"Moving to PublishView.");
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        Poll *poll = [[Poll alloc  ] initWithName:_PollTitleTextField.text creatorName:appDelegate.username description:_PollDescriptionTextField.text ];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    Poll *poll = [[Poll alloc  ] initWithName:_PollTitleTextField.text creatorName:appDelegate.username description:_PollDescriptionTextField.text ];
-    
-    PublishPollViewController *publishPollViewController = [[PublishPollViewController alloc] init];
-    [publishPollViewController setPollCreated:poll];
-    [self.navigationController pushViewController:publishPollViewController animated:YES];
+        PublishPollViewController *publishPollViewController = [[PublishPollViewController alloc] init];
+        [publishPollViewController setPollCreated:poll];
+        [self.navigationController pushViewController:publishPollViewController animated:YES];
+    }
 }
 
 

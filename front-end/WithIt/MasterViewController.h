@@ -18,10 +18,6 @@
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UIImageView *profilePictureView;
 
-// User specific information
-@property (strong, nonatomic) NSString *userID;
-@property (strong, nonatomic) NSString *userName;
-@property (strong, nonatomic) NSMutableArray *userFriendsList;
-@property (strong, nonatomic) NSMutableArray *userPollsList;
++ (MasterViewController*)sharedInstance;
 
 @end

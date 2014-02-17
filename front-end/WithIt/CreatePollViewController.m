@@ -20,7 +20,7 @@
 {
     self = [super init];
     if (self) {
-        // Custom initialization
+        self.dataController = [PollDataController sharedInstance];
     }
     return self;
 }
@@ -50,7 +50,7 @@
     [self.view addSubview:self.detailsView];
     
     //Add input text field for Poll Title
-    NSLog(@"Before create Poll Title Text Field.");
+    //NSLog(@"Before create Poll Title Text Field.");
     self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (self.screenWidth - 40), 30)];
     self.PollTitleTextField.placeholder = @"Poll Title";
     self.PollTitleTextField.backgroundColor=[UIColor whiteColor];
@@ -62,11 +62,11 @@
     //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
     self.PollTitleTextField.delegate = self;
     [self.detailsView addSubview:self.PollTitleTextField];
-    NSLog(@"Done create Poll Title Text Field.");
+    //NSLog(@"Done create Poll Title Text Field.");
     
     
     //Add input text field for Poll Description
-    NSLog(@"Before create Poll Description Text Field.");
+    //NSLog(@"Before create Poll Description Text Field.");
     self.PollDescriptionTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 150)];
     self.PollDescriptionTextField.placeholder = @"Poll Description";
     self.PollDescriptionTextField.backgroundColor=[UIColor whiteColor];
@@ -78,7 +78,7 @@
     self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;
     [self.detailsView addSubview:self.PollDescriptionTextField];
-    NSLog(@"Done create Poll Description Text Field.");
+    //NSLog(@"Done create Poll Description Text Field.");
     
     //Add date selection label for Poll Expiration
     self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 260, 300, 30)];
@@ -114,23 +114,21 @@
 //action for PollCreateButton pressed - going to the next create poll page
 - (IBAction)goPublishNewPoll
 {
-   /* AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    Poll *currentPoll = [[Poll alloc] init:appDelegate.username];
-    
-    
-    //Create current poll Object
-    if(![_PollTitleTextField.text  isEqualToString: @"Poll Title"]){
-        currentPoll.title = _PollTitleTextField.text;
+    NSLog(@"Moving to PublishView.");
+    if([_PollTitleTextField.text isEqualToString: @"Poll Title"] ||
+       [_PollTitleTextField.text isEqualToString: @""] ||
+       [_PollDescriptionTextField.text isEqualToString: @"Poll Description"] ){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a poll title." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            NSLog(@"Invalid input, alerting user.");
+            return;
     }
     
-    if(![_PollDescriptionTextField.text isEqualToString: @"Poll Description"]){
-        currentPoll.description = _PollDescriptionTextField.text;
-    }*/
-    
-    
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    Poll *poll = [[Poll alloc  ] initWithName:_PollTitleTextField.text creatorName:appDelegate.username description:_PollDescriptionTextField.text ];
     
     PublishPollViewController *publishPollViewController = [[PublishPollViewController alloc] init];
+    [publishPollViewController setPollCreated:poll];
     [self.navigationController pushViewController:publishPollViewController animated:YES];
 }
 

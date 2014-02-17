@@ -27,10 +27,11 @@
 //@property (strong, nonatomic) UITextField *PollDescriptionTextField;
 
 @property (strong, nonatomic) UITableView *memberTableView;
-
-//-(void)setPollDetails:(Poll*)poll;
+@property (strong, nonatomic) Poll *poll;
 
 //Labels
 //@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
+
+-(void)setPollCreated:(Poll*)poll;
 
 @end

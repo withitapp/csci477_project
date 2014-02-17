@@ -27,6 +27,17 @@
 @synthesize friendPickerController = _friendPickerController;
 @synthesize InviteFriendsButton, PublishPollButton;
 
+
+-(void)setPollCreated:(Poll *)poll
+{
+    if(!poll){
+        NSLog(@"Poll is null.");
+        return;
+    }
+    self.poll = poll;
+    NSLog(@"Set poll %@.", self.poll.title);
+}
+
 #pragma mark View lifecycle
 
 - (void)viewDidLoad
@@ -304,7 +315,11 @@
     
     NSLog(@"Publish button pressed.");
     
-  //  [masterPollsCreatedList addPollCreatedWithPoll:currentPoll];
+    PollDataController *dataController = [PollDataController sharedInstance];
+    [dataController addPollCreatedWithPoll:self.poll];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.masterViewController.pollTableView reloadData];
     
     //pop view controllers twice
     [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];

@@ -11,6 +11,20 @@
 @implementation Poll
 
 // Use this init when testing
+-(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate{
+    self = [super init];
+    if (self) {
+        _title = name;
+        _creatorID = creatorName;
+        _description = description;
+        _createDate = [[NSDate alloc] init];
+        _endDate = endDate;
+        return self;
+    }
+    return nil;
+}
+
+// Use this init when testing
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description{
     self = [super init];
     if (self) {
@@ -28,6 +42,7 @@
     // Forward to the "designated" initialization method
     return [self initWithName:@"Untitled Poll" creatorName:creatorName description:@"No description given"];
 }
+
 
 -(void)populateMembers:(NSArray *) users{
     _members = [[NSMutableArray alloc] init];

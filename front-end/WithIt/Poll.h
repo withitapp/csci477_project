@@ -18,6 +18,7 @@
 @property NSDate *endDate;
 @property NSMutableArray *members;
 
+-(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;
 -(id)init:(NSString *)creatorName;
 -(void)populateMembers:(NSArray *) users;

@@ -87,7 +87,7 @@
     // Add poll creator name label
     self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 210, (self.screenWidth - 10), 10)];
     self.creatorNameLabel.font = [UIFont systemFontOfSize:10.0];
-     self.descriptionLabel.textColor = [UIColor lightGrayColor];
+     self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
     [self.creatorNameLabel setText:@"Created by: "];
     self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];

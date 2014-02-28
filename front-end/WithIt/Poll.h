@@ -14,9 +14,16 @@
 @property NSString *title;
 @property NSString *description;
 @property NSString *creatorID;
+@property NSDate *createDate;
 @property NSDate *endDate;
-@property NSDate *endTime;
 @property NSMutableArray *members;
 
--(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName dateCreated:(NSDate *)dateCreated;
+-(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
+-(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;
+-(id)init:(NSString *)creatorName;
+-(void)populateMembers:(NSArray *) users;
+-(void)addMember:(NSObject *) user;
+-(void)removeMember:(NSObject *) user;
+
+
 @end

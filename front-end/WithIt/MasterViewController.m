@@ -11,98 +11,50 @@
 #import "PollDetailViewController.h"
 #import "AppDelegate.h"
 
-#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
-#define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
-
 @interface MasterViewController ()
 
 @end
 
 @implementation MasterViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+// Ensure that only instance of MasterViewController is ever instantiated
++ (MasterViewController*)sharedInstance
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    static MasterViewController *_sharedInstance = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        _sharedInstance = [[MasterViewController alloc] init];
+    });
+    return _sharedInstance;
 }
 
 - (void)loadData
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        //self.clearsSelectionOnViewWillAppear = NO;
         self.preferredContentSize = CGSizeMake(320.0, 500.0);
     }
     [super awakeFromNib];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.dataController = [[PollDataController alloc] init];
+    // Use sharedInstance instead of init to ensure use of singleton
+    self.dataController = [PollDataController sharedInstance];
+    [self.dataController loadData];
     
-    // Get user data including polls
-    NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
-    NSError *userDataError;
-    NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
+}
+
+- (void)setEditing:(BOOL)flag animated:(BOOL)animated
+
+{
     
-    if(userDataError){
-        NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
+    [super setEditing:flag animated:animated];
+    
+    if (flag == YES){
+        [self.pollTableView setEditing:YES animated:YES];
     }
+    
     else {
-        NSLog(@"JSON user data loaded.");
-        //NSLog(@"%@", users);
+        [self.pollTableView setEditing:NO animated:NO];
     }
     
-    // Parse user data
-    for(NSDictionary *theUser in users){
-        NSString *theID = theUser[@"id"];
-            if([theID isEqualToString:appDelegate.userID]){
-                self.userID = theUser[@"id"];
-                self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
-                self.userFriendsList = theUser[@"friends"];
-                self.userPollsList = theUser[@"polls"];
-                break;
-            }
-    }
-    
-    // Get poll data
-    NSData *pollsData = [[NSData alloc] initWithContentsOfURL:pollDataURL];
-    NSError *pollDataError;
-    NSDictionary *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError][@"polls"];
-	
-    if(pollDataError){
-        NSLog(@"Error loading poll data JSON: %@", [pollDataError localizedDescription]);
-    }
-    else {
-        NSLog(@"JSON poll data loaded.");
-        //NSLog(@"%@", polls);
-    }
-    
-    // Parse poll data
-    Poll *poll;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyyMMdd"];
-    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-    [timeFormatter setDateFormat:@"hhmmss"];
-    
-    for(NSDictionary *thePoll in polls){
-        NSString *pollID = thePoll[@"id"];
-        for(NSString *theID in self.userPollsList){
-            if([pollID isEqualToString:theID]){
-                poll = [[Poll alloc] init];
-                poll.pollID = pollID;
-                poll.title = thePoll[@"title"];
-                poll.description = thePoll[@"description"];
-                poll.creatorID = thePoll[@"creator"];
-                //poll.endDate = [dateFormatter dateFromString:thePoll[@"endDate"]];
-                //poll.endTime = [timeFormatter dateFromString:thePoll[@"endTime"]];
-                //poll.members = thePoll[@"members"];
-                //NSLog(@"Member list %@", poll.members);
-                [self.dataController addPollWithPoll:poll];
-                break;
-            }
-        }
-    }
 }
 
 - (void)viewDidLoad
@@ -136,7 +88,6 @@
     // Add user welcome label
     self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(65, 10, (self.screenWidth - 75), 20) ];
     self.usernameLabel.textColor = [UIColor blackColor];
-    //self.usernameLabel.backgroundColor = [UIColor greenColor];
     self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
     self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
     [self.headerView addSubview:self.usernameLabel];
@@ -163,7 +114,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
@@ -176,6 +127,9 @@
             break;
         case 1:
             sectionName = NSLocalizedString(@" My polls:", @" My polls:");
+            break;
+        case 2:
+            sectionName = NSLocalizedString(@" Expired polls:", @" Expired polls:");
             break;
     }
     return sectionName;
@@ -244,24 +198,20 @@
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
             break;
+        case 2:
+            if (!formatter) {
+                formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:NSDateFormatterMediumStyle];
+            }
+            
+            pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
+            [[cell textLabel] setText:pollAtIndex.title];
+            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            break;
     }
     cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
 
     return cell;
-}
-
-- (void)setEditing:(BOOL)flag animated:(BOOL)animated
-
-{
-    [super setEditing:flag animated:animated];
-    
-    if (flag == YES){
-        [self.pollTableView setEditing:YES animated:YES];
-    }
-    
-    else {
-        [self.pollTableView setEditing:NO animated:NO];
-    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -269,8 +219,10 @@
     // Return NO if you do not want the specified item to be editable.
     switch (indexPath.section){
         case 0:
-            return YES;
+            return NO;
         case 1:
+            return YES;
+        case 2:
             return NO;
     }
     return YES;
@@ -288,6 +240,10 @@
         case 1:
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             break;
+        
+        case 2:
+            // expired poll
+            return;
             
         default:
             NSLog(@"Something went wrong!");

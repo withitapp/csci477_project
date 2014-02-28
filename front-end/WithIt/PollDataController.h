@@ -11,6 +11,13 @@
 
 @interface PollDataController : NSObject
 
+// User information
+// User specific information
+@property (strong, nonatomic) NSString *userID;
+@property (strong, nonatomic) NSString *userName;
+@property (strong, nonatomic) NSMutableArray *userFriendsList;
+@property (strong, nonatomic) NSMutableArray *userPollsList;
+
 @property (nonatomic, copy) NSMutableArray *masterPollsList;
 @property (nonatomic, copy) NSMutableArray *masterPollsCreatedList;
 
@@ -20,4 +27,7 @@
 - (Poll *)objectInCreatedListAtIndex:(NSUInteger)theIndex;
 - (void)addPollCreatedWithPoll:(Poll *)poll;
 
+- (void)loadData;
++ (PollDataController*)sharedInstance;
+    
 @end

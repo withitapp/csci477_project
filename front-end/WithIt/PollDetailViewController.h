@@ -15,6 +15,7 @@
 @property (strong, nonatomic) Poll *poll;
 @property (strong, nonatomic) UIView *detailsView;
 @property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UITextView *descriptionLabel;
 @property (strong, nonatomic) UILabel *timeRemainingLabel;
 @property (strong, nonatomic) UILabel *creatorNameLabel;
 

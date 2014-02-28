@@ -9,20 +9,29 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "WIViewController.h"
+#import "Poll.h"
 
-@interface PublishPollViewController : WIViewController <FBFriendPickerDelegate>
 
-- (IBAction)pickFriendsButtonClick:(id)sender;
+@interface PublishPollViewController : WIViewController <FBFriendPickerDelegate, UITableViewDelegate, UITableViewDataSource>
 
+//- (IBAction)pickFriendsButtonClick:(id)sender;
+- (void)inviteFriendsButtonClick:(id)sender;
 
 @property (strong, nonatomic) UIView *detailsView;
 
+//Buttons
+@property (nonatomic, strong) UIButton *InviteFriendsButton, *PublishPollButton;
 
-//For input data
+//For Data
 @property (strong, nonatomic) UITextField *FriendsInvitedTextField;
 //@property (strong, nonatomic) UITextField *PollDescriptionTextField;
 
+@property (strong, nonatomic) UITableView *memberTableView;
+@property (strong, nonatomic) Poll *poll;
+
 //Labels
-@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
+//@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
+
+-(void)setPollCreated:(Poll*)poll;
 
 @end

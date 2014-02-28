@@ -34,7 +34,6 @@
     }
     self.poll = pollAtIndex;
     //[self.titleLabel setText:self.poll.name];
-    NSLog(@"Set poll %@.", self.poll.title);
 }
 
 - (void)viewDidLoad
@@ -45,10 +44,16 @@
     //[self.navigationController.navigationItem setTitle:@"WithIt"];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+    if(self.poll.creatorID == appDelegate.username) {
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
-
+    }
+    else {
+        UIBarButtonItem *leaveButton = [[UIBarButtonItem alloc] initWithTitle:@"Leave Group" style:UIBarButtonItemStyleBordered target:self action:@selector(Leave)];
+        self.navigationItem.rightBarButtonItem = leaveButton;
+    }
     
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, self.screenHeight)];
     
@@ -233,6 +238,19 @@
 }
 
 - (void)editPoll
+{
+    
+}
+
+//Leave button
+- (IBAction)Leave
+{
+    NSLog(@"Leave button in polldetailview pressed.");
+    [self leavePoll];
+    //[self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)leavePoll
 {
     
 }

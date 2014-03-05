@@ -14,7 +14,8 @@
 #import "User.h"
 
 #define serverURL [NSURL URLWithString:@"http://api.withitapp.com"]
-#define dummyURL [NSURL URLWithString:@"https://gist.githubusercontent.com/oguzbilgic/9280772/raw/5712b87f2c3dc7908290f936bf8bc6821eb65c14/polls.json"]
+//#define dummyURL [NSURL URLWithString:@"https://gist.githubusercontent.com/oguzbilgic/9280772/raw/5712b87f2c3dc7908290f936bf8bc6821eb65c14/polls.json"]
+#define dummyURL [NSURL URLWithString:@"http://gist.githubusercontent.com/oguzbilgic/9283570/raw/9e63c13790a74ffc51c5ea4edb9004d7e5246622/polls.json"]
 #define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
 #define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
 
@@ -230,8 +231,10 @@
                                    poll.description = thePoll[@"description"];
                                    poll.creatorID = thePoll[@"user_id"];
                                    poll.endDate = thePoll[@"ends_at"];
-                                   
-                                   poll.members = thePoll[@"member_ids"];
+                                   //NSMutableArray *members = [NSJSONSerialization JSONObjectWithData:thePoll[@"member_ids"] options:NSJSONReadingMutableContainers error:&memberDataError];
+                                   poll.members = [polls valueForKey:@"member_ids"];
+                                //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
+                                  // poll.members = thePoll[@"member_ids"];
                                   // poll.membershipIDs = thePoll[@"membership_ids"];
                                    [updatePollsList addObject:poll];
                                           // break;

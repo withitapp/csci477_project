@@ -78,19 +78,21 @@
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
+  //  NSLog(@"Before poll endDate");
     if(self.poll.endDate != nil){
-        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]]; }
+        NSLog(@"Poll endDate is not nil");
+        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:self.poll.endDate];}//[dateFormatter stringFromDate:self.poll.endDate]]; }
     else
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
     [self.detailsView addSubview:self.timeRemainingLabel];
-    
+    NSLog(@"After poll endDate");
     // Add poll creator name label
     self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 210, (self.screenWidth - 10), 10)];
     self.creatorNameLabel.font = [UIFont systemFontOfSize:10.0];
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
     [self.creatorNameLabel setText:@"Created by: "];
-    self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
+   // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
     [self.detailsView addSubview:self.creatorNameLabel];
     
     

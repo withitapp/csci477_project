@@ -11,6 +11,8 @@
 #import "CreatePollViewController.h"
 #import "AppDelegate.h"
 
+const NSInteger ALIGN = 10;
+
 @interface PollDetailViewController ()
 
 @end
@@ -33,7 +35,6 @@
         return;
     }
     self.poll = pollAtIndex;
-    //[self.titleLabel setText:self.poll.name];
     NSLog(@"Set poll %@.", self.poll.title);
 }
 
@@ -42,36 +43,30 @@
     NSLog(@"Loading detail view for poll %@.", self.poll.title);
     [super viewDidLoad];
     
-    //[self.navigationController.navigationItem setTitle:@"WithIt"];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
     
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
-
     
-    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, self.screenHeight)];
+   NSInteger currentHeight = 65;
     
-  //  UIFont *font = [UIFont fontWithName:@"Ariel-Bold" size:40];
     // Add poll title label
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 65, (self.screenWidth - 10), 40)];
-    //self.titleLabel.adjustsFontSizeToFitWidth = YES;
-    [self.titleLabel setText:self.poll.title];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    [self.detailsView addSubview:self.titleLabel];
-    
+    self.titleLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
+    self.titleLabel.font = [UIFont systemFontOfSize:20.0];
+    self.titleLabel.textColor = [UIColor blackColor];
+    [self.titleLabel setEditable:FALSE];
+    currentHeight += self.titleLabel.frame.size.height;
     
     // Add poll description label
-    self.descriptionLabel = [[UITextView alloc] initWithFrame:CGRectMake(10, 100, (self.screenWidth - 10), 90)];
-    self.descriptionLabel.font = [UIFont fontWithName:@"Ariel" size:14];
+    self.descriptionLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
+    self.descriptionLabel.font = [UIFont fontWithName:@"Ariel" size:14.0];
     self.descriptionLabel.textColor = [UIColor darkGrayColor];
-    [self.descriptionLabel setText:self.poll.description];
     [self.descriptionLabel setEditable:FALSE];
-    [self.detailsView addSubview:self.descriptionLabel];
+    currentHeight += self.descriptionLabel.frame.size.height;
     
     // Add time remaining for poll label
-    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 190, (self.screenWidth - 10), 20)];
+    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20)];
     self.timeRemainingLabel.font = [UIFont systemFontOfSize:10.0];
     [self.timeRemainingLabel setTextAlignment: NSTextAlignmentCenter];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -82,26 +77,56 @@
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]]; }
     else
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
-    [self.detailsView addSubview:self.timeRemainingLabel];
+    currentHeight += 20;
     
     // Add poll creator name label
-    self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 210, (self.screenWidth - 10), 10)];
+    self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10)];
     self.creatorNameLabel.font = [UIFont systemFontOfSize:10.0];
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
     [self.creatorNameLabel setText:@"Created by: "];
     self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
+    currentHeight += 10;
+    
+    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, currentHeight)];
+    [self.detailsView addSubview:self.titleLabel];
+    [self.detailsView addSubview:self.descriptionLabel];
+    [self.detailsView addSubview:self.timeRemainingLabel];
     [self.detailsView addSubview:self.creatorNameLabel];
-    
-    
     [self.view addSubview:self.detailsView];
     
     // Set up poll table view
-    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 225, self.screenWidth, (self.screenHeight-280))];
+    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight))];
     self.memberTableView.delegate = self;
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.memberTableView];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSInteger currentHeight = 65;
+    [self.titleLabel setText:self.poll.title];
+    [self.titleLabel sizeToFit];
+    [self.titleLabel layoutIfNeeded];
+    currentHeight += self.titleLabel.frame.size.height;
+    
+    self.descriptionLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenWidth);
+    [self.descriptionLabel setText:self.poll.description];
+    [self.descriptionLabel sizeToFit];
+    [self.descriptionLabel layoutIfNeeded];
+    currentHeight += self.descriptionLabel.frame.size.height;
+    
+    self.timeRemainingLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20);
+    currentHeight += 20;
+    
+    self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
+    currentHeight += 10;
+    
+    self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
+    currentHeight += 5;
+    self.memberTableView.frame = CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight));
+    
 }
 
 #pragma mark - Poll Detail Table View
@@ -133,7 +158,7 @@
             numRows = 3; // need to add member lists to poll data
             break;
         case 1:
-            numRows = 2; // same problem
+            numRows = 8; // same problem
             break;
     }
     return numRows;

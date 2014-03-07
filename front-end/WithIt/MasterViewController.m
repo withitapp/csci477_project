@@ -280,21 +280,24 @@
 }
 
 
-- (void) leavePollFunction
+- (void) leavePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside leave Poll function!!");
+    [self.dataController deleteObjectInListAtIndex:index];
     
 }
 
-- (void) deletePollFunction
+- (void) deletePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside delete Poll function!!");
+    [self.dataController deleteObjectInCreatedListAtIndex:index];
     
 }
 
-- (void) erasePollFunction
+- (void) erasePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside erase Poll function!!");
+    [self.dataController deleteObjectInExpiredListAtIndex:index];
     
 }
 
@@ -312,17 +315,17 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
      switch (indexPath.section) {
      case 0:
              NSLog(@"leavePoll pressed");
-             [self leavePollFunction];
+             [self leavePollFunction:indexPath.row];
              break;
      
      case 1:
              NSLog(@"DeletePoll pressed");
-             [self deletePollFunction];
+             [self deletePollFunction:indexPath.row];
              break;
      
      case 2:
              NSLog(@"ErasePoll pressed");
-             [self erasePollFunction];
+             [self erasePollFunction:indexPath.row];
              break;
      
      default:

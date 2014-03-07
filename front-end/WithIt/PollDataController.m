@@ -142,12 +142,32 @@
     [self.masterPollsList addObject:poll];
 }
 
+- (void)deleteObjectInListAtIndex:(NSUInteger)theIndex{
+    [self.masterPollsList removeObjectAtIndex:theIndex];
+}
+
 - (Poll *)objectInCreatedListAtIndex:(NSUInteger)theIndex {
     return [self.masterPollsCreatedList objectAtIndex:theIndex];
 }
 
 - (void)addPollCreatedWithPoll:(Poll *)poll {
     [self.masterPollsCreatedList addObject:poll];
+}
+
+- (void)deleteObjectInCreatedListAtIndex:(NSUInteger)theIndex {
+    [self.masterPollsCreatedList removeObjectAtIndex:theIndex];
+}
+
+- (Poll *)objectInExpiredListAtIndex:(NSUInteger)theIndex {
+    return [self.masterPollsExpiredList objectAtIndex:theIndex];
+}
+
+- (void)addPollExpiredWithPoll:(Poll *)poll {
+    [self.masterPollsExpiredList addObject:poll];
+}
+
+- (void)deleteObjectInExpiredListAtIndex:(NSUInteger)theIndex {
+    [self.masterPollsExpiredList removeObjectAtIndex:theIndex];
 }
 
 @end

@@ -173,7 +173,6 @@
 				1DA893081863F38100904F8F /* CreatePollViewController.h */,
 				1DA893091863F38100904F8F /* CreatePollViewController.m */,
 				B6136DBF1890D46B0081B2AB /* PublishPollViewController.h */,
-				12A5A43518C139BB00D9229F /* Base.lproj */,
 				B6136DC01890D46B0081B2AB /* PublishPollViewController.m */,
 				1DA893101864117C00904F8F /* Poll.h */,
 				1DA893111864117C00904F8F /* Poll.m */,
@@ -182,6 +181,7 @@
 				1DA8931418641B0300904F8F /* PollDataController.h */,
 				1DA8931518641B0300904F8F /* PollDataController.m */,
 				1DA892D41863846D00904F8F /* Images.xcassets */,
+				12A5A43518C139BB00D9229F /* Base.lproj */,
 				1DA892C31863846D00904F8F /* Supporting Files */,
 			);
 			path = WithIt;

@@ -76,10 +76,10 @@ heightForHeaderInSection:(NSInteger)section{
     NSString *sectionName;
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@"User Name:", @"User Name:");
+            sectionName = NSLocalizedString(@"User Name", @"User Name");
             break;
         case 1:
-            sectionName = NSLocalizedString(@"Software:", @"Software:");
+            sectionName = NSLocalizedString(@"Software", @"Software");
             break;
     }
     return sectionName;
@@ -90,11 +90,10 @@ heightForHeaderInSection:(NSInteger)section{
     switch (section){
         case 0:
             numRows = 1;
-            NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
-            break;
+                       break;
         case 1:
             numRows = 1;
-            NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
+
             break;
         default:
             numRows = 0;

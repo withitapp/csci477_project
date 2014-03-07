@@ -138,8 +138,7 @@
 {
     
     if([_PollTitleTextField.text isEqualToString: @"Poll Title"] ||
-       [_PollTitleTextField.text isEqualToString: @""] ||
-       [_PollDescriptionTextField.text isEqualToString: @"Poll Description"] ){
+       [_PollTitleTextField.text isEqualToString: @""]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a poll title." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             NSLog(@"Invalid input, alerting user.");

@@ -41,6 +41,8 @@
     
 }
 
+//Should be old edit mode
+/*
 - (void)setEditing:(BOOL)flag animated:(BOOL)animated
 
 {
@@ -55,7 +57,7 @@
         [self.pollTableView setEditing:NO animated:NO];
     }
     
-}
+}*/
 
 - (void)viewDidLoad
 {
@@ -65,7 +67,10 @@
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;
     
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    //Old//
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    //TODO:: Have not idea it works fine now,but new poll button should not be the left bar button
+    self.navigationItem.leftBarButtonItem = newPollButton;
     
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];
@@ -118,6 +123,7 @@
 }
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
+//Set the Names of Sections of the table
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *sectionName;
@@ -135,6 +141,7 @@
     return sectionName;
 }
 
+//Set the Number of rows of each section in table
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSUInteger numRows = 0;
     switch (section){
@@ -154,6 +161,7 @@
     return numRows;
 }
 
+//Return each "poll" into corresponding section of the table
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"PollCell";
@@ -218,7 +226,8 @@
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//This should be the one delete show when in edit mode
+/*- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     switch (indexPath.section){
@@ -230,7 +239,7 @@
             return NO;
     }
     return YES;
-}
+}*/
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -269,5 +278,100 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (void) leavePollFunction
+{
+    NSLog(@"Inside leave Poll function!!");
+    
+}
+
+- (void) deletePollFunction
+{
+    NSLog(@"Inside delete Poll function!!");
+    
+}
+
+- (void) erasePollFunction
+{
+    NSLog(@"Inside erase Poll function!!");
+    
+}
+
+
+//Swipe to delete button in table view
+ -(void)tableView:(UITableView*)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ }
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    //TODO::: function for delete a poll / leave a poll
+     switch (indexPath.section) {
+     case 0:
+             NSLog(@"leavePoll pressed");
+             [self leavePollFunction];
+             break;
+     
+     case 1:
+             NSLog(@"DeletePoll pressed");
+             [self deletePollFunction];
+             break;
+     
+     case 2:
+             NSLog(@"ErasePoll pressed");
+             [self erasePollFunction];
+             break;
+     
+     default:
+     break;
+     }
+  
+   // TODO::should include below function into the leavePollFunction/ DeletePollFunction/ ErasePollFunction
+  
+    // If row is deleted, remove it from the list.
+   
+    /*
+     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // delete your data item here
+    
+        // Animate the deletion from the table.
+        [self.pollTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+      
+    }*/
+    
+    // Reload the table view.
+    [tableView reloadData];
+}
+
+//Change "delete" to "leave " for other people's polls, and to "erase" for expired polls
+- (NSString *)tableView:(UITableView *)tableView
+titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    switch (indexPath.section) {
+        case 0:
+           return @"Leave";
+            break;
+            
+        case 1:
+            return @"Delete";
+            break;
+            
+        case 2:
+            return @"Erase";
+            
+        default:
+            NSLog(@"Something went wrong!");
+            return @"Something went wrong!";
+
+}
+}
+
+
+
+
 
 @end

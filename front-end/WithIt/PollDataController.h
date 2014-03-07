@@ -20,12 +20,19 @@
 
 @property (nonatomic, copy) NSMutableArray *masterPollsList;
 @property (nonatomic, copy) NSMutableArray *masterPollsCreatedList;
+@property (nonatomic, copy) NSMutableArray *masterPollsExpiredList;
 
 - (Poll *)objectInListAtIndex:(NSUInteger)theIndex;
 - (void)addPollWithPoll:(Poll *)poll;
+- (void)deleteObjectInListAtIndex:(NSUInteger)theIndex;
 
 - (Poll *)objectInCreatedListAtIndex:(NSUInteger)theIndex;
 - (void)addPollCreatedWithPoll:(Poll *)poll;
+- (void)deleteObjectInCreatedListAtIndex:(NSUInteger)theIndex;
+
+- (Poll *)objectInExpiredListAtIndex:(NSUInteger)theIndex;
+- (void)addPollExpiredWithPoll:(Poll *)poll;
+- (void)deleteObjectInExpiredListAtIndex:(NSUInteger)theIndex;
 
 - (void)loadData;
 + (PollDataController*)sharedInstance;

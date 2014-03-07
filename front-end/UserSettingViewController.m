@@ -7,6 +7,7 @@
 //
 
 #import "UserSettingViewController.h"
+#import "AppDelegate.h"
 
 @interface UserSettingViewController ()
 
@@ -30,6 +31,9 @@
 {
     [super viewDidLoad];
 
+
+    
+    
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -174,13 +178,16 @@ heightForHeaderInSection:(NSInteger)section{
     //Poll *pollAtIndex;
     //UISwitch *toggleSwitch = [[UISwitch alloc] init];
     
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
     switch (indexPath.section) {
         case 0:
-
+            cell.textLabel.text = [NSString stringWithFormat: @"%@", appDelegate.username];
             
             break;
             
         case 1:
+            cell.textLabel.text = [NSString stringWithFormat: @"Version 1.0"];
 
             break;
         case 2:

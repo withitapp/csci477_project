@@ -12,10 +12,13 @@
 #include "AppDelegate.h"
 #import "Poll.h"
 #import "User.h"
+#import <FacebookSDK/FBSessionTokenCachingStrategy.h>
 
 #define serverURL [NSURL URLWithString:@"http://api.withitapp.com"]
 //#define dummyURL [NSURL URLWithString:@"https://gist.githubusercontent.com/oguzbilgic/9280772/raw/5712b87f2c3dc7908290f936bf8bc6821eb65c14/polls.json"]
 #define dummyURL [NSURL URLWithString:@"http://gist.githubusercontent.com/oguzbilgic/9283570/raw/9e63c13790a74ffc51c5ea4edb9004d7e5246622/polls.json"]
+#define dummyPostURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
+//#define dummyURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 #define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
 #define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
 
@@ -53,7 +56,19 @@
             self.userPollsList = theUser[@"polls"];
             break;
         }
-    }*/
+    }
+   
+   token:
+   CAAIK6ZAZCePloBAC556xyZAEJUR7dvgY0mkHDvOwx4PqUexQDLKp0soudZCkxfB722VkZAICGb7BiW01qGh54Lc8bwo1cxLfc9bcbwqKyAVcriZBrsCLA3ZBZBCrnsJyZCp2Q6BGZBk7KBFop1EcZAWodTMa9U6nICwszd1noAczkNAdQ5pgRpt9ILoavdWnXFtrc0VKPY58YJj1kZBjSaXiTYRZCol8EGPTb65cZD*/
+    FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
+    FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
+    NSLog(@"FB token string %@", fbtoken.accessToken);
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    NSLog(@"FB token expiration date %@", [formatter stringFromDate:fbtoken.expirationDate]);
+    NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
+    
+    [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
     [self retrievePolls];
     
     
@@ -111,16 +126,11 @@
         NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
         self.masterPollsCreatedList = createdPollsList;
         
-        [self retrievePolls];
+       // [self retrievePolls];
     
-        
-      //  poll = [[Poll alloc] initWithName:@"Default creator poll" creatorName:@"Francesca" description:@"No description given"];
        // [self addPollCreatedWithPoll:poll];
         return self;
-        //[self initializeDefaultDataList];
-  //      return self;
-    //}
-   // return nil;
+    
 }
 
 - (Poll *)objectInListAtIndex:(NSUInteger)theIndex {
@@ -192,7 +202,6 @@
                                NSError *jsonError = nil;
                                
                                
-                               ////poll data
                                // Get poll data
                                NSData *pollsData = [[NSData alloc] initWithContentsOfURL:dummyURL];
                                NSError *pollDataError;
@@ -212,10 +221,6 @@
                                
                                // Parse poll data
                                Poll *poll;
-                               NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                               [dateFormatter setDateFormat:@"yyyyMMdd"];
-                               NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-                               [timeFormatter setDateFormat:@"hhmmss"];
                                
                                for(NSDictionary *thePoll in polls){
                                    
@@ -224,16 +229,17 @@
                                      //  if([pollID isEqualToString:theID]){
                                     NSLog(@"-Adding poll to masterpolls list-");
                                    poll = [[Poll alloc] init];
-                                   poll.pollID = thePoll[@"ID"];
-                                   [self dateFromString:thePoll[@"CreatedAt"]];
-                                  // poll.createDate = thePoll[@"created_at"];
-                                   poll.updatedAt = thePoll[@"UpdatedAt"];
-                                   poll.title = thePoll[@"Title"];
-                                   poll.description = thePoll[@"Description"];
-                                   poll.creatorID = thePoll[@"UserID"];
-                                   poll.endDate = thePoll[@"EndsAt"];
-                                 //  [self dateFromString:thePoll[@"CreatedAt"]];
-                                   //NSMutableArray *members = [NSJSONSerialization JSONObjectWithData:thePoll[@"member_ids"] options:NSJSONReadingMutableContainers error:&memberDataError];
+                                   poll.pollID = thePoll[@"id"];
+                                  // poll.createDate = [self convertJSONDate:thePoll[@"created_at"]];
+                                   poll.createDate = thePoll[@"created_at"];
+                                  // poll.updatedAt = [self convertJSONDate:thePoll[@"updated_at"]];
+                                   poll.updatedAt = thePoll[@"updated_at"];
+                                   poll.title = thePoll[@"title"];
+                                   poll.description = thePoll[@"description"];
+                                   poll.creatorID = thePoll[@"user_id"];
+                                  // poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
+                                   poll.endDate = thePoll[@"ends_at"];
+                                 
                               //     poll.members = [polls valueForKey:@"member_ids"];
                               //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
                                 //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
@@ -254,14 +260,80 @@
     //return polls;
 }
 
-- (NSDate *) dateFromString:(NSString *)dateString {
+
+//post request of token
+- (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID//:(NSArray *)polls
+{
+    NSLog(@"Posting user token to session");
+   // NSURL *pollsURL = dummyPostURL;
+    NSLog(@"URL posting to is: %@", dummyPostURL);
+    
+    NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:dummyPostURL];
+   
+    /*NSDictionary *requestData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                 fbID, @"facebook_id",
+                                 fbToken, @"fb_token",
+                                 nil]; */
+   // [postRequest setValue:requestData forHTTPHeaderField:@"Content-Type"];
+    [postRequest setHTTPMethod:@"POST"];
+    NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [postRequest setHTTPBody:requestBodyData];
+    
+    
+   // NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:postRequest delegate:self];
+    
+    
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    [NSURLConnection sendAsynchronousRequest:postRequest
+                                       queue:queue
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                               NSHTTPURLResponse *httpResponse = nil;
+                               if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                                   httpResponse = (NSHTTPURLResponse *) response;
+                               }
+                               
+                               // NSURLConnection's completionHandler is called on the background thread.
+                               // Prepare a block to show an alert on the main thread:
+                               __block NSString *message = @"";
+                               void (^showAlert)(void) = ^{
+                                   [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                       [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                   }];
+                               };
+                               
+                               // Check for error or non-OK statusCode:
+                               if (error || httpResponse.statusCode != 200) {
+                                   message = @"Error fetching polls";
+                                   NSLog(@"URL error: %@", error);
+                                   showAlert();
+                                   return;
+                               }
+                               
+                               
+                              
+                               
+                               
+                               dispatch_semaphore_signal(semaphore);
+                           }];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    //return polls;
+}
+
+
+//- (void)retrieveUser
+
+- (NSDate *) convertJSONDate:(NSString *)dateString {
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SS'Z'"];
     
 	NSDate *result = [dateFormatter dateFromString:dateString];
-    NSLog(@"Date from string is: %@", [dateFormatter stringFromDate:result] );
+    NSLog(@"Date from string is: %@", dateString );
 	return result;
 
 }

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Poll.h"
 #import "DataController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface PollDataController : DataController
 
@@ -35,6 +36,8 @@
 - (void)loadData;
 + (PollDataController*)sharedInstance;
 
+- (NSDate *)convertJSONDate:(NSString *) dateString;
+- (void)postUser:(NSString *)appLinkToken fbID:(NSString *)fbID;
 //api calls
 - (void)retrievePolls;//:(NSArray *)polls;
     

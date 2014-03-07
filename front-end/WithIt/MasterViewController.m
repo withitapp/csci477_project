@@ -9,6 +9,7 @@
 #import "MasterViewController.h"
 #import "CreatePollViewController.h"
 #import "PollDetailViewController.h"
+#import "UserSettingViewController.h"
 #import "AppDelegate.h"
 
 @interface MasterViewController ()
@@ -67,10 +68,8 @@
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;
     
-    //Old//
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    //TODO:: Have not idea it works fine now,but new poll button should not be the left bar button
-    self.navigationItem.leftBarButtonItem = newPollButton;
+    UIBarButtonItem *userSettingButton = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
+    self.navigationItem.leftBarButtonItem = userSettingButton;
     
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];
@@ -113,6 +112,12 @@
 {
     CreatePollViewController *createPollViewController = [[CreatePollViewController alloc] init];
     [self.navigationController pushViewController:createPollViewController animated:YES];
+}
+
+- (IBAction)UserSetting
+{
+    UserSettingViewController *userSettingViewController = [[UserSettingViewController alloc] init];
+    [self.navigationController pushViewController:userSettingViewController animated:YES];
 }
 
 #pragma mark - Table View

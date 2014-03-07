@@ -39,19 +39,32 @@
     [self.view addSubview:self.detailsView];
     
     // Set up user information table view
-    self.InfoTableView = [[UITableView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] style:UITableViewStyleGrouped];
+    self.InfoTableView = [[UITableView alloc] initWithFrame:self.detailsView.bounds style:UITableViewStyleGrouped];
     self.InfoTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.InfoTableView.delegate = self;
     self.InfoTableView.dataSource = self;
     [self.InfoTableView reloadData];
     [self.detailsView addSubview:self.InfoTableView];
+    
 
 
 }
 
+- (CGFloat) tableView:(UITableView *)tableView
+heightForHeaderInSection:(NSInteger)section{
+    
+    CGFloat result = 0.0f;
+    if ([tableView isEqual:self.InfoTableView]){
+        result = 35.0f;
+    }
+    return result;
+}
+
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -62,9 +75,6 @@
             sectionName = NSLocalizedString(@"User Name:", @"User Name:");
             break;
         case 1:
-            sectionName = NSLocalizedString(@"User Email:", @"User Email:");
-            break;
-        case 2:
             sectionName = NSLocalizedString(@"Software:", @"Software:");
             break;
     }
@@ -82,30 +92,83 @@
             numRows = 1;
             NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
             break;
-        case 2:
-            numRows = 1;
-            NSLog(@"Number of expired polls: %lu.", (unsigned long)numRows);
+        default:
+            numRows = 0;
             break;
     }
     return numRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"PollCell";
+    static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier ];
+        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        UILabel * nameLabel = [[UILabel alloc] initWithFrame: CGRectMake( 0, 15, 40, 19.0f)];
-        nameLabel.tag = @"labelll";
-        [nameLabel setTextColor: [UIColor colorWithRed: 79.0f/255.0f green:79.0f/255.0f blue:79.0f/255.0f alpha:1.0f]];
-        [nameLabel setFont: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 18.0f]];
-        [nameLabel setBackgroundColor: [UIColor clearColor]];
-        nameLabel.textAlignment = NSTextAlignmentCenter;
-        [cell.contentView addSubview: nameLabel];
+        
+        //create background image for the cell:
+        //  UIImageView *bgView = [[[UIImageView alloc] initWithFrame:CGRectZero] autorelease];
+        [cell setBackgroundColor:[UIColor clearColor]];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        //[cell setBackgroundView:bgView];
+        [cell setIndentationWidth:0.0];
+        
+        // create a custom label:                                        x    y   width  height
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 8.0, 300.0, 30.0)];
+        [nameLabel setTag:1];
+        [nameLabel setBackgroundColor:[UIColor clearColor]]; // transparent label background
+        [nameLabel setFont:[UIFont boldSystemFontOfSize:17.0]];
+        // custom views should be added as subviews of the cell's contentView:
+        [cell.contentView addSubview:nameLabel];
+        //[nameLabel release];
+        
     }
-    
+
+    ///// Styling the table view into rounded - rectangle
+    if ([cell respondsToSelector:@selector(tintColor)]) {
+        if (tableView == self.InfoTableView) {
+            CGFloat cornerRadius = 5.f;
+            cell.backgroundColor = UIColor.clearColor;
+            CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+            CGMutablePathRef pathRef = CGPathCreateMutable();
+            CGRect bounds = CGRectInset(cell.bounds, 10, 0);
+            BOOL addLine = NO;
+            if (indexPath.row == 0 && indexPath.row == [tableView numberOfRowsInSection:indexPath.section]-1) {
+                CGPathAddRoundedRect(pathRef, nil, bounds, cornerRadius, cornerRadius);
+            } else if (indexPath.row == 0) {
+                CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+                CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds), CGRectGetMidX(bounds), CGRectGetMinY(bounds), cornerRadius);
+                CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds), CGRectGetMinY(bounds), CGRectGetMaxX(bounds), CGRectGetMidY(bounds), cornerRadius);
+                CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds), CGRectGetMaxY(bounds));
+                addLine = YES;
+            } else if (indexPath.row == [tableView numberOfRowsInSection:indexPath.section]-1) {
+                CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+                CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
+                CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds), CGRectGetMaxY(bounds), CGRectGetMaxX(bounds), CGRectGetMidY(bounds), cornerRadius);
+                CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds), CGRectGetMinY(bounds));
+            } else {
+                CGPathAddRect(pathRef, nil, bounds);
+                addLine = YES;
+            }
+            layer.path = pathRef;
+            CFRelease(pathRef);
+            layer.fillColor = [UIColor colorWithWhite:1.f alpha:0.8f].CGColor;
+            
+            if (addLine == YES) {
+                CALayer *lineLayer = [[CALayer alloc] init];
+                CGFloat lineHeight = (1.f / [UIScreen mainScreen].scale);
+                lineLayer.frame = CGRectMake(CGRectGetMinX(bounds)+10, bounds.size.height-lineHeight, bounds.size.width-10, lineHeight);
+                lineLayer.backgroundColor = tableView.separatorColor.CGColor;
+                [layer addSublayer:lineLayer];
+            }
+            UIView *testView = [[UIView alloc] initWithFrame:bounds];
+            [testView.layer insertSublayer:layer atIndex:0];
+            testView.backgroundColor = UIColor.clearColor;
+            cell.backgroundView = testView;
+        }
+    }
+      
     // Only create the date formatter once
     //static NSDateFormatter *formatter = nil;
     //Poll *pollAtIndex;
@@ -124,10 +187,10 @@
 
             break;
     }
-    cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
-    
-    return cell;
+       return cell;
 }
+
+
 
 - (IBAction)Back
 {

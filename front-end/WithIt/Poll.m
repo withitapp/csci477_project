@@ -11,7 +11,7 @@
 @implementation Poll
 
 // Use this init when testing
--(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate{
+-(id)initWithInfo:(NSString *)name creatorName:(NSNumber *)creatorName description:(NSString *)description endDate:(NSDate *)endDate{
     self = [super init];
     if (self) {
         _title = name;
@@ -25,7 +25,7 @@
 }
 
 // Use this init when testing
--(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description{
+-(id)initWithName:(NSString *)name creatorName:(NSNumber *)creatorName description:(NSString *)description{
     self = [super init];
     if (self) {
         _title = name;
@@ -38,7 +38,7 @@
 }
 
 // Use this init when the user decides to create a new poll
-- (id)init:(NSString *)creatorName {
+- (id)init:(NSNumber *)creatorName {
     // Forward to the "designated" initialization method
     return [self initWithName:@"Untitled Poll" creatorName:creatorName description:@"No description given"];
 }

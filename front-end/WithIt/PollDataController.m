@@ -224,15 +224,18 @@
                                      //  if([pollID isEqualToString:theID]){
                                     NSLog(@"-Adding poll to masterpolls list-");
                                    poll = [[Poll alloc] init];
-                                   poll.pollID = thePoll[@"id"];
-                                   poll.createDate = thePoll[@"created_at"];
-                                   poll.updatedAt = thePoll[@"updated_at"];
-                                   poll.title = thePoll[@"title"];
-                                   poll.description = thePoll[@"description"];
-                                   poll.creatorID = thePoll[@"user_id"];
-                                   poll.endDate = thePoll[@"ends_at"];
+                                   poll.pollID = thePoll[@"ID"];
+                                   [self dateFromString:thePoll[@"CreatedAt"]];
+                                  // poll.createDate = thePoll[@"created_at"];
+                                   poll.updatedAt = thePoll[@"UpdatedAt"];
+                                   poll.title = thePoll[@"Title"];
+                                   poll.description = thePoll[@"Description"];
+                                   poll.creatorID = thePoll[@"UserID"];
+                                   poll.endDate = thePoll[@"EndsAt"];
+                                 //  [self dateFromString:thePoll[@"CreatedAt"]];
                                    //NSMutableArray *members = [NSJSONSerialization JSONObjectWithData:thePoll[@"member_ids"] options:NSJSONReadingMutableContainers error:&memberDataError];
-                                   poll.members = [polls valueForKey:@"member_ids"];
+                              //     poll.members = [polls valueForKey:@"member_ids"];
+                              //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
                                 //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
                                   // poll.members = thePoll[@"member_ids"];
                                   // poll.membershipIDs = thePoll[@"membership_ids"];
@@ -249,6 +252,18 @@
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     //return polls;
+}
+
+- (NSDate *) dateFromString:(NSString *)dateString {
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SS'Z'"];
+    
+	NSDate *result = [dateFormatter dateFromString:dateString];
+    NSLog(@"Date from string is: %@", [dateFormatter stringFromDate:result] );
+	return result;
+
 }
 
 @end

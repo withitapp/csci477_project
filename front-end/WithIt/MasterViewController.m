@@ -18,7 +18,7 @@
 
 @implementation MasterViewController
 
-// Ensure that only instance of MasterViewController is ever instantiated
+// Ensure that only one instance of MasterViewController is ever instantiated
 + (MasterViewController*)sharedInstance
 {
     static MasterViewController *_sharedInstance = nil;
@@ -284,26 +284,43 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if ((alertView.tag % 10) == 1) {
+        if (buttonIndex == 1) {
+            [self leavePollFunction:(alertView.tag/10)];
+        }
+    }
+    else if ((alertView.tag % 10) == 2) {
+        if (buttonIndex == 1) {
+            [self deletePollFunction:(alertView.tag/10)];
+        }
+    }
+    else if ((alertView.tag % 10) == 3) {
+        if (buttonIndex == 1) {
+            [self erasePollFunction:(alertView.tag/10)];
+        }
+    }
+}
 
 - (void) leavePollFunction:(NSUInteger)index
 {
-    NSLog(@"Inside leave Poll function!!");
+
     [self.dataController deleteObjectInListAtIndex:index];
-    
+    [self.pollTableView reloadData];
 }
 
 - (void) deletePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside delete Poll function!!");
     [self.dataController deleteObjectInCreatedListAtIndex:index];
-    
+    [self.pollTableView reloadData];
 }
 
 - (void) erasePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside erase Poll function!!");
     [self.dataController deleteObjectInExpiredListAtIndex:index];
-    
+    [self.pollTableView reloadData];
 }
 
 
@@ -315,27 +332,32 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSLog(@"Inside leave Poll function!!");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete a poll?" message:@"Do you really want to delete this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+    
     
     //TODO::: function for delete a poll / leave a poll
      switch (indexPath.section) {
      case 0:
              NSLog(@"leavePoll pressed");
-             [self leavePollFunction:indexPath.row];
+             alert.tag = (indexPath.row * 10) + 1;
              break;
      
      case 1:
              NSLog(@"DeletePoll pressed");
-             [self deletePollFunction:indexPath.row];
+             alert.tag = (indexPath.row * 10) + 2;
              break;
      
      case 2:
              NSLog(@"ErasePoll pressed");
-             [self erasePollFunction:indexPath.row];
+             alert.tag = (indexPath.row * 10) + 3;
              break;
      
      default:
      break;
      }
+    
+    [alert show];
   
    // TODO::should include below function into the leavePollFunction/ DeletePollFunction/ ErasePollFunction
   

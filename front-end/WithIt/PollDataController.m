@@ -143,7 +143,9 @@
 }
 
 - (void)deleteObjectInListAtIndex:(NSUInteger)theIndex{
-    [self.masterPollsList removeObjectAtIndex:theIndex];
+    if(theIndex < [self.masterPollsList count]){
+        [self.masterPollsList removeObjectAtIndex:theIndex];
+    }
 }
 
 - (Poll *)objectInCreatedListAtIndex:(NSUInteger)theIndex {
@@ -155,7 +157,9 @@
 }
 
 - (void)deleteObjectInCreatedListAtIndex:(NSUInteger)theIndex {
-    [self.masterPollsCreatedList removeObjectAtIndex:theIndex];
+    if(theIndex < [self.masterPollsCreatedList count]){
+        [self.masterPollsCreatedList removeObjectAtIndex:theIndex];
+    }
 }
 
 - (Poll *)objectInExpiredListAtIndex:(NSUInteger)theIndex {
@@ -167,7 +171,9 @@
 }
 
 - (void)deleteObjectInExpiredListAtIndex:(NSUInteger)theIndex {
-    [self.masterPollsExpiredList removeObjectAtIndex:theIndex];
+    if(theIndex < [self.masterPollsExpiredList count]){
+        [self.masterPollsExpiredList removeObjectAtIndex:theIndex];
+    }
 }
 
 @end

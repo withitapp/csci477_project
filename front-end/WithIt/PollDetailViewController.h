@@ -18,6 +18,8 @@
 @property (strong, nonatomic) UITextView *descriptionLabel;
 @property (strong, nonatomic) UILabel *timeRemainingLabel;
 @property (strong, nonatomic) UILabel *creatorNameLabel;
+@property (strong, nonatomic) UITextField *editPollTitle;
+@property (strong, nonatomic) UITextView *editPollDescription;
 
 @property (strong, nonatomic) UITableView *memberTableView;
 

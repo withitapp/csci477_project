@@ -46,11 +46,12 @@
     self.navigationItem.leftBarButtonItem = backButton;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
+    //You can edit your own poll
     if(self.poll.creatorID == appDelegate.username) {
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
     }
-    else {
+    else { //You cannot edit someone else's poll, but you can leave someone else's poll
         UIBarButtonItem *leaveButton = [[UIBarButtonItem alloc] initWithTitle:@"Leave Group" style:UIBarButtonItemStyleBordered target:self action:@selector(Leave)];
         self.navigationItem.rightBarButtonItem = leaveButton;
     }
@@ -239,7 +240,65 @@
 
 - (void)editPoll
 {
+    //Hide the Poll Label and show an editable version of it
+    [self.titleLabel setHidden:YES];
+    self.editPollTitle = [[UITextField alloc] initWithFrame:CGRectMake(10, 65, (self.screenWidth - 10), 40)];
+    self.editPollTitle.text = self.titleLabel.text;
+    self.editPollTitle.backgroundColor=[UIColor whiteColor];
+    self.editPollTitle.textColor = [UIColor blackColor];
+    self.editPollTitle.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.editPollTitle.returnKeyType = UIReturnKeyDone;
+    self.editPollTitle.borderStyle = UITextBorderStyleRoundedRect;
+    self.editPollTitle.tag= 2;
+    //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
+    self.editPollTitle.delegate = self;
+    [self.detailsView addSubview:self.editPollTitle];
     
+    //Hide the poll description and show an editable version of it
+    [self.descriptionLabel setHidden:YES];
+    self.editPollDescription = [[UITextView alloc] initWithFrame:CGRectMake(10, 110, (self.screenWidth - 10), 80)];
+    self.editPollDescription.textColor = [UIColor blackColor];
+    [self.editPollDescription setText: self.descriptionLabel.text];
+    self.editPollDescription.backgroundColor=[UIColor whiteColor];
+    // self.PollDescriptionTextField.textColor = [UIColor blackColor];
+    self.editPollDescription.returnKeyType = UIReturnKeyDone;
+    self.editPollDescription.layer.cornerRadius = 5.0f;
+    [[self.editPollDescription layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+    [[self.editPollDescription layer] setBorderWidth:1.2];
+    // self.PollDescriptionTextField.layer.borderStyle = UITextBorderStyleRoundedRect;
+    self.editPollDescription.tag= 2;
+    self.editPollDescription.textAlignment = NSTextAlignmentLeft;
+    self.editPollDescription.delegate = self;
+    [self.detailsView addSubview:self.editPollDescription];
+    
+    
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(Done)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+}
+
+- (IBAction)Done
+{
+    NSLog(@"Done button in edit polldetailview pressed.");
+    [self donePoll];
+}
+
+- (void)donePoll
+{
+    //set the edited text
+    self.titleLabel.text = self.editPollTitle.text;
+    self.descriptionLabel.text = self.editPollDescription.text;
+    self.poll.title = self.titleLabel.text;
+    self.poll.description = self.descriptionLabel.text;
+    //self.pollAtIndex.title = self.poll.title;
+    //hide the editable versions and show the uneditable versions
+    [self.editPollTitle setHidden:YES];
+    [self.titleLabel setHidden:NO];
+    [self.editPollDescription setHidden:YES];
+    [self.descriptionLabel setHidden:NO];
+    //bring back the edit button so the user can make further changes
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
+    self.navigationItem.rightBarButtonItem = editButton;
 }
 
 //Leave button

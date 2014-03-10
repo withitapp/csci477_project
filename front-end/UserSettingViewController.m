@@ -47,6 +47,7 @@
     self.InfoTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.InfoTableView.delegate = self;
     self.InfoTableView.dataSource = self;
+    self.InfoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.InfoTableView reloadData];
     [self.detailsView addSubview:self.InfoTableView];
     

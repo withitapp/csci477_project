@@ -326,6 +326,9 @@ const NSInteger ALIGN = 10;
     //bring back the edit button so the user can make further changes
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.masterViewController.pollTableView reloadData];
 }
 
 //Leave button

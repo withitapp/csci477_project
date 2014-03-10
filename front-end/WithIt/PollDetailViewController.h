@@ -12,6 +12,7 @@
 
 @interface PollDetailViewController : WIViewController <UITableViewDelegate, UITableViewDataSource>
 
+@property NSUInteger pollIndex;
 @property (strong, nonatomic) Poll *poll;
 @property (strong, nonatomic) UIView *detailsView;
 @property (strong, nonatomic) UITextView *titleLabel;
@@ -23,6 +24,6 @@
 
 @property (strong, nonatomic) UITableView *memberTableView;
 
--(void)setPollDetails:(Poll*)poll;
+-(void)setPollDetails:(Poll*)poll:(NSUInteger)index;
 
 @end

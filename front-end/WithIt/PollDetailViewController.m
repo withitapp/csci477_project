@@ -28,13 +28,14 @@ const NSInteger ALIGN = 10;
     return self;
 }
 
--(void)setPollDetails:(Poll *)pollAtIndex
+-(void)setPollDetails:(Poll *)pollAtIndex:(NSUInteger)index
 {
     if(!pollAtIndex){
         NSLog(@"Poll is null.");
         return;
     }
     self.poll = pollAtIndex;
+    self.pollIndex = index;
     //[self.titleLabel setText:self.poll.name];
 }
 
@@ -341,7 +342,14 @@ const NSInteger ALIGN = 10;
 
 - (void)leavePoll
 {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+    [appDelegate.masterViewController.dataController deleteObjectInListAtIndex:self.pollIndex];
+
+    [appDelegate.masterViewController.pollTableView reloadData];
     
+    [self Back];
+
 }
 
 - (void)didReceiveMemoryWarning

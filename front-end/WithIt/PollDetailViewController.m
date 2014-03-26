@@ -28,13 +28,13 @@ const NSInteger ALIGN = 10;
     return self;
 }
 
--(void)setPollDetails:(Poll *)pollAtIndex:(NSUInteger)index
+-(void)setPollDetails:(Poll *)poll atIndex:(NSUInteger)index
 {
-    if(!pollAtIndex){
+    if(!poll){
         NSLog(@"Poll is null.");
         return;
     }
-    self.poll = pollAtIndex;
+    self.poll = poll;
     self.pollIndex = index;
     //[self.titleLabel setText:self.poll.name];
 }

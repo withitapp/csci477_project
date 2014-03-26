@@ -23,6 +23,7 @@
 @property (strong, nonatomic) UITextView *editPollDescription;
 
 @property (strong, nonatomic) UITableView *memberTableView;
+@property (nonatomic, strong) UIButton *DeletePollButton;
 
 -(void)setPollDetails:(Poll*)poll:(NSUInteger)index;
 

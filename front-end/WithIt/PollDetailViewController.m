@@ -110,6 +110,7 @@ const NSInteger ALIGN = 10;
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.memberTableView];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -299,8 +300,21 @@ const NSInteger ALIGN = 10;
     self.editPollDescription.delegate = self;
     [self.detailsView addSubview:self.editPollDescription];
     
+
+    self.DeletePollButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.DeletePollButton.frame = CGRectMake((self.screenWidth*0.5 - 50), 30, 100, 30);
+    [self.DeletePollButton setTitle:@"Delete Poll" forState:UIControlStateNormal ];
+    [self.DeletePollButton addTarget:self
+                               action:@selector(Delete)
+                     forControlEvents:UIControlEventTouchUpInside];
+    [self.detailsView addSubview:self.DeletePollButton];
     
-    
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,(self.screenWidth), 100)];
+    [footerView addSubview:self.DeletePollButton];
+
+    self.memberTableView.tableFooterView = footerView;
+
+
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(Done)];
     self.navigationItem.rightBarButtonItem = doneButton;
 }
@@ -308,6 +322,7 @@ const NSInteger ALIGN = 10;
 - (IBAction)Done
 {
     NSLog(@"Done button in edit polldetailview pressed.");
+    [self.DeletePollButton removeFromSuperview];
     [self donePoll];
 }
 
@@ -340,6 +355,11 @@ const NSInteger ALIGN = 10;
     //[self.navigationController popViewControllerAnimated:YES];
 }
 
+-(IBAction)Delete{
+        NSLog(@"Delete button in polldetailview pressed.");
+        [self deletePoll];
+}
+
 - (void)leavePoll
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -350,6 +370,18 @@ const NSInteger ALIGN = 10;
     
     [self Back];
 
+}
+
+- (void)deletePoll
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.masterViewController.dataController  deleteObjectInCreatedListAtIndex:self.pollIndex];
+    
+    [appDelegate.masterViewController.pollTableView reloadData];
+    
+    [self Back];
+    
 }
 
 - (void)didReceiveMemoryWarning

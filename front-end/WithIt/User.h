@@ -11,13 +11,15 @@
 @interface User : NSObject
 //probably don't even need this class...
 @property NSInteger *ID;
-@property NSDate *createdAt;
-@property NSDate *updateAt;
-@property NSString *userName;
+@property NSDate *created_at;
+@property NSDate *updated_at;
+@property NSString *username;
 @property NSString *email;
-@property NSString *firstName;
-@property NSString *lastName;
-@property NSString *fbID;
+@property NSString *first_name;
+@property NSString *last_name;
+@property NSString *fb_id;
+@property NSString *fb_token;
+@property NSDate *fb_synced_at;
 @property NSMutableArray *friendshipID;
 @property NSMutableArray *invitationID;
 @property NSMutableArray *membershipID;

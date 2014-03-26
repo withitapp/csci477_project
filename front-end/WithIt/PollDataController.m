@@ -19,8 +19,10 @@
 #define dummyURL [NSURL URLWithString:@"http://gist.githubusercontent.com/oguzbilgic/9283570/raw/9e63c13790a74ffc51c5ea4edb9004d7e5246622/polls.json"]
 #define dummyPostURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
 //#define dummyURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
-#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
+//#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
+#define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
 #define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
+#define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
 
 @interface PollDataController ()
 - (id)init;
@@ -69,7 +71,7 @@
     NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
     
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
-    [self retrievePolls];
+    //[self retrievePolls];
     
     
 }
@@ -267,7 +269,7 @@
     NSLog(@"Posting user token to session");
    // NSURL *pollsURL = dummyPostURL;
     NSLog(@"URL posting to is: %@", dummyPostURL);
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:dummyPostURL];
    
     /*NSDictionary *requestData = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -312,6 +314,44 @@
                                    return;
                                }
                                
+                                // Get user data including polls
+                                NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
+                                NSError *userDataError;
+                                NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
+                                
+                                if(userDataError){
+                                NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
+                                }
+                                else {
+                                NSLog(@"JSON user data loaded after post request.");
+                                //NSLog(@"%@", users);
+                                }
+                               
+                               User *user;
+                               
+                                // Parse user data
+                                for(NSDictionary *theUser in users){
+                                   // user.ID = theUser[@"id"];
+                                    NSLog(@"id: %@", theUser[@"id"]);
+                                //if([theID == appDelegate.userID]){
+                               // self.userID = theUser[@"id"];
+                                    user.created_at = theUser[@"created_at"];
+                                    user.updated_at = theUser[@"updated_at"];
+                                    user.username = theUser[@"username"];
+                                    user.email = theUser[@"email"];
+                                    user.first_name = theUser[@"first_name"];
+                                    NSLog(@"user name: %@", user.first_name);
+                                    user.last_name = theUser[@"last_name"];
+                                    user.fb_id = theUser[@"fb_id"];
+                                    user.fb_token = theUser[@"fb_token"];
+                                    user.fb_synced_at = theUser[@"fb_synced_at"];
+                             /*
+                                self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
+                                self.userFriendsList = theUser[@"friends"];
+                                self.userPollsList = theUser[@"polls"];*/
+                                break;
+                                
+                                }
                                
                               
                                

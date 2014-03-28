@@ -183,10 +183,13 @@
         //[cell.contentView addSubview: nameLabel];
     }
     
+    
     // Only create the date formatter once
     static NSDateFormatter *formatter = nil;
     Poll *pollAtIndex;
     UISwitch *toggleSwitch = [[UISwitch alloc] init];
+    
+
     
     switch (indexPath.section) {
         case 0:
@@ -214,6 +217,7 @@
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
             break;
         case 2:
             if (!formatter) {
@@ -224,6 +228,7 @@
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             break;
     }
     cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];

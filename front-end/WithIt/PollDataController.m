@@ -24,7 +24,7 @@
 #define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
 #define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
 
-@interface PollDataController ()
+@interface PollDataController () <NSURLConnectionDelegate>
 - (id)init;
 @end
 
@@ -59,9 +59,7 @@
             break;
         }
     }
-   
-   token:
-   CAAIK6ZAZCePloBAC556xyZAEJUR7dvgY0mkHDvOwx4PqUexQDLKp0soudZCkxfB722VkZAICGb7BiW01qGh54Lc8bwo1cxLfc9bcbwqKyAVcriZBrsCLA3ZBZBCrnsJyZCp2Q6BGZBk7KBFop1EcZAWodTMa9U6nICwszd1noAczkNAdQ5pgRpt9ILoavdWnXFtrc0VKPY58YJj1kZBjSaXiTYRZCol8EGPTb65cZD*/
+  */
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
     NSLog(@"FB token string %@", fbtoken.accessToken);
@@ -129,7 +127,7 @@
         self.masterPollsCreatedList = createdPollsList;
         
        // [self retrievePolls];
-    
+    NSLog(@"Init polldatacontroller");
        // [self addPollCreatedWithPoll:poll];
         return self;
     
@@ -169,10 +167,10 @@
 {
     NSLog(@"Retrieving Poll Data");
   //  NSURL *weatherURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%F%@%f", self.weatherURLStr1, coordinate.latitude, self.weatherURLStr2, coordinate.longitude]];
-    NSURL *pollsURL = dummyURL;
-    NSLog(@"URL: %@", dummyURL);
+    NSURL *pollsURL = dummyPostURL;
+    NSLog(@"URL: %@", dummyPostURL);
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:dummyURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:dummyPostURL];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
     [NSURLConnection sendAsynchronousRequest:request
@@ -205,7 +203,7 @@
                                
                                
                                // Get poll data
-                               NSData *pollsData = [[NSData alloc] initWithContentsOfURL:dummyURL];
+                               NSData *pollsData = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
                                NSError *pollDataError;
                                NSLog(@"Trying to load JSON data");
                                NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
@@ -263,6 +261,22 @@
 }
 
 
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    // A response has been received, this is where we initialize the instance var you created
+    // so that we can append data to it in the didReceiveData method
+    // Furthermore, this method is called each time there is a redirect so reinitializing it
+    // also serves to clear it
+    NSLog(@"Got response");
+    _responseData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    // Append the new data to the instance variable you declared
+    NSLog(@"Got recieveData");
+    [_responseData appendData:data];
+}
+
+
 //post request of token
 - (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID//:(NSArray *)polls
 {
@@ -288,15 +302,16 @@
     
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    
+    NSLog(@"Sending request");
     [NSURLConnection sendAsynchronousRequest:postRequest
                                        queue:queue
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                               NSHTTPURLResponse *httpResponse = nil;
+                               NSHTTPURLResponse *httpResponse;
                                if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
                                    httpResponse = (NSHTTPURLResponse *) response;
+                                   NSLog(@"Got response!");
                                }
-                               
+                               NSLog(@"response noted");
                                // NSURLConnection's completionHandler is called on the background thread.
                                // Prepare a block to show an alert on the main thread:
                                __block NSString *message = @"";
@@ -308,7 +323,7 @@
                                
                                // Check for error or non-OK statusCode:
                                if (error || httpResponse.statusCode != 200) {
-                                   message = @"Error fetching polls";
+                                   message = @"Error fetching users";
                                    NSLog(@"URL error: %@", error);
                                    showAlert();
                                    return;
@@ -317,8 +332,19 @@
                                 // Get user data including polls
                                 NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
                                 NSError *userDataError;
-                                NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
-                                
+                               
+                               NSDictionary *users;
+                               @try{
+                                users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
+                                if(userDataError){
+                                       NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
+                                   }
+                                else {
+                                       NSLog(@"JSON user data loaded.");
+                                   }
+                               } @catch (NSException *NSInvalidArgumentException){
+                                   NSLog(@"Got invalid data from server when posting user %@", NSInvalidArgumentException);
+                               }
                                 if(userDataError){
                                 NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
                                 }
@@ -348,16 +374,16 @@
                              /*
                                 self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
                                 self.userFriendsList = theUser[@"friends"];
-                                self.userPollsList = theUser[@"polls"];*/
-                                break;
+                                self.userPollsList = theUser[@"polls"];
+                                break;*/
                                 
                                 }
                                
                               
                                
-                               
                                dispatch_semaphore_signal(semaphore);
                            }];
+    NSLog(@"Sempaphore dispatched");
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     
     //return polls;

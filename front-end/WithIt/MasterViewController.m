@@ -65,7 +65,9 @@
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;
     
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editAction)];
+    
+    //self.navigationItem.leftBarButtonItem = self.editButton;
     
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];

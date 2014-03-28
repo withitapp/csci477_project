@@ -12,6 +12,9 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 @interface PollDataController : DataController
+{
+    NSMutableData *_responseData;
+}
 
 // User information
 // User specific information

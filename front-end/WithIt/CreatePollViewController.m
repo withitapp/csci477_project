@@ -74,7 +74,6 @@
     self.PollDescriptionTextField.tag= 2;
     self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;
-    [self.PollDescriptionTextField setKeyboardType:UIKeyboardTypeDefault];
     [self.detailsView addSubview:self.PollDescriptionTextField];
     
     //Add date selection label for Poll Expiration
@@ -84,7 +83,6 @@
     self.PollExpirationDateLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:(16.0)];
     [self.detailsView addSubview:self.PollExpirationDateLabel];
     self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End Date : "];
-    
     
     //Add date selection datepicker for Poll Expiration
     self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (self.screenWidth - 20), 60)];
@@ -98,7 +96,7 @@
 {
     if ([textView.text isEqualToString:@"Poll Description"]) {
         textView.text = @"";
-        textView.textColor = [UIColor blackColor]; //optional
+        textView.textColor = [UIColor blackColor];
     }
     [textView becomeFirstResponder];
 }
@@ -107,7 +105,7 @@
 {
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"Poll Description";
-        textView.textColor = [UIColor lightGrayColor]; //optional
+        textView.textColor = [UIColor lightGrayColor];
     }
     [textView resignFirstResponder];
 }
@@ -117,8 +115,6 @@
     NSLog(@"Cancelling poll creation.");
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 //action for PollCreateButton pressed - going to the next create poll page
 - (IBAction)goPublishNewPoll
@@ -140,8 +136,6 @@
         [self.navigationController pushViewController:publishPollViewController animated:YES];
     }
 }
-
-
 
 - (void)didReceiveMemoryWarning
 {

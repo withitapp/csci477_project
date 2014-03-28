@@ -36,7 +36,6 @@ const NSInteger ALIGN = 10;
     }
     self.poll = poll;
     self.pollIndex = index;
-    //[self.titleLabel setText:self.poll.name];
 }
 
 - (void)viewDidLoad
@@ -51,7 +50,7 @@ const NSInteger ALIGN = 10;
     //You can edit your own poll
     if(self.poll.creatorID == appDelegate.username) {
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
-    self.navigationItem.rightBarButtonItem = editButton;
+        self.navigationItem.rightBarButtonItem = editButton;
     }
     else { //You cannot edit someone else's poll, but you can leave someone else's poll
         UIBarButtonItem *leaveButton = [[UIBarButtonItem alloc] initWithTitle:@"Leave Group" style:UIBarButtonItemStyleBordered target:self action:@selector(Leave)];
@@ -82,10 +81,14 @@ const NSInteger ALIGN = 10;
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
-    if(self.poll.endDate != nil){
-        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]]; }
+    if(self.poll.endDate != nil)
+    {
+        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
+    }
     else
+    {
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
+    }
     currentHeight += 20;
     
     // Add poll creator name label
@@ -195,17 +198,11 @@ const NSInteger ALIGN = 10;
     
     switch (indexPath.section) {
         case 0:
-            //pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:@"MemberName"];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            //cell.backgroundColor = [UIColor greenColor];
             break;
             
         case 1:
-            //pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:@"MemberName"];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            //cell.backgroundColor = [UIColor redColor];
             break;
     }
     cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
@@ -225,34 +222,6 @@ const NSInteger ALIGN = 10;
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /*NSLog(@"Selected row %d in section %d.", indexPath.row, indexPath.section);
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    Poll *pollAtIndex;
-    switch (indexPath.section) {
-        case 0:
-            pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
-            break;
-            
-        case 1:
-            pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
-            break;
-            
-        default:
-            NSLog(@"Something went wrong!");
-            return;
-    }
-    
-    NSLog(@"Selected poll: %@.", pollAtIndex.name);
-    
-    [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
-    [detailViewController setPollDetails:pollAtIndex];
-    [appDelegate.navigationController pushViewController:detailViewController animated:YES];*/
-}
-
 //Back button
 - (IBAction)Back
 {
@@ -265,7 +234,6 @@ const NSInteger ALIGN = 10;
 {
     NSLog(@"Edit button in polldetailview pressed.");
     [self editPoll];
-    //[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)editPoll
@@ -289,12 +257,10 @@ const NSInteger ALIGN = 10;
     self.editPollDescription.textColor = [UIColor blackColor];
     [self.editPollDescription setText: self.descriptionLabel.text];
     self.editPollDescription.backgroundColor=[UIColor whiteColor];
-    // self.PollDescriptionTextField.textColor = [UIColor blackColor];
     self.editPollDescription.returnKeyType = UIReturnKeyDone;
     self.editPollDescription.layer.cornerRadius = 5.0f;
     [[self.editPollDescription layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
     [[self.editPollDescription layer] setBorderWidth:1.2];
-    // self.PollDescriptionTextField.layer.borderStyle = UITextBorderStyleRoundedRect;
     self.editPollDescription.tag= 2;
     self.editPollDescription.textAlignment = NSTextAlignmentLeft;
     self.editPollDescription.delegate = self;
@@ -378,12 +344,11 @@ const NSInteger ALIGN = 10;
 {
     NSLog(@"Leave button in polldetailview pressed.");
     [self leavePoll];
-    //[self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)Delete{
-        NSLog(@"Delete button in polldetailview pressed.");
-        [self deletePoll];
+    NSLog(@"Delete button in polldetailview pressed.");
+    [self deletePoll];
 }
 
 - (void)leavePoll

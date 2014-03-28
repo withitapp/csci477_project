@@ -148,4 +148,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     #endif
 }
 
+// Only allow portrait view orientation
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    return (UIInterfaceOrientationMaskPortrait);
+}
+
 @end

@@ -125,6 +125,13 @@
     [textView resignFirstResponder];
 }
 
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+        [textView resignFirstResponder];
+    return YES;
+}
+
 - (IBAction)Cancel
 {
     NSLog(@"Cancelling poll creation.");

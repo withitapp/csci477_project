@@ -122,7 +122,7 @@ const NSInteger ALIGN = 10;
     [self.titleLabel layoutIfNeeded];
     currentHeight += self.titleLabel.frame.size.height;
     
-    self.descriptionLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenWidth);
+    self.descriptionLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight);
     [self.descriptionLabel setText:self.poll.description];
     [self.descriptionLabel sizeToFit];
     [self.descriptionLabel layoutIfNeeded];
@@ -270,9 +270,9 @@ const NSInteger ALIGN = 10;
 
 - (void)editPoll
 {
-    //Hide the Poll Label and show an editable version of it
-    [self.titleLabel setHidden:YES];
-    self.editPollTitle = [[UITextField alloc] initWithFrame:CGRectMake(10, 65, (self.screenWidth - 10), 40)];
+     [self.titleLabel setHidden:YES];
+    NSInteger currentHeight = 70;
+    self.editPollTitle = [[UITextField alloc] initWithFrame:CGRectMake(10, currentHeight, (self.screenWidth -20), 40)];
     self.editPollTitle.text = self.titleLabel.text;
     self.editPollTitle.backgroundColor=[UIColor whiteColor];
     self.editPollTitle.textColor = [UIColor blackColor];
@@ -280,13 +280,12 @@ const NSInteger ALIGN = 10;
     self.editPollTitle.returnKeyType = UIReturnKeyDone;
     self.editPollTitle.borderStyle = UITextBorderStyleRoundedRect;
     self.editPollTitle.tag= 2;
-    //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
     self.editPollTitle.delegate = self;
     [self.detailsView addSubview:self.editPollTitle];
+    currentHeight += self.editPollTitle.frame.size.height+10;
     
-    //Hide the poll description and show an editable version of it
-    [self.descriptionLabel setHidden:YES];
-    self.editPollDescription = [[UITextView alloc] initWithFrame:CGRectMake(10, 110, (self.screenWidth - 10), 80)];
+        [self.descriptionLabel setHidden:YES];
+    self.editPollDescription = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth -ALIGN -ALIGN), 70)];
     self.editPollDescription.textColor = [UIColor blackColor];
     [self.editPollDescription setText: self.descriptionLabel.text];
     self.editPollDescription.backgroundColor=[UIColor whiteColor];
@@ -300,6 +299,22 @@ const NSInteger ALIGN = 10;
     self.editPollDescription.textAlignment = NSTextAlignmentLeft;
     self.editPollDescription.delegate = self;
     [self.detailsView addSubview:self.editPollDescription];
+
+    [self.descriptionLabel sizeToFit];
+    [self.descriptionLabel layoutIfNeeded];
+    currentHeight += self.editPollDescription.frame.size.height+20;
+    
+    
+    self.timeRemainingLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20);
+    currentHeight += 20;
+    
+    self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
+    currentHeight += 10;
+    
+    self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
+    currentHeight += 5;
+    self.memberTableView.frame = CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight));
+    
     
 
     self.DeletePollButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];

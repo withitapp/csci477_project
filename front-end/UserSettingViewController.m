@@ -15,9 +15,6 @@
 
 @implementation UserSettingViewController
 
-
-
-
 - (id)init
 {
     self = [super init];
@@ -30,9 +27,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-
-    
     
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
@@ -50,9 +44,6 @@
     self.InfoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.InfoTableView reloadData];
     [self.detailsView addSubview:self.InfoTableView];
-    
-
-
 }
 
 - (CGFloat) tableView:(UITableView *)tableView

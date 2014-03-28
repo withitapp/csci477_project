@@ -117,6 +117,7 @@ const NSInteger ALIGN = 10;
 {
     NSInteger currentHeight = 65;
     [self.titleLabel setText:self.poll.title];
+    [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x,currentHeight, self.screenWidth, self.screenHeight)];
     [self.titleLabel sizeToFit];
     [self.titleLabel layoutIfNeeded];
     currentHeight += self.titleLabel.frame.size.height;
@@ -342,9 +343,9 @@ const NSInteger ALIGN = 10;
     self.poll.description = self.descriptionLabel.text;
     //self.pollAtIndex.title = self.poll.title;
     //hide the editable versions and show the uneditable versions
-    [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x,0.0, self.screenWidth, self.screenHeight)];
-        [self.descriptionLabel setFrame:CGRectMake(self.descriptionLabel.frame.origin.x, self.descriptionLabel.frame.origin.y, self.screenWidth, self.screenHeight)];
-    
+
+    [self viewDidAppear:YES];
+
     [self.editPollTitle setHidden:YES];
     [self.titleLabel setHidden:NO];
     [self.editPollDescription setHidden:YES];

@@ -342,7 +342,9 @@ const NSInteger ALIGN = 10;
     self.poll.description = self.descriptionLabel.text;
     //self.pollAtIndex.title = self.poll.title;
     //hide the editable versions and show the uneditable versions
-
+    [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x,0.0, self.screenWidth, self.screenHeight)];
+        [self.descriptionLabel setFrame:CGRectMake(self.descriptionLabel.frame.origin.x, self.descriptionLabel.frame.origin.y, self.screenWidth, self.screenHeight)];
+    
     [self.editPollTitle setHidden:YES];
     [self.titleLabel setHidden:NO];
     [self.editPollDescription setHidden:YES];

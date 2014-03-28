@@ -67,22 +67,19 @@
     
     
     //Add input text field for Poll Description
-    //NSLog(@"Before create Poll Description Text Field.");
     self.PollDescriptionTextField = [[UITextView alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 150)];
     self.PollDescriptionTextField.textColor = [UIColor lightGrayColor];
     [self.PollDescriptionTextField setText: @"Poll Description"];
     self.PollDescriptionTextField.backgroundColor=[UIColor whiteColor];
-   // self.PollDescriptionTextField.textColor = [UIColor blackColor];
     self.PollDescriptionTextField.returnKeyType = UIReturnKeyDone;
     self.PollDescriptionTextField.layer.cornerRadius = 5.0f;
     [[self.PollDescriptionTextField layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
     [[self.PollDescriptionTextField layer] setBorderWidth:1.2];
-   // self.PollDescriptionTextField.layer.borderStyle = UITextBorderStyleRoundedRect;
     self.PollDescriptionTextField.tag= 2;
     self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;
+    [self.PollDescriptionTextField setKeyboardType:UIKeyboardTypeDefault];
     [self.detailsView addSubview:self.PollDescriptionTextField];
-    //NSLog(@"Done create Poll Description Text Field.");
     
     //Add date selection label for Poll Expiration
     self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 260, 300, 30)];
@@ -98,11 +95,7 @@
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];
-    //  [self.PollExpirationDatePicker addTarget:self
-    //                action:@selector(changeDateInLabel:)
-    //    forControlEvents:UIControlEventValueChanged];
     [self.detailsView addSubview:self.PollExpirationDatePicker];
-    // [self.PollExpirationDatePicker release];
     
     
 }

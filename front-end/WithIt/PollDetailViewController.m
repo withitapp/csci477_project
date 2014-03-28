@@ -319,6 +319,13 @@ const NSInteger ALIGN = 10;
     self.navigationItem.rightBarButtonItem = doneButton;
 }
 
+//when clicking the return button in the keybaord only for title
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    NSLog(@"Keyboard Return Working");
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (IBAction)Done
 {
     NSLog(@"Done button in edit polldetailview pressed.");
@@ -335,6 +342,7 @@ const NSInteger ALIGN = 10;
     self.poll.description = self.descriptionLabel.text;
     //self.pollAtIndex.title = self.poll.title;
     //hide the editable versions and show the uneditable versions
+
     [self.editPollTitle setHidden:YES];
     [self.titleLabel setHidden:NO];
     [self.editPollDescription setHidden:YES];

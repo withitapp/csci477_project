@@ -51,7 +51,6 @@
     [self.view addSubview:self.detailsView];
     
     //Add input text field for Poll Title
-    //NSLog(@"Before create Poll Title Text Field.");
     self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (self.screenWidth - 40), 30)];
     self.PollTitleTextField.placeholder = @"Poll Title";
     self.PollTitleTextField.backgroundColor=[UIColor whiteColor];
@@ -60,11 +59,8 @@
     self.PollTitleTextField.returnKeyType = UIReturnKeyDone;
     self.PollTitleTextField.borderStyle = UITextBorderStyleRoundedRect;
     self.PollTitleTextField.tag= 2;
-    //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
     self.PollTitleTextField.delegate = self;
     [self.detailsView addSubview:self.PollTitleTextField];
-    //NSLog(@"Done create Poll Title Text Field.");
-    
     
     //Add input text field for Poll Description
     self.PollDescriptionTextField = [[UITextView alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 150)];
@@ -96,8 +92,6 @@
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];
     [self.detailsView addSubview:self.PollExpirationDatePicker];
-    
-    
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

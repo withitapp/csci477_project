@@ -10,7 +10,7 @@
 #import "WIViewController.h"
 #import "Poll.h"
 
-@interface PollDetailViewController : WIViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate>
+@interface PollDetailViewController : WIViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
 @property NSUInteger pollIndex;
 @property (strong, nonatomic) Poll *poll;

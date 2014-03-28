@@ -346,16 +346,36 @@ const NSInteger ALIGN = 10;
     [appDelegate.masterViewController.pollTableView reloadData];
 }
 
+
 //Leave button
 - (IBAction)Leave
 {
     NSLog(@"Leave button in polldetailview pressed.");
-    [self leavePoll];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Are you sure you want to leave this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    alert.tag = 0;
+    [alert show];
 }
 
 -(IBAction)Delete{
     NSLog(@"Delete button in polldetailview pressed.");
-    [self deletePoll];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Are you sure you want to delete this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    alert.tag = 1;
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // Request confirmed
+    if (buttonIndex != 0)
+    {
+        if (alertView.tag == 0)
+        {
+            [self leavePoll];
+        }
+        else if (alertView.tag == 1)
+        {
+            [self deletePoll];
+        }
+    }
 }
 
 - (void)leavePoll
@@ -377,7 +397,7 @@ const NSInteger ALIGN = 10;
     [appDelegate.masterViewController.dataController  deleteObjectInCreatedListAtIndex:self.pollIndex];
     
     [appDelegate.masterViewController.pollTableView reloadData];
-    
+
     [self Back];
     
 }

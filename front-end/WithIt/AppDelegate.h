@@ -13,6 +13,7 @@
 #import "PollDetailViewController.h"
 #import "PublishPollViewController.h"
 
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -23,6 +24,7 @@
 
 // Facebook user info
 @property (strong, nonatomic) NSString *username;
+@property (strong, nonatomic) FBAccessTokenData * fbToken;
 @property (strong, nonatomic) NSString *userID;
 
 - (void)resetMainViewController;

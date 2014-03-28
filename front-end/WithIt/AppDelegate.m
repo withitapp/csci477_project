@@ -36,6 +36,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                 NSLog(@"INFO: Ignoring app link because current session is open.");
             }
             else {
+                
+                self.fbToken = call.accessTokenData;
+                
                 [self handleAppLink:call.accessTokenData];
             }
         }
@@ -76,6 +79,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                                  urlSchemeSuffix:nil
                                               tokenCacheStrategy:[FBSessionTokenCachingStrategy nullCacheInstance] ];
     [FBSession setActiveSession:appLinkSession];
+    
+    NSLog(@"^^^handling app link data^^^");
+    
+    
+    
     // ... and open it from the App Link's Token.
     [appLinkSession openFromAccessTokenData:appLinkToken
                           completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {

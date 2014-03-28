@@ -10,13 +10,15 @@
 
 @interface Poll : NSObject
 
-@property NSString *pollID;
+@property NSNumber *pollID;
+@property NSDate *updatedAt;
 @property NSString *title;
 @property NSString *description;
-@property NSString *creatorID;
+@property NSNumber *creatorID;
 @property NSDate *createDate;
 @property NSDate *endDate;
 @property NSMutableArray *members;
+@property NSMutableArray *membershipIDs;
 
 -(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;

@@ -6,16 +6,26 @@
 //  Copyright (c) 2013 WithIt. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import "DataController.h"
 #import "PollDataController.h"
 #include "AppDelegate.h"
 #import "Poll.h"
 #import "User.h"
+#import <FacebookSDK/FBSessionTokenCachingStrategy.h>
 
-#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
+#define serverURL [NSURL URLWithString:@"http://api.withitapp.com"]
+//#define dummyURL [NSURL URLWithString:@"https://gist.githubusercontent.com/oguzbilgic/9280772/raw/5712b87f2c3dc7908290f936bf8bc6821eb65c14/polls.json"]
+#define dummyURL [NSURL URLWithString:@"http://gist.githubusercontent.com/oguzbilgic/9283570/raw/9e63c13790a74ffc51c5ea4edb9004d7e5246622/polls.json"]
+#define dummyPostURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
+//#define dummyURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
+//#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
+#define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
 #define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
+#define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
 
-@interface PollDataController ()
-- (void)initializeDefaultDataList;
+@interface PollDataController () <NSURLConnectionDelegate>
+- (id)init;
 @end
 
 @implementation PollDataController
@@ -25,7 +35,7 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    // Get user data including polls
+  /*  // Get user data including polls
     NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
     NSError *userDataError;
     NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
@@ -49,41 +59,19 @@
             break;
         }
     }
+  */
+    FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
+    FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
+    NSLog(@"FB token string %@", fbtoken.accessToken);
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    NSLog(@"FB token expiration date %@", [formatter stringFromDate:fbtoken.expirationDate]);
+    NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
     
-    // Get poll data
-    NSData *pollsData = [[NSData alloc] initWithContentsOfURL:pollDataURL];
-    NSError *pollDataError;
-    NSDictionary *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError][@"polls"];
-	
-    if(pollDataError){
-        NSLog(@"Error loading poll data JSON: %@", [pollDataError localizedDescription]);
-    }
-    else {
-        NSLog(@"JSON poll data loaded.");
-        //NSLog(@"%@", polls);
-    }
+    [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
+    //[self retrievePolls];
     
-    // Parse poll data
-    Poll *poll;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyyMMdd"];
-    NSDateFormatter *timeFormatter = [[NSDateFormatter alloc] init];
-    [timeFormatter setDateFormat:@"hhmmss"];
     
-    for(NSDictionary *thePoll in polls){
-        NSString *pollID = thePoll[@"id"];
-        for(NSString *theID in self.userPollsList){
-            if([pollID isEqualToString:theID]){
-                poll = [[Poll alloc] init];
-                poll.pollID = pollID;
-                poll.title = thePoll[@"title"];
-                poll.description = thePoll[@"description"];
-                poll.creatorID = thePoll[@"creator"];
-                [self addPollWithPoll:poll];
-                break;
-            }
-        }
-    }
 }
 
 // Ensure that only instance of PollDataController is ever instantiated
@@ -96,7 +84,7 @@
     });
     return _sharedInstance;
 }
-    
+ /*
 - (void)initializeDefaultDataList {
     
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];
@@ -119,11 +107,22 @@
 }
 
 - (id)init {
-    if (self = [super init]) {
-        [self initializeDefaultDataList];
+        semaphore = dispatch_semaphore_create(0);
+   // if (self = [super init]) { ?? commented out by patrick
+        //self.dummyURL
+        //self.serverURL = serverURL;
+        
+        NSMutableArray *pollsList = [[NSMutableArray alloc] init];
+        self.masterPollsList = pollsList;
+        
+        NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
+        self.masterPollsCreatedList = createdPollsList;
+        
+       // [self retrievePolls];
+    NSLog(@"Init polldatacontroller");
+       // [self addPollCreatedWithPoll:poll];
         return self;
-    }
-    return nil;
+    
 }
 
 - (Poll *)objectInListAtIndex:(NSUInteger)theIndex {

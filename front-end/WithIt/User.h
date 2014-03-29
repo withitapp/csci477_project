@@ -10,7 +10,7 @@
 
 @interface User : NSObject
 //probably don't even need this class...
-@property NSInteger *ID;
+@property NSNumber *ID;
 @property NSDate *created_at;
 @property NSDate *updated_at;
 @property NSString *username;

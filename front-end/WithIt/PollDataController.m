@@ -154,6 +154,7 @@
             willSendRequest:(NSURLRequest *)request
            redirectResponse:(NSURLResponse *)redirectResponse
 {
+    NSLog(@"Redirect Response!!");
     NSURLRequest *newRequest = request;
     
     if (redirectResponse)
@@ -166,7 +167,6 @@
 - (void)retrievePolls//:(NSArray *)polls
 {
     NSLog(@"Retrieving Poll Data");
-  //  NSURL *weatherURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%F%@%f", self.weatherURLStr1, coordinate.latitude, self.weatherURLStr2, coordinate.longitude]];
     NSURL *pollsURL = dummyPostURL;
     NSLog(@"URL: %@", dummyPostURL);
     
@@ -203,7 +203,7 @@
                                
                                
                                // Get poll data
-                               NSData *pollsData = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
+                               NSData *pollsData;// = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
                                NSError *pollDataError;
                                NSLog(@"Trying to load JSON data");
                                NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
@@ -266,7 +266,7 @@
     // so that we can append data to it in the didReceiveData method
     // Furthermore, this method is called each time there is a redirect so reinitializing it
     // also serves to clear it
-    NSLog(@"Got response");
+    NSLog(@"Got response in delegate method");
     _responseData = [[NSMutableData alloc] init];
 }
 
@@ -317,6 +317,7 @@
                                __block NSString *message = @"";
                                void (^showAlert)(void) = ^{
                                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                       NSLog(@"$$ in operation queue $$");
                                        [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                                    }];
                                };
@@ -330,21 +331,16 @@
                                }
                                
                                 // Get user data including polls
-                                NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
-                                NSError *userDataError;
-                               
+                              // NSData *userData= [[NSData alloc] init];
+                               NSError *userDataError;
                                NSDictionary *users;
                                @try{
-                                users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
-                                if(userDataError){
-                                       NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
-                                   }
-                                else {
-                                       NSLog(@"JSON user data loaded.");
-                                   }
+                                   users = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&userDataError];//[@"user"];
+                               
                                } @catch (NSException *NSInvalidArgumentException){
-                                   NSLog(@"Got invalid data from server when posting user %@", NSInvalidArgumentException);
+                                   NSLog(@"Got invalid data from server when posting user error is: %@", NSInvalidArgumentException);
                                }
+                               
                                 if(userDataError){
                                 NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
                                 }
@@ -354,13 +350,16 @@
                                 }
                                
                                User *user;
-                               
+                               NSLog(@"Type of data received: %@, ", [users class]);
                                 // Parse user data
-                                for(NSDictionary *theUser in users){
-                                   // user.ID = theUser[@"id"];
-                                    NSLog(@"id: %@", theUser[@"id"]);
-                                //if([theID == appDelegate.userID]){
+                               NSDictionary *theUser = users;
+                               // for(theUser in users){
+                                    NSLog(@"in the dictionary");
+                                    user = [[User alloc] init];
+                                    user.ID = theUser[@"id"];
+                                  //  NSLog(@"id: %@", theUser[@"id"]);
                                // self.userID = theUser[@"id"];
+                                    
                                     user.created_at = theUser[@"created_at"];
                                     user.updated_at = theUser[@"updated_at"];
                                     user.username = theUser[@"username"];
@@ -371,15 +370,15 @@
                                     user.fb_id = theUser[@"fb_id"];
                                     user.fb_token = theUser[@"fb_token"];
                                     user.fb_synced_at = theUser[@"fb_synced_at"];
+                                    
                              /*
                                 self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
                                 self.userFriendsList = theUser[@"friends"];
                                 self.userPollsList = theUser[@"polls"];
                                 break;*/
-                                
-                                }
                                
-                              
+                               
+                               NSLog(@"Outta here");
                                
                                dispatch_semaphore_signal(semaphore);
                            }];

@@ -34,32 +34,7 @@
 {
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
-  /*  // Get user data including polls
-    NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
-    NSError *userDataError;
-    NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
-    
-    if(userDataError){
-        NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
-    }
-    else {
-        NSLog(@"JSON user data loaded.");
-        //NSLog(@"%@", users);
-    }
-    
-    // Parse user data
-    for(NSDictionary *theUser in users){
-        NSString *theID = theUser[@"id"];
-        if([theID isEqualToString:appDelegate.userID]){
-            self.userID = theUser[@"id"];
-            self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
-            self.userFriendsList = theUser[@"friends"];
-            self.userPollsList = theUser[@"polls"];
-            break;
-        }
-    }
-  */
+ 
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
     NSLog(@"FB token string %@", fbtoken.accessToken);
@@ -116,19 +91,14 @@
 
 - (id)init {
         semaphore = dispatch_semaphore_create(0);
-   // if (self = [super init]) { ?? commented out by patrick
-        //self.dummyURL
-        //self.serverURL = serverURL;
         
         NSMutableArray *pollsList = [[NSMutableArray alloc] init];
         self.masterPollsList = pollsList;
         
         NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
         self.masterPollsCreatedList = createdPollsList;
-        
-       // [self retrievePolls];
-    NSLog(@"Init polldatacontroller");
-       // [self addPollCreatedWithPoll:poll];
+    
+        NSLog(@"Init polldatacontroller");
         return self;
     
 }

@@ -21,7 +21,7 @@
 //#define dummyURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 //#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
 #define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
-#define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
+#define pollDataURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 #define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
 
 @interface PollDataController () <NSURLConnectionDelegate>
@@ -44,7 +44,7 @@
     NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
     
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
-    //[self retrievePolls];
+    [self retrievePolls];
     
     
 }
@@ -137,10 +137,10 @@
 - (void)retrievePolls//:(NSArray *)polls
 {
     NSLog(@"Retrieving Poll Data");
-    NSURL *pollsURL = dummyPostURL;
-    NSLog(@"URL: %@", dummyPostURL);
+    NSURL *pollsURL = pollDataURL;
+    NSLog(@"URL: %@", pollDataURL);
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:dummyPostURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
     [NSURLConnection sendAsynchronousRequest:request
@@ -176,7 +176,7 @@
                                NSData *pollsData;// = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
                                NSError *pollDataError;
                                NSLog(@"Trying to load JSON data");
-                               NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
+                               NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
                                
                                NSLog(@"JSON poll data loaded.");
                                if(pollDataError){

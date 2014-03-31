@@ -157,7 +157,7 @@
     NSLog(@"Retrieving Poll Data");
     NSURL *pollsURL = pollDataURL;
     NSLog(@"URL: %@", pollDataURL);
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
@@ -231,12 +231,20 @@
                                    //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
                                    //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
                                    // poll.members = thePoll[@"member_ids"];
-                                   // poll.membershipIDs = thePoll[@"membership_ids"];
+                                   // poll.membershipIDs = thePoll[@"membership_ids"];  = [updatePollsList mutableCopy]
                                    [updatePollsList addObject:poll];
                                    // break;
                                    
                                }
-                               self.masterPollsList = [updatePollsList mutableCopy];
+                               for( poll in updatePollsList){
+                                  
+                                   if(appDelegate.ID == poll.creatorID){
+                                   [self.masterPollsCreatedList addObject:poll];
+                               }
+                                   
+                                   else{
+                                   [self.masterPollsList addObject:poll];
+                               }}
                                [updatePollsList removeAllObjects];
                                
                                
@@ -270,7 +278,7 @@
     // NSURL *pollsURL = dummyPostURL;
     NSLog(@"URL posting to is: %@", dummyPostURL);
     NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:dummyPostURL];
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     /*NSDictionary *requestData = [[NSDictionary alloc] initWithObjectsAndKeys:
      fbID, @"facebook_id",
      fbToken, @"fb_token",
@@ -341,12 +349,10 @@
                                 // Parse user data
                                NSDictionary *theUser = users;
                                // for(theUser in users){
-                                    NSLog(@"in the dictionary");
                                     user = [[User alloc] init];
+                                  
                                     user.ID = theUser[@"id"];
-                                  //  NSLog(@"id: %@", theUser[@"id"]);
-                               // self.userID = theUser[@"id"];
-                                    
+                                   // NSLog(@"1User ID is: %@", theUser[@"id"]);
                                     user.created_at = theUser[@"created_at"];
                                     user.updated_at = theUser[@"updated_at"];
                                     user.username = theUser[@"username"];
@@ -357,7 +363,10 @@
                                     user.fb_id = theUser[@"fb_id"];
                                     user.fb_token = theUser[@"fb_token"];
                                     user.fb_synced_at = theUser[@"fb_synced_at"];
-                                    
+                          
+                               appDelegate.ID = user.ID;
+                               NSLog(@"2User ID is: %@", appDelegate.ID);
+                               NSLog(@"3User ID is: %@", user.ID);
                              /*
                                 self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
                                 self.userFriendsList = theUser[@"friends"];

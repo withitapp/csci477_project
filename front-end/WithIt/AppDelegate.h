@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) FBAccessTokenData * fbToken;
 @property (strong, nonatomic) NSString *userID;
+@property (strong, nonatomic) NSNumber *ID;
 
 - (void)resetMainViewController;
 

@@ -134,7 +134,6 @@
             NSLog(@"Invalid input, alerting user.");
     }
     else {
-        NSLog(@"Moving to PublishView.");
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         Poll *poll = [[Poll alloc  ] initWithInfo:_PollTitleTextField.text creatorName:appDelegate.username description:_PollDescriptionTextField.text endDate:_PollExpirationDatePicker.date];
     

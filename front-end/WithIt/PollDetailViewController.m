@@ -88,6 +88,8 @@ const NSInteger ALIGN = 10;
     else
     {
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
+    [self.detailsView addSubview:self.timeRemainingLabel];
+    NSLog(@"After poll endDate");
     }
     currentHeight += 20;
     

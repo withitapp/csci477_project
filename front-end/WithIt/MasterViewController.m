@@ -70,6 +70,9 @@
     
     UIBarButtonItem *userSettingButton = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
     self.navigationItem.leftBarButtonItem = userSettingButton;
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editAction)];
+    
+    //self.navigationItem.leftBarButtonItem = self.editButton;
     
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];

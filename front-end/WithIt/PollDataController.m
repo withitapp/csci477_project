@@ -185,7 +185,7 @@
 - (void)retrievePolls//:(NSArray *)polls
 {
     NSLog(@"Retrieving Poll Data");
-    NSURL *pollsURL = dummyPostURL;
+    //NSURL *pollsURL = dummyPostURL;
     NSLog(@"URL: %@", dummyPostURL);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:dummyPostURL];
@@ -348,6 +348,8 @@
                                 // Get user data including polls
                               // NSData *userData= [[NSData alloc] init];
                                NSError *userDataError;
+                    
+                               
                                NSDictionary *users;
                                @try{
                                    users = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&userDataError];//[@"user"];

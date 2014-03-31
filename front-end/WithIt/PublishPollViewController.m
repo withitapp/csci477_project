@@ -71,7 +71,6 @@
     
     self.selectedFriends = [[NSMutableArray alloc] init];
     
-    NSLog(@"Before create Friends Invited Text Field.");
     self.FriendsInvitedTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 130, (self.screenWidth-40), 200)];
     self.FriendsInvitedTextField.textAlignment = NSTextAlignmentLeft;
     self.FriendsInvitedTextField.backgroundColor=[UIColor whiteColor];
@@ -80,11 +79,6 @@
     self.FriendsInvitedTextField.returnKeyType = UIReturnKeyDone;
     self.FriendsInvitedTextField.borderStyle = UITextBorderStyleRoundedRect;
     self.FriendsInvitedTextField.text = @"No Friends Currently Invited";
-    
-    
-  //  [self.detailsView addSubview:self.FriendsInvitedTextField]; REMOVED AFTER UITABLEVIEW OF FRIENDS WAS PUT IN HERE
-    
-    NSLog(@"Done create Friends Invited Text Field.");
     
     
     //Add Publish Poll Button
@@ -105,8 +99,6 @@
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.memberTableView];
-
-    
 }
 
 #pragma mark - Poll Detail Table View
@@ -259,7 +251,6 @@
     [self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
     
     [_memberTableView reloadData];
-    NSLog(@"OUT of facebookview done");
 }
 
 - (void)facebookViewControllerCancelWasPressed:(id)sender {

@@ -11,6 +11,8 @@
 #import "CreatePollViewController.h"
 #import "AppDelegate.h"
 
+const NSInteger ALIGN = 10;
+
 @interface PollDetailViewController ()
 
 @end
@@ -26,15 +28,14 @@
     return self;
 }
 
--(void)setPollDetails:(Poll *)pollAtIndex
+-(void)setPollDetails:(Poll *)poll atIndex:(NSUInteger)index
 {
-    if(!pollAtIndex){
+    if(!poll){
         NSLog(@"Poll is null.");
         return;
     }
-    self.poll = pollAtIndex;
-    //[self.titleLabel setText:self.poll.name];
-    NSLog(@"Set poll %@.", self.poll.title);
+    self.poll = poll;
+    self.pollIndex = index;
 }
 
 - (void)viewDidLoad
@@ -42,68 +43,106 @@
     NSLog(@"Loading detail view for poll %@.", self.poll.title);
     [super viewDidLoad];
     
-    //[self.navigationController.navigationItem setTitle:@"WithIt"];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
-    
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
-    self.navigationItem.rightBarButtonItem = editButton;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
+    //You can edit your own poll
+    if(self.poll.creatorID == appDelegate.username) {
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
+        self.navigationItem.rightBarButtonItem = editButton;
+    }
+    else { //You cannot edit someone else's poll, but you can leave someone else's poll
+        UIBarButtonItem *leaveButton = [[UIBarButtonItem alloc] initWithTitle:@"Leave Group" style:UIBarButtonItemStyleBordered target:self action:@selector(Leave)];
+        self.navigationItem.rightBarButtonItem = leaveButton;
+    }
     
-    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, self.screenHeight)];
+   NSInteger currentHeight = 65;
     
-  //  UIFont *font = [UIFont fontWithName:@"Ariel-Bold" size:40];
     // Add poll title label
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 65, (self.screenWidth - 10), 40)];
-    //self.titleLabel.adjustsFontSizeToFitWidth = YES;
-    [self.titleLabel setText:self.poll.title];
-    self.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-    self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    [self.detailsView addSubview:self.titleLabel];
-    
+    self.titleLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
+    self.titleLabel.font = [UIFont systemFontOfSize:20.0];
+    self.titleLabel.textColor = [UIColor blackColor];
+    [self.titleLabel setEditable:FALSE];
+    currentHeight += self.titleLabel.frame.size.height;
     
     // Add poll description label
-    self.descriptionLabel = [[UITextView alloc] initWithFrame:CGRectMake(10, 100, (self.screenWidth - 10), 90)];
-    self.descriptionLabel.font = [UIFont fontWithName:@"Ariel" size:14];
+    self.descriptionLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
+    self.descriptionLabel.font = [UIFont fontWithName:@"Ariel" size:14.0];
     self.descriptionLabel.textColor = [UIColor darkGrayColor];
-    [self.descriptionLabel setText:self.poll.description];
     [self.descriptionLabel setEditable:FALSE];
-    [self.detailsView addSubview:self.descriptionLabel];
+    currentHeight += self.descriptionLabel.frame.size.height;
     
     // Add time remaining for poll label
-    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 190, (self.screenWidth - 10), 20)];
+    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20)];
     self.timeRemainingLabel.font = [UIFont systemFontOfSize:10.0];
     [self.timeRemainingLabel setTextAlignment: NSTextAlignmentCenter];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
-  //  NSLog(@"Before poll endDate");
-    if(self.poll.endDate != nil){
-        NSLog(@"Poll endDate is not nil");
-        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:self.poll.endDate];}//[dateFormatter stringFromDate:self.poll.endDate]]; }
+    if(self.poll.endDate != nil)
+    {
+        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
+    }
     else
+    {
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
     [self.detailsView addSubview:self.timeRemainingLabel];
     NSLog(@"After poll endDate");
+    }
+    currentHeight += 20;
+    
     // Add poll creator name label
-    self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 210, (self.screenWidth - 10), 10)];
+    self.creatorNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10)];
     self.creatorNameLabel.font = [UIFont systemFontOfSize:10.0];
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
     [self.creatorNameLabel setText:@"Created by: "];
-   // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
+    self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
+    currentHeight += 10;
+    
+    self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, currentHeight)];
+    [self.detailsView addSubview:self.titleLabel];
+    [self.detailsView addSubview:self.descriptionLabel];
+    [self.detailsView addSubview:self.timeRemainingLabel];
     [self.detailsView addSubview:self.creatorNameLabel];
-    
-    
     [self.view addSubview:self.detailsView];
     
     // Set up poll table view
-    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 225, self.screenWidth, (self.screenHeight-280))];
+    self.memberTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight))];
     self.memberTableView.delegate = self;
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.memberTableView];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSInteger currentHeight = 65;
+    [self.titleLabel setText:self.poll.title];
+    [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x,currentHeight, self.screenWidth, self.screenHeight)];
+    [self.titleLabel sizeToFit];
+    [self.titleLabel layoutIfNeeded];
+    currentHeight += self.titleLabel.frame.size.height;
+    
+    self.descriptionLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight);
+    [self.descriptionLabel setText:self.poll.description];
+    [self.descriptionLabel sizeToFit];
+    [self.descriptionLabel layoutIfNeeded];
+    currentHeight += self.descriptionLabel.frame.size.height;
+    
+    self.timeRemainingLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20);
+    currentHeight += 20;
+    
+    self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
+    currentHeight += 10;
+    
+    self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
+    currentHeight += 5;
+    self.memberTableView.frame = CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight));
+    
 }
 
 #pragma mark - Poll Detail Table View
@@ -135,7 +174,7 @@
             numRows = 3; // need to add member lists to poll data
             break;
         case 1:
-            numRows = 2; // same problem
+            numRows = 8; // same problem
             break;
     }
     return numRows;
@@ -161,17 +200,11 @@
     
     switch (indexPath.section) {
         case 0:
-            //pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:@"MemberName"];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            //cell.backgroundColor = [UIColor greenColor];
             break;
             
         case 1:
-            //pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:@"MemberName"];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            //cell.backgroundColor = [UIColor redColor];
             break;
     }
     cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
@@ -191,34 +224,6 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /*NSLog(@"Selected row %d in section %d.", indexPath.row, indexPath.section);
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    Poll *pollAtIndex;
-    switch (indexPath.section) {
-        case 0:
-            pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
-            break;
-            
-        case 1:
-            pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
-            break;
-            
-        default:
-            NSLog(@"Something went wrong!");
-            return;
-    }
-    
-    NSLog(@"Selected poll: %@.", pollAtIndex.name);
-    
-    [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
-    [detailViewController setPollDetails:pollAtIndex];
-    [appDelegate.navigationController pushViewController:detailViewController animated:YES];*/
-}
-
 //Back button
 - (IBAction)Back
 {
@@ -231,11 +236,171 @@
 {
     NSLog(@"Edit button in polldetailview pressed.");
     [self editPoll];
-    //[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)editPoll
 {
+     [self.titleLabel setHidden:YES];
+    NSInteger currentHeight = 70;
+    self.editPollTitle = [[UITextField alloc] initWithFrame:CGRectMake(10, currentHeight, (self.screenWidth -20), 40)];
+    self.editPollTitle.text = self.titleLabel.text;
+    self.editPollTitle.backgroundColor=[UIColor whiteColor];
+    self.editPollTitle.textColor = [UIColor blackColor];
+    self.editPollTitle.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.editPollTitle.returnKeyType = UIReturnKeyDone;
+    self.editPollTitle.borderStyle = UITextBorderStyleRoundedRect;
+    self.editPollTitle.tag= 2;
+    self.editPollTitle.delegate = self;
+    [self.detailsView addSubview:self.editPollTitle];
+    currentHeight += self.editPollTitle.frame.size.height+10;
+    
+        [self.descriptionLabel setHidden:YES];
+    self.editPollDescription = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth -ALIGN -ALIGN), 70)];
+    self.editPollDescription.textColor = [UIColor blackColor];
+    [self.editPollDescription setText: self.descriptionLabel.text];
+    self.editPollDescription.backgroundColor=[UIColor whiteColor];
+    self.editPollDescription.returnKeyType = UIReturnKeyDone;
+    self.editPollDescription.layer.cornerRadius = 5.0f;
+    [[self.editPollDescription layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+    [[self.editPollDescription layer] setBorderWidth:1.2];
+    self.editPollDescription.tag= 2;
+    self.editPollDescription.textAlignment = NSTextAlignmentLeft;
+    self.editPollDescription.delegate = self;
+    [self.detailsView addSubview:self.editPollDescription];
+
+    [self.descriptionLabel sizeToFit];
+    [self.descriptionLabel layoutIfNeeded];
+    currentHeight += self.editPollDescription.frame.size.height+20;
+    
+    
+    self.timeRemainingLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20);
+    currentHeight += 20;
+    
+    self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
+    currentHeight += 10;
+    
+    self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
+    currentHeight += 5;
+    self.memberTableView.frame = CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight));
+    
+    
+
+    self.DeletePollButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.DeletePollButton.frame = CGRectMake((self.screenWidth*0.5 - 50), 30, 100, 30);
+    [self.DeletePollButton setTitle:@"Delete Poll" forState:UIControlStateNormal ];
+    [self.DeletePollButton addTarget:self
+                               action:@selector(Delete)
+                     forControlEvents:UIControlEventTouchUpInside];
+    [self.detailsView addSubview:self.DeletePollButton];
+    
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,(self.screenWidth), 100)];
+    [footerView addSubview:self.DeletePollButton];
+
+    self.memberTableView.tableFooterView = footerView;
+
+
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(Done)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+}
+
+//when clicking the return button in the keybaord only for title
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    NSLog(@"Keyboard Return Working");
+    [textField resignFirstResponder];
+    return YES;
+}
+
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+        [textView resignFirstResponder];
+    return YES;
+}
+
+- (IBAction)Done
+{
+    NSLog(@"Done button in edit polldetailview pressed.");
+    [self.DeletePollButton removeFromSuperview];
+    [self donePoll];
+}
+
+- (void)donePoll
+{
+    //set the edited text
+    self.titleLabel.text = self.editPollTitle.text;
+    self.descriptionLabel.text = self.editPollDescription.text;
+    self.poll.title = self.titleLabel.text;
+    self.poll.description = self.descriptionLabel.text;
+    //self.pollAtIndex.title = self.poll.title;
+    //hide the editable versions and show the uneditable versions
+
+    [self viewDidAppear:YES];
+
+    [self.editPollTitle setHidden:YES];
+    [self.titleLabel setHidden:NO];
+    [self.editPollDescription setHidden:YES];
+    [self.descriptionLabel setHidden:NO];
+    //bring back the edit button so the user can make further changes
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate.masterViewController.pollTableView reloadData];
+}
+
+
+//Leave button
+- (IBAction)Leave
+{
+    NSLog(@"Leave button in polldetailview pressed.");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Are you sure you want to leave this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    alert.tag = 0;
+    [alert show];
+}
+
+-(IBAction)Delete{
+    NSLog(@"Delete button in polldetailview pressed.");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Are you sure you want to delete this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    alert.tag = 1;
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    // Request confirmed
+    if (buttonIndex != 0)
+    {
+        if (alertView.tag == 0)
+        {
+            [self leavePoll];
+        }
+        else if (alertView.tag == 1)
+        {
+            [self deletePoll];
+        }
+    }
+}
+
+- (void)leavePoll
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+    [appDelegate.masterViewController.dataController deleteObjectInListAtIndex:self.pollIndex];
+
+    [appDelegate.masterViewController.pollTableView reloadData];
+    
+    [self Back];
+
+}
+
+- (void)deletePoll
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    [appDelegate.masterViewController.dataController  deleteObjectInCreatedListAtIndex:self.pollIndex];
+    
+    [appDelegate.masterViewController.pollTableView reloadData];
+
+    [self Back];
     
 }
 

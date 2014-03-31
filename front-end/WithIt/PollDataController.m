@@ -59,7 +59,7 @@
     });
     return _sharedInstance;
 }
- /*
+
 - (void)initializeDefaultDataList {
     
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];
@@ -67,15 +67,7 @@
     
     NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
     self.masterPollsCreatedList = createdPollsList;
-    
-    Poll *poll;
-  //  NSDate *today = [NSDate date];
-    poll = [[Poll alloc] initWithName:@"Default member poll" creatorName:@"Francesca" description:@"No description given"];
-    [self addPollWithPoll:poll];
-    
-    poll = [[Poll alloc] initWithName:@"Default creator poll" creatorName:@"Francesca" description:@"No description given"];
-    [self addPollCreatedWithPoll:poll];
-}*/
+}
 
 - (void)setMasterPollsList:(NSMutableArray *)newList {
     if (_masterPollsList != newList) {
@@ -92,8 +84,8 @@
 - (id)init {
         semaphore = dispatch_semaphore_create(0);
         
-        NSMutableArray *pollsList = [[NSMutableArray alloc] init];
-        self.masterPollsList = pollsList;
+    NSMutableArray *pollsList = [[NSMutableArray alloc] init];
+    self.masterPollsList = pollsList;
         
         NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
         self.masterPollsCreatedList = createdPollsList;
@@ -111,6 +103,11 @@
     [self.masterPollsList addObject:poll];
 }
 
+- (void)deleteObjectInListAtIndex:(NSUInteger)theIndex{
+    if(theIndex < [self.masterPollsList count]){
+        [self.masterPollsList removeObjectAtIndex:theIndex];
+    }
+}
 
 - (Poll *)objectInCreatedListAtIndex:(NSUInteger)theIndex {
     return [self.masterPollsCreatedList objectAtIndex:theIndex];
@@ -120,6 +117,26 @@
     [self.masterPollsCreatedList addObject:poll];
 }
 
+- (void)deleteObjectInCreatedListAtIndex:(NSUInteger)theIndex {
+    if(theIndex < [self.masterPollsCreatedList count]){
+        [self.masterPollsCreatedList removeObjectAtIndex:theIndex];
+    }
+}
+
+- (Poll *)objectInExpiredListAtIndex:(NSUInteger)theIndex {
+    return [self.masterPollsExpiredList objectAtIndex:theIndex];
+}
+
+- (void)addPollExpiredWithPoll:(Poll *)poll {
+    [self.masterPollsExpiredList addObject:poll];
+}
+
+- (void)deleteObjectInExpiredListAtIndex:(NSUInteger)theIndex {
+    if(theIndex < [self.masterPollsExpiredList count]){
+        [self.masterPollsExpiredList removeObjectAtIndex:theIndex];
+    }
+}
+
 -(NSURLRequest *)connection:(NSURLConnection *)connection
             willSendRequest:(NSURLRequest *)request
            redirectResponse:(NSURLResponse *)redirectResponse
@@ -127,6 +144,7 @@
     NSLog(@"Redirect Response!!");
     NSURLRequest *newRequest = request;
     
+    NSLog(@"Redirect!");
     if (redirectResponse)
     {
         newRequest = nil;
@@ -171,7 +189,6 @@
                                // Parse the JSON response:
                                NSError *jsonError = nil;
                                
-                               
                                // Get poll data
                                NSData *pollsData;// = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
                                NSError *pollDataError;
@@ -194,29 +211,29 @@
                                
                                for(NSDictionary *thePoll in polls){
                                    
-                                       // NSString *pollID = thePoll[@"id"];
-                                 //  for(NSString *theID in self.userPollsList){
-                                     //  if([pollID isEqualToString:theID]){
-                                    NSLog(@"-Adding poll to masterpolls list-");
+                                   // NSString *pollID = thePoll[@"id"];
+                                   //  for(NSString *theID in self.userPollsList){
+                                   //  if([pollID isEqualToString:theID]){
+                                   NSLog(@"-Adding poll to masterpolls list-");
                                    poll = [[Poll alloc] init];
                                    poll.pollID = thePoll[@"id"];
-                                  // poll.createDate = [self convertJSONDate:thePoll[@"created_at"]];
+                                   // poll.createDate = [self convertJSONDate:thePoll[@"created_at"]];
                                    poll.createDate = thePoll[@"created_at"];
-                                  // poll.updatedAt = [self convertJSONDate:thePoll[@"updated_at"]];
+                                   // poll.updatedAt = [self convertJSONDate:thePoll[@"updated_at"]];
                                    poll.updatedAt = thePoll[@"updated_at"];
                                    poll.title = thePoll[@"title"];
                                    poll.description = thePoll[@"description"];
                                    poll.creatorID = thePoll[@"user_id"];
-                                  // poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
+                                   // poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
                                    poll.endDate = thePoll[@"ends_at"];
-                                 
-                              //     poll.members = [polls valueForKey:@"member_ids"];
-                              //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
-                                //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
-                                  // poll.members = thePoll[@"member_ids"];
-                                  // poll.membershipIDs = thePoll[@"membership_ids"];
+                                   
+                                   //     poll.members = [polls valueForKey:@"member_ids"];
+                                   //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
+                                   //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
+                                   // poll.members = thePoll[@"member_ids"];
+                                   // poll.membershipIDs = thePoll[@"membership_ids"];
                                    [updatePollsList addObject:poll];
-                                          // break;
+                                   // break;
                                    
                                }
                                self.masterPollsList = [updatePollsList mutableCopy];
@@ -229,7 +246,6 @@
     
     //return polls;
 }
-
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     // A response has been received, this is where we initialize the instance var you created
@@ -251,23 +267,22 @@
 - (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID//:(NSArray *)polls
 {
     NSLog(@"Posting user token to session");
-   // NSURL *pollsURL = dummyPostURL;
+    // NSURL *pollsURL = dummyPostURL;
     NSLog(@"URL posting to is: %@", dummyPostURL);
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:dummyPostURL];
-   
+    
     /*NSDictionary *requestData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                 fbID, @"facebook_id",
-                                 fbToken, @"fb_token",
-                                 nil]; */
-   // [postRequest setValue:requestData forHTTPHeaderField:@"Content-Type"];
+     fbID, @"facebook_id",
+     fbToken, @"fb_token",
+     nil]; */
+    // [postRequest setValue:requestData forHTTPHeaderField:@"Content-Type"];
     [postRequest setHTTPMethod:@"POST"];
     NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [postRequest setHTTPBody:requestBodyData];
     
     
-   // NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:postRequest delegate:self];
+    // NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:postRequest delegate:self];
     
     
     
@@ -303,6 +318,8 @@
                                 // Get user data including polls
                               // NSData *userData= [[NSData alloc] init];
                                NSError *userDataError;
+                    
+                               
                                NSDictionary *users;
                                @try{
                                    users = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&userDataError];//[@"user"];

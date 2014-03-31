@@ -51,7 +51,6 @@
     [self.view addSubview:self.detailsView];
     
     //Add input text field for Poll Title
-    //NSLog(@"Before create Poll Title Text Field.");
     self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (self.screenWidth - 40), 30)];
     self.PollTitleTextField.placeholder = @"Poll Title";
     self.PollTitleTextField.backgroundColor=[UIColor whiteColor];
@@ -60,29 +59,22 @@
     self.PollTitleTextField.returnKeyType = UIReturnKeyDone;
     self.PollTitleTextField.borderStyle = UITextBorderStyleRoundedRect;
     self.PollTitleTextField.tag= 2;
-    //self.PollTitleTextField.textAlignment = UITextAlignmentLeft;
     self.PollTitleTextField.delegate = self;
     [self.detailsView addSubview:self.PollTitleTextField];
-    //NSLog(@"Done create Poll Title Text Field.");
-    
     
     //Add input text field for Poll Description
-    //NSLog(@"Before create Poll Description Text Field.");
     self.PollDescriptionTextField = [[UITextView alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 150)];
     self.PollDescriptionTextField.textColor = [UIColor lightGrayColor];
     [self.PollDescriptionTextField setText: @"Poll Description"];
     self.PollDescriptionTextField.backgroundColor=[UIColor whiteColor];
-   // self.PollDescriptionTextField.textColor = [UIColor blackColor];
     self.PollDescriptionTextField.returnKeyType = UIReturnKeyDone;
     self.PollDescriptionTextField.layer.cornerRadius = 5.0f;
     [[self.PollDescriptionTextField layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
     [[self.PollDescriptionTextField layer] setBorderWidth:1.2];
-   // self.PollDescriptionTextField.layer.borderStyle = UITextBorderStyleRoundedRect;
     self.PollDescriptionTextField.tag= 2;
     self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;
     [self.detailsView addSubview:self.PollDescriptionTextField];
-    //NSLog(@"Done create Poll Description Text Field.");
     
     //Add date selection label for Poll Expiration
     self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 260, 300, 30)];
@@ -92,26 +84,19 @@
     [self.detailsView addSubview:self.PollExpirationDateLabel];
     self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End Date : "];
     
-    
     //Add date selection datepicker for Poll Expiration
     self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (self.screenWidth - 20), 60)];
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];
-    //  [self.PollExpirationDatePicker addTarget:self
-    //                action:@selector(changeDateInLabel:)
-    //    forControlEvents:UIControlEventValueChanged];
     [self.detailsView addSubview:self.PollExpirationDatePicker];
-    // [self.PollExpirationDatePicker release];
-    
-    
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if ([textView.text isEqualToString:@"Poll Description"]) {
         textView.text = @"";
-        textView.textColor = [UIColor blackColor]; //optional
+        textView.textColor = [UIColor blackColor];
     }
     [textView becomeFirstResponder];
 }
@@ -120,9 +105,16 @@
 {
     if ([textView.text isEqualToString:@""]) {
         textView.text = @"Poll Description";
-        textView.textColor = [UIColor lightGrayColor]; //optional
+        textView.textColor = [UIColor lightGrayColor];
     }
     [textView resignFirstResponder];
+}
+
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+        [textView resignFirstResponder];
+    return YES;
 }
 
 - (IBAction)Cancel
@@ -131,21 +123,17 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
-
 //action for PollCreateButton pressed - going to the next create poll page
 - (IBAction)goPublishNewPoll
 {
     
     if([_PollTitleTextField.text isEqualToString: @"Poll Title"] ||
-       [_PollTitleTextField.text isEqualToString: @""] ||
-       [_PollDescriptionTextField.text isEqualToString: @"Poll Description"] ){
+       [_PollTitleTextField.text isEqualToString: @""]){
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a poll title." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alert show];
             NSLog(@"Invalid input, alerting user.");
     }
     else {
-        NSLog(@"Moving to PublishView.");
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         Poll *poll = [[Poll alloc  ] initWithInfo:_PollTitleTextField.text creatorName:appDelegate.username description:_PollDescriptionTextField.text endDate:_PollExpirationDatePicker.date];
     
@@ -154,8 +142,6 @@
         [self.navigationController pushViewController:publishPollViewController animated:YES];
     }
 }
-
-
 
 - (void)didReceiveMemoryWarning
 {

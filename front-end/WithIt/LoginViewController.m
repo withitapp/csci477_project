@@ -25,8 +25,7 @@
         // but we could have also explicitly wired its delegate here.
     }
     // Create Login View so that the app will be granted "status_update" permission.
-    FBLoginView *loginview = [[FBLoginView alloc] init];
-    loginview.readPermissions = @[@"email"];
+    FBLoginView *loginview = [[FBLoginView alloc] initWithReadPermissions:@[@"email"]];
     loginview.frame = CGRectOffset(loginview.frame, 50, 50);
 #ifdef __IPHONE_7_0
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED

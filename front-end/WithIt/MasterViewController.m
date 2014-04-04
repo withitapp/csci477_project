@@ -285,7 +285,7 @@
     [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
-    [detailViewController setPollDetails:pollAtIndex atIndex:indexPath.row];
+    [detailViewController setPollDetails:pollAtIndex atIndex:indexPath.row atSection:indexPath.section];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationController pushViewController:detailViewController animated:YES];
 }

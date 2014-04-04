@@ -393,6 +393,7 @@ const NSInteger ALIGN = 10;
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
+    
     [appDelegate.masterViewController.dataController deleteObjectInListAtIndex:self.pollIndex];
 
     [appDelegate.masterViewController.pollTableView reloadData];

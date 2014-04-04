@@ -232,7 +232,7 @@
                 [formatter setDateStyle:NSDateFormatterMediumStyle];
             }
             
-            pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
+            pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
@@ -272,8 +272,8 @@
             break;
         
         case 2:
-            // expired poll
-            return;
+            pollAtIndex = [self.dataController objectInExpiredListAtIndex:(indexPath.row)];
+            break;
             
         default:
             NSLog(@"Something went wrong!");

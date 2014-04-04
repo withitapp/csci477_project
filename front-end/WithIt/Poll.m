@@ -56,9 +56,31 @@
 -(void)removeMember:(NSObject *) user{
     [_members removeObject:user];
 }
-/*
--(void)setDescription:(NSString *) description{
-    _description = description;
-}*/
+
+// Create an NSDictionary from the poll object
+-(NSDictionary *)makeDictionary {
+    return [NSDictionary dictionaryWithObjectsAndKeys:self.pollID, @"id",
+                                                      self.updatedAt, @"updated_at",
+                                                      self.createDate, @"created_at",
+                                                      self.endDate, @"ends_at",
+                                                      self.title, @"title",
+                                                      self.description, @"description",
+                                                      self.creatorID, @"user_id",
+                                                      nil];
+}
+
+// Serialize the poll object to JSON
+-(NSString*)convertToJSON {
+    NSDictionary *dictionary = [self makeDictionary];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                       options:0
+                                                         error:&error];
+    if(error){
+        return NULL;
+    }
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonString;
+}
 
 @end

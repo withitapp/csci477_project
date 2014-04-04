@@ -26,6 +26,8 @@
 -(void)populateMembers:(NSArray *) users;
 -(void)addMember:(NSObject *) user;
 -(void)removeMember:(NSObject *) user;
+-(NSDictionary *)makeDictionary;
+-(NSString*)convertToJSON;
 
 
 @end

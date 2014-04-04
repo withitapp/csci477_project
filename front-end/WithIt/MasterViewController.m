@@ -63,8 +63,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
+
+
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;
     
@@ -108,6 +110,8 @@
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.pollTableView];
     [self loadData];
+    NSLog(@"Heerrreee issssss the curreennntttt   timeee");
+    [self.dataController determineExpiredPoll];
     
 }
 

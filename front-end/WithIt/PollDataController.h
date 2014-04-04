@@ -49,5 +49,7 @@
 - (void)postUser:(NSString *)appLinkToken fbID:(NSString *)fbID;
 //api calls
 - (void)retrievePolls;//:(NSArray *)polls;
+
+-(void) determineExpiredPoll;
     
 @end

@@ -434,16 +434,25 @@
 
 -(void) determineExpiredPoll
 {
-    NSDate * now = [NSDate date];
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:now];
-    NSLog(@"newDateString %@", newDateString);
-    [outputFormatter release];
-    NSLog(@"Time now is: %@",)
+
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit |NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+    NSInteger currentHour = [components hour];
+    NSInteger currentMinute = [components minute];
+    NSInteger currentSecond = [components second];
+    NSInteger currentYear = [components year];
+    NSInteger currentMonth = [components month];
+    NSInteger currentDay = [components day];
+    
+    NSLog(@"Time now is: %ld / %ld / %ld / %ld :%ld: %ld ",currentMonth,currentDay,currentYear, currentHour,(long)currentMinute,(long)currentSecond);
     for(int d = 0; d < [_masterPollsList count];d++)
     {
-        
+        NSDate *pollEndDate = [_masterPollsList[d] endDate];
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSHourCalendarUnit | NSMinuteCalendarUnit) fromDate:pollEndDate];
+        NSInteger hour = [components hour];
+        NSInteger minute = [components minute];
+        NSLog(@"Poll %d end time is %ld %ld",d, hour, minute);
     }
     
 }

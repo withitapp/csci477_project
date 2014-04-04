@@ -46,9 +46,10 @@ const NSInteger ALIGN = 10;
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
+    NSLog(@"App delegate id: %@", appDelegate.ID);
+    NSLog(@"Poll Creator id: %@", self.poll.creatorID);
     //You can edit your own poll
-    if(self.poll.creatorID == appDelegate.username) {
+    if(self.poll.creatorID == appDelegate.ID) {
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
         self.navigationItem.rightBarButtonItem = editButton;
     }
@@ -81,12 +82,19 @@ const NSInteger ALIGN = 10;
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
+    
     if(self.poll.endDate != nil)
-    {
-        self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
+    {NSLog(@"1");
+        @try {
+       // self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
+            self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:self.poll.endDate];}
+        @catch (NSException *NSInvalidArgumentException){
+            NSLog(@"Caught invalid argument exception on end date label");
+        }
     }
     else
     {
+        NSLog(@"2");
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
     [self.detailsView addSubview:self.timeRemainingLabel];
     NSLog(@"After poll endDate");
@@ -98,8 +106,9 @@ const NSInteger ALIGN = 10;
     self.creatorNameLabel.font = [UIFont systemFontOfSize:10.0];
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
-    [self.creatorNameLabel setText:@"Created by: "];
-    self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
+    NSLog(@"3");
+    [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", self.poll.creatorID]];
+   // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
     currentHeight += 10;
     
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, currentHeight)];

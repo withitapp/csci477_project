@@ -21,7 +21,7 @@
 //#define dummyURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 //#define userDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/users.json"]
 #define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
-#define pollDataURL [NSURL URLWithString:@"http://www-scf.usc.edu/~nannizzi/polls.json"]
+#define pollDataURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 #define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
 
 @interface PollDataController () <NSURLConnectionDelegate>
@@ -34,32 +34,7 @@
 {
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
-  /*  // Get user data including polls
-    NSData *userData = [[NSData alloc] initWithContentsOfURL:userDataURL];
-    NSError *userDataError;
-    NSDictionary *users = [NSJSONSerialization JSONObjectWithData:userData options:NSJSONReadingMutableContainers error:&userDataError][@"users"];
-    
-    if(userDataError){
-        NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
-    }
-    else {
-        NSLog(@"JSON user data loaded.");
-        //NSLog(@"%@", users);
-    }
-    
-    // Parse user data
-    for(NSDictionary *theUser in users){
-        NSString *theID = theUser[@"id"];
-        if([theID isEqualToString:appDelegate.userID]){
-            self.userID = theUser[@"id"];
-            self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
-            self.userFriendsList = theUser[@"friends"];
-            self.userPollsList = theUser[@"polls"];
-            break;
-        }
-    }
-  */
+ 
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
     NSLog(@"FB token string %@", fbtoken.accessToken);
@@ -69,7 +44,7 @@
     NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
     
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
-    //[self retrievePolls];
+    [self retrievePolls];
     
     
 }
@@ -116,10 +91,7 @@
 }
 
 - (id)init {
-    semaphore = dispatch_semaphore_create(0);
-    // if (self = [super init]) { ?? commented out by patrick
-    //self.dummyURL
-    //self.serverURL = serverURL;
+        semaphore = dispatch_semaphore_create(0);
         
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];
     self.masterPollsList = pollsList;
@@ -197,10 +169,10 @@
 - (void)retrievePolls//:(NSArray *)polls
 {
     NSLog(@"Retrieving Poll Data");
-    //NSURL *pollsURL = dummyPostURL;
-    NSLog(@"URL: %@", dummyPostURL);
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:dummyPostURL];
+    NSURL *pollsURL = pollDataURL;
+    NSLog(@"URL: %@", pollDataURL);
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
     [NSURLConnection sendAsynchronousRequest:request
@@ -235,7 +207,7 @@
                                NSData *pollsData;// = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
                                NSError *pollDataError;
                                NSLog(@"Trying to load JSON data");
-                               NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:pollsData options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
+                               NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
                                
                                NSLog(@"JSON poll data loaded.");
                                if(pollDataError){
@@ -273,12 +245,20 @@
                                    //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
                                    //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
                                    // poll.members = thePoll[@"member_ids"];
-                                   // poll.membershipIDs = thePoll[@"membership_ids"];
+                                   // poll.membershipIDs = thePoll[@"membership_ids"];  = [updatePollsList mutableCopy]
                                    [updatePollsList addObject:poll];
                                    // break;
                                    
                                }
-                               self.masterPollsList = [updatePollsList mutableCopy];
+                               for( poll in updatePollsList){
+                                  
+                                   if(appDelegate.ID == poll.creatorID){
+                                   [self.masterPollsCreatedList addObject:poll];
+                               }
+                                   
+                                   else{
+                                   [self.masterPollsList addObject:poll];
+                               }}
                                [updatePollsList removeAllObjects];
                                
                                
@@ -312,7 +292,7 @@
     // NSURL *pollsURL = dummyPostURL;
     NSLog(@"URL posting to is: %@", dummyPostURL);
     NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:dummyPostURL];
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     /*NSDictionary *requestData = [[NSDictionary alloc] initWithObjectsAndKeys:
      fbID, @"facebook_id",
      fbToken, @"fb_token",
@@ -383,12 +363,10 @@
                                 // Parse user data
                                NSDictionary *theUser = users;
                                // for(theUser in users){
-                                    NSLog(@"in the dictionary");
                                     user = [[User alloc] init];
+                                  
                                     user.ID = theUser[@"id"];
-                                  //  NSLog(@"id: %@", theUser[@"id"]);
-                               // self.userID = theUser[@"id"];
-                                    
+                                   // NSLog(@"1User ID is: %@", theUser[@"id"]);
                                     user.created_at = theUser[@"created_at"];
                                     user.updated_at = theUser[@"updated_at"];
                                     user.username = theUser[@"username"];
@@ -399,7 +377,10 @@
                                     user.fb_id = theUser[@"fb_id"];
                                     user.fb_token = theUser[@"fb_token"];
                                     user.fb_synced_at = theUser[@"fb_synced_at"];
-                                    
+                          
+                               appDelegate.ID = user.ID;
+                               NSLog(@"2User ID is: %@", appDelegate.ID);
+                               NSLog(@"3User ID is: %@", user.ID);
                              /*
                                 self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
                                 self.userFriendsList = theUser[@"friends"];

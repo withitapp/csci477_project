@@ -305,11 +305,11 @@
 {
     
     NSLog(@"Publish button pressed.");
-    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     PollDataController *dataController = [PollDataController sharedInstance];
+    self.poll.creatorID = appDelegate.ID;
     [dataController addPollCreatedWithPoll:self.poll];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.masterViewController.pollTableView reloadData];
     
     //pop view controllers twice

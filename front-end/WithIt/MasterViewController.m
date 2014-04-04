@@ -166,7 +166,7 @@
             NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
             break;
         case 2:
-            numRows = [self.dataController.masterPollsCreatedList count];
+            numRows = [self.dataController.masterPollsExpiredList count];
             NSLog(@"Number of expired polls: %lu.", (unsigned long)numRows);
             break;
     }

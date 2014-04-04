@@ -16,7 +16,7 @@
 @property NSString *description;
 @property NSNumber *creatorID;
 @property NSDate *createDate;
-@property NSDate *endDate;
+@property NSString *endDate;
 @property NSMutableArray *members;
 @property NSMutableArray *membershipIDs;
 

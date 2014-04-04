@@ -92,6 +92,9 @@
     
     NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
     self.masterPollsCreatedList = createdPollsList;
+    
+    NSMutableArray *expiredPollsList = [[NSMutableArray alloc] init];
+    self.masterPollsExpiredList = expiredPollsList;
 }
 
 - (void)setMasterPollsList:(NSMutableArray *)newList {
@@ -106,6 +109,12 @@
     }
 }
 
+- (void)setMasterPollsExpiredList:(NSMutableArray *)newList {
+    if (_masterPollsExpiredList != newList) {
+        _masterPollsExpiredList = [newList mutableCopy];
+    }
+}
+
 - (id)init {
     semaphore = dispatch_semaphore_create(0);
     // if (self = [super init]) { ?? commented out by patrick
@@ -117,7 +126,10 @@
         
     NSMutableArray *createdPollsList = [[NSMutableArray alloc] init];
     self.masterPollsCreatedList = createdPollsList;
-        
+    
+    NSMutableArray *expiredPollsList = [[NSMutableArray alloc] init];
+    self.masterPollsExpiredList = expiredPollsList;
+    
     // [self retrievePolls];
     NSLog(@"Init polldatacontroller");
     // [self addPollCreatedWithPoll:poll];
@@ -418,6 +430,22 @@
     NSLog(@"Date from string is: %@", dateString );
 	return result;
 
+}
+
+-(void) determineExpiredPoll
+{
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    NSLog(@"newDateString %@", newDateString);
+    [outputFormatter release];
+    NSLog(@"Time now is: %@",)
+    for(int d = 0; d < [_masterPollsList count];d++)
+    {
+        
+    }
+    
 }
 
 @end

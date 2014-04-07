@@ -62,10 +62,10 @@
     return [NSDictionary dictionaryWithObjectsAndKeys:self.pollID, @"id",
                                                       self.updatedAt, @"updated_at",
                                                       self.createDate, @"created_at",
-                                                      self.endDate, @"ends_at",
                                                       self.title, @"title",
                                                       self.description, @"description",
                                                       self.creatorID, @"user_id",
+                                                      self.endDate, @"ends_at",
                                                       nil];
 }
 

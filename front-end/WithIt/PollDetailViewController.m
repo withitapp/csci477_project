@@ -28,7 +28,7 @@ const NSInteger ALIGN = 10;
     return self;
 }
 
--(void)setPollDetails:(Poll *)poll atIndex:(NSUInteger)index
+-(void)setPollDetails:(Poll *)poll atIndex:(NSUInteger)index atSection:(NSUInteger)sectionNumber
 {
     if(!poll){
         NSLog(@"Poll is null.");
@@ -36,6 +36,7 @@ const NSInteger ALIGN = 10;
     }
     self.poll = poll;
     self.pollIndex = index;
+    self.pollSection = sectionNumber;
 }
 
 - (void)viewDidLoad
@@ -392,9 +393,14 @@ const NSInteger ALIGN = 10;
 - (void)leavePoll
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
+    
+    if(self.pollSection == 0)
+    {
     [appDelegate.masterViewController.dataController deleteObjectInListAtIndex:self.pollIndex];
-
+    }
+    else if (self.pollSection == 2){
+        [appDelegate.masterViewController.dataController deleteObjectInExpiredListAtIndex:self.pollIndex];
+    }
     [appDelegate.masterViewController.pollTableView reloadData];
     
     [self Back];
@@ -404,9 +410,12 @@ const NSInteger ALIGN = 10;
 - (void)deletePoll
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
+    if(self.pollSection == 1){
     [appDelegate.masterViewController.dataController  deleteObjectInCreatedListAtIndex:self.pollIndex];
-    
+    }
+    else if (self.pollSection == 2){
+        [appDelegate.masterViewController.dataController deleteObjectInExpiredListAtIndex:self.pollIndex];
+    }
     [appDelegate.masterViewController.pollTableView reloadData];
 
     [self Back];

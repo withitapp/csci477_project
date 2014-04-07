@@ -63,8 +63,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
+
+
     UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
     self.navigationItem.rightBarButtonItem = newPollButton;
     
@@ -108,6 +110,8 @@
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.pollTableView];
     [self loadData];
+
+    [self.dataController determineExpiredPoll];
     
 }
 
@@ -228,7 +232,7 @@
                 [formatter setDateStyle:NSDateFormatterMediumStyle];
             }
             
-            pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
+            pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
@@ -268,8 +272,8 @@
             break;
         
         case 2:
-            // expired poll
-            return;
+            pollAtIndex = [self.dataController objectInExpiredListAtIndex:(indexPath.row)];
+            break;
             
         default:
             NSLog(@"Something went wrong!");
@@ -281,7 +285,7 @@
     [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PollDetailViewController *detailViewController = [[PollDetailViewController alloc] init];
-    [detailViewController setPollDetails:pollAtIndex atIndex:indexPath.row];
+    [detailViewController setPollDetails:pollAtIndex atIndex:indexPath.row atSection:indexPath.section];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.navigationController pushViewController:detailViewController animated:YES];
 }

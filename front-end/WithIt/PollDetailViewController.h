@@ -12,7 +12,7 @@
 
 @interface PollDetailViewController : WIViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
-@property NSUInteger pollIndex;
+@property NSUInteger pollIndex, pollSection;
 @property (strong, nonatomic) Poll *poll;
 @property (strong, nonatomic) UIView *detailsView;
 @property (strong, nonatomic) UITextView *titleLabel;
@@ -25,6 +25,6 @@
 @property (strong, nonatomic) UITableView *memberTableView;
 @property (nonatomic, strong) UIButton *DeletePollButton;
 
--(void)setPollDetails:(Poll*)poll atIndex:(NSUInteger)index;
+-(void)setPollDetails:(Poll*)poll atIndex:(NSUInteger)index atSection:(NSUInteger)sectionNumber;
 
 @end

@@ -200,7 +200,7 @@
 
 - (void)postPoll:(Poll *)poll
 {
-    NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
+    NSLog(@"Posting user token to session with URL: %@", pollDataURL);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
     [request setHTTPMethod:@"POST"];
     NSString *pollData = [poll convertToJSON];

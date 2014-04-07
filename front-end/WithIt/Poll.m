@@ -59,6 +59,13 @@
 
 // Create an NSDictionary from the poll object
 -(NSDictionary *)makeDictionary {
+    NSLog(@"ID: %@", self.pollID);
+    NSLog(@"Updated at: %@", self.updatedAt);
+    NSLog(@"CreateDate: %@", self.createDate);
+    NSLog(@"Title: %@", self.title);
+    NSLog(@"Description: %@", self.description);
+    NSLog(@"CreatorID: %@", self.creatorID);
+    NSLog(@"End date %@", self.endDate);
     return [NSDictionary dictionaryWithObjectsAndKeys:self.pollID, @"id",
                                                       self.updatedAt, @"updated_at",
                                                       self.createDate, @"created_at",
@@ -70,7 +77,7 @@
 }
 
 // Serialize the poll object to JSON
--(NSString*)convertToJSON {
+-(NSData*)convertToJSON {
     NSDictionary *dictionary = [self makeDictionary];
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary

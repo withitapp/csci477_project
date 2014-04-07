@@ -67,7 +67,7 @@
 -(NSDictionary *)makeDictionary {
     NSLog(@"POLL STUFF: %@", self.title);
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SS'Z'"];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
     NSString *endDate = [dateFormatter stringFromDate:_endDate];
     NSString *createDate = [dateFormatter stringFromDate:_endDate];
     NSString *updateDate = [dateFormatter stringFromDate:_endDate];
@@ -84,7 +84,7 @@
 }
 
 // Serialize the poll object to JSON
--(NSString*)convertToJSON {
+-(NSData*)convertToJSON {
     NSDictionary *dictionary = [self makeDictionary];
     NSLog(@"Dictionary: %@", dictionary);
     NSError *error;

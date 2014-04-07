@@ -15,10 +15,16 @@
     self = [super init];
     if (self) {
         _title = name;
-        _creatorID = creatorName;
         _description = description;
         _createDate = [[NSDate alloc] init];
         _endDate = endDate;
+        // setting these for convenience, we need to actually set them later
+        _pollID = [[NSNumber alloc] initWithInt:45];
+        _updatedAt = endDate;
+        _creatorID = [[NSNumber alloc] initWithInt:45];
+        
+        
+        
         return self;
     }
     return nil;
@@ -59,27 +65,38 @@
 
 // Create an NSDictionary from the poll object
 -(NSDictionary *)makeDictionary {
-    return [NSDictionary dictionaryWithObjectsAndKeys:self.pollID, @"id",
-                                                      self.updatedAt, @"updated_at",
-                                                      self.createDate, @"created_at",
-                                                      self.endDate, @"ends_at",
-                                                      self.title, @"title",
-                                                      self.description, @"description",
-                                                      self.creatorID, @"user_id",
+    NSLog(@"POLL STUFF: %@", self.title);
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SS'Z'"];
+    NSString *endDate = [dateFormatter stringFromDate:_endDate];
+    NSString *createDate = [dateFormatter stringFromDate:_endDate];
+    NSString *updateDate = [dateFormatter stringFromDate:_endDate];
+    
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:self.pollID, @"id",
+                                                      updateDate, @"updated_at",
+                                                      createDate, @"created_at",
+                                                      endDate, @"ends_at",
+                                                      _title, @"title",
+                                                      _description, @"description",
+                                                      _creatorID, @"user_id",
                                                       nil];
+    return dictionary;
 }
 
 // Serialize the poll object to JSON
 -(NSString*)convertToJSON {
     NSDictionary *dictionary = [self makeDictionary];
+    NSLog(@"Dictionary: %@", dictionary);
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary
                                                        options:0
                                                          error:&error];
     if(error){
+        NSLog(@"Error converting poll to JSON: %@", [error localizedDescription]);
         return NULL;
     }
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSLog(@"JSON: %@", jsonString);
     return jsonString;
 }
 

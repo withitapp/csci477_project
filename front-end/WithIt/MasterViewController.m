@@ -110,7 +110,7 @@
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.pollTableView];
     [self loadData];
-    NSLog(@"Heerrreee issssss the curreennntttt   timeee");
+
     [self.dataController determineExpiredPoll];
     
 }

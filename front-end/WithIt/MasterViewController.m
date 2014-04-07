@@ -107,6 +107,8 @@
     self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-100))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
+    self.pollTableView.bounces = NO;
+    self.pollTableView.scrollEnabled = YES;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.pollTableView];
     [self loadData];

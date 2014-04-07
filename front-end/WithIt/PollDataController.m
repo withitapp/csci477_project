@@ -190,6 +190,8 @@
                                    message = @"Error fetching data.";
                                    NSLog(@"URL error: %@", error);
                                    showAlert();
+                                   // we should handle the error here
+                                   dispatch_semaphore_signal(semaphore);
                                    return;
                                }
                                

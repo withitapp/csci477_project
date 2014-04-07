@@ -44,7 +44,19 @@
     self.InfoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.InfoTableView reloadData];
     [self.detailsView addSubview:self.InfoTableView];
+    
+    
+    
+    //Add logout button
+    NSInteger LogoutButtonHeight = self.InfoTableView.frame.origin.y + self.InfoTableView.frame.size.height + 30;
+    self.LogoutButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.LogoutButton.frame = CGRectMake(40, LogoutButtonHeight, 200, 40);
+    [self.LogoutButton setTitle:@"Log Out" forState:UIControlStateNormal];
+    [self.LogoutButton addTarget:self action:@selector(logoutButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.detailsView addSubview:self.LogoutButton];
 }
+
+-()
 
 - (CGFloat) tableView:(UITableView *)tableView
 heightForHeaderInSection:(NSInteger)section{

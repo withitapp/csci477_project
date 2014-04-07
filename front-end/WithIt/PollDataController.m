@@ -27,11 +27,22 @@
 
 @implementation PollDataController
 
+// Ensure that only instance of PollDataController is ever instantiated
++ (PollDataController*)sharedInstance
+{
+    static PollDataController *_sharedInstance = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        _sharedInstance = [[PollDataController alloc] init];
+    });
+    return _sharedInstance;
+}
+
 - (void)loadData
 {
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
- 
+    
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
     NSLog(@"FB token string %@", fbtoken.accessToken);
@@ -42,19 +53,6 @@
     
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
     [self retrievePolls];
-    
-    
-}
-
-// Ensure that only instance of PollDataController is ever instantiated
-+ (PollDataController*)sharedInstance
-{
-    static PollDataController *_sharedInstance = nil;
-    static dispatch_once_t oncePredicate;
-    dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[PollDataController alloc] init];
-    });
-    return _sharedInstance;
 }
 
 - (void)initializeDefaultDataList {
@@ -192,6 +190,8 @@
                                    message = @"Error fetching data.";
                                    NSLog(@"URL error: %@", error);
                                    showAlert();
+                                   // we should handle the error here
+                                   dispatch_semaphore_signal(semaphore);
                                    return;
                                }
                                
@@ -217,8 +217,8 @@
 
 - (void)postPoll:(Poll *)poll
 {
-    NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
+    NSLog(@"Posting poll with URL: %@", pollDataURL);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"POST"];
     NSString *pollData = [poll convertToJSON];
     if(!pollData)
@@ -231,12 +231,17 @@
     NSDictionary *feedback = [self makeServerRequestWithRequest:request];
 }
 
+// Retrieve poll data from the server
 - (void)retrievePolls
 {
-    NSLog(@"Retrieving Poll Data with URL: %@", pollDataURL);
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSLog(@"Retrieving poll data with URL: %@", pollDataURL);
+    
+    // Create the request with an appropriate URL
     NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
+    // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
+    // Copy the creatorID from AppDelegate
+    NSNumber *creatorID = ((AppDelegate *)[UIApplication sharedApplication].delegate).ID;
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
     Poll *poll;
     
@@ -253,7 +258,7 @@
     }
     for( poll in updatePollsList){
         
-        if([appDelegate.ID isEqualToNumber:poll.creatorID]){
+        if([creatorID isEqualToNumber:poll.creatorID]){
             NSLog(@"Poll %@ added to created list.", poll.title);
             [self.masterPollsCreatedList addObject:poll];
         }
@@ -268,7 +273,6 @@
 {
     NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [request setHTTPMethod:@"POST"];
     NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
@@ -291,7 +295,8 @@
     user.fb_id = users[@"fb_id"];
     user.fb_token = users[@"fb_token"];
     user.fb_synced_at = users[@"fb_synced_at"];
-                               
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.ID = user.ID;
 }
 
@@ -505,7 +510,7 @@
                                appDelegate.ID = user.ID;
                                NSLog(@"2User ID is: %@", appDelegate.ID);
                                NSLog(@"3User ID is: %@", user.ID);
-                             
+ 
                                 self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
                                 self.userFriendsList = theUser[@"friends"];
                                 self.userPollsList = theUser[@"polls"];

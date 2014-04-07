@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		12A5A43818C139BB00D9229F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12A5A43618C139BB00D9229F /* Main.storyboard */; };
 		1D16751C186828C100A839D3 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D16751B186828C100A839D3 /* placeholder.png */; };
+		1DA5DB3018EF49CF00BCD3AA /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */; };
+		1DA5DB3118EF49CF00BCD3AA /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */; };
 		1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BC1863846C00904F8F /* Foundation.framework */; };
 		1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BE1863846D00904F8F /* CoreGraphics.framework */; };
 		1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892C01863846D00904F8F /* UIKit.framework */; };
@@ -57,6 +59,8 @@
 /* Begin PBXFileReference section */
 		12A5A43718C139BB00D9229F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
 		1D16751B186828C100A839D3 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = WithIt/placeholder.png; sourceTree = "<group>"; };
+		1DA5DB2E18EF49CF00BCD3AA /* UserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettings.h; sourceTree = "<group>"; };
+		1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettings.m; sourceTree = "<group>"; };
 		1DA892B91863846C00904F8F /* WithIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DA892BC1863846C00904F8F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DA892BE1863846D00904F8F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -189,6 +193,8 @@
 				7CC0B01C18998C280051C36E /* User.m */,
 				1DA8931418641B0300904F8F /* PollDataController.h */,
 				1DA8931518641B0300904F8F /* PollDataController.m */,
+				1DA5DB2E18EF49CF00BCD3AA /* UserSettings.h */,
+				1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */,
 				1DA892D41863846D00904F8F /* Images.xcassets */,
 				12A5A43518C139BB00D9229F /* Base.lproj */,
 				1DA892C31863846D00904F8F /* Supporting Files */,
@@ -332,6 +338,7 @@
 				1DA892CD1863846D00904F8F /* AppDelegate.m in Sources */,
 				7C4D490218C14A6700985B3A /* DataController.m in Sources */,
 				1DA8931618641B0300904F8F /* PollDataController.m in Sources */,
+				1DA5DB3018EF49CF00BCD3AA /* UserSettings.m in Sources */,
 				B609471118C16D9C00200524 /* UserSettingViewController.m in Sources */,
 				7CC0B01D18998C280051C36E /* User.m in Sources */,
 				1DA893061863F2F700904F8F /* PollDetailViewController.m in Sources */,
@@ -346,6 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA893131864117C00904F8F /* Poll.m in Sources */,
+				1DA5DB3118EF49CF00BCD3AA /* UserSettings.m in Sources */,
 				1DA893071863F2F700904F8F /* PollDetailViewController.m in Sources */,
 				1DA892FF1863E7FE00904F8F /* MasterViewController.m in Sources */,
 				B609471218C16D9C00200524 /* UserSettingViewController.m in Sources */,

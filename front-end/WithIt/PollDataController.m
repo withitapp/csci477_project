@@ -198,8 +198,8 @@
 
 - (void)postPoll:(Poll *)poll
 {
-    NSLog(@"Posting user token to session with URL: %@", pollDataURL);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
+    NSLog(@"Posting poll with URL: %@", pollDataURL);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"POST"];
     NSString *pollData = [poll convertToJSON];
     if(!pollData)
@@ -515,7 +515,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     //[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SS'Z'"];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
     
 	NSDate *result = [dateFormatter dateFromString:dateString];
     NSLog(@"Date from string is: %@", dateString );

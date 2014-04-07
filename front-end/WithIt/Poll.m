@@ -65,20 +65,20 @@
 
 // Create an NSDictionary from the poll object
 -(NSDictionary *)makeDictionary {
-    NSLog(@"ID: %@", self.pollID);
-    NSLog(@"Updated at: %@", self.updatedAt);
-    NSLog(@"CreateDate: %@", self.createDate);
-    NSLog(@"Title: %@", self.title);
-    NSLog(@"Description: %@", self.description);
-    NSLog(@"CreatorID: %@", self.creatorID);
-    NSLog(@"End date %@", self.endDate);
-    return [NSDictionary dictionaryWithObjectsAndKeys:self.pollID, @"id",
-                                                      self.updatedAt, @"updated_at",
-                                                      self.createDate, @"created_at",
-                                                      self.title, @"title",
-                                                      self.description, @"description",
-                                                      self.creatorID, @"user_id",
-                                                      self.endDate, @"ends_at",
+    NSLog(@"POLL STUFF: %@", self.title);
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
+    NSString *endDate = [dateFormatter stringFromDate:_endDate];
+    NSString *createDate = [dateFormatter stringFromDate:_endDate];
+    NSString *updateDate = [dateFormatter stringFromDate:_endDate];
+    
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:self.pollID, @"id",
+                                                      updateDate, @"updated_at",
+                                                      createDate, @"created_at",
+                                                      endDate, @"ends_at",
+                                                      _title, @"title",
+                                                      _description, @"description",
+                                                      _creatorID, @"user_id",
                                                       nil];
     return dictionary;
 }

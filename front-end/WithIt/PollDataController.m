@@ -17,7 +17,7 @@
 #define serverURL [NSURL URLWithString:@"http://api.withitapp.com"]
 #define dummyURL [NSURL URLWithString:@"http://gist.githubusercontent.com/oguzbilgic/9283570/raw/9e63c13790a74ffc51c5ea4edb9004d7e5246622/polls.json"]
 #define dummyPostURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
-#define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
+#define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/users"]
 #define pollDataURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 #define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
 
@@ -215,20 +215,58 @@
     return dataDictionary;
 }
 
+- (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID
+{
+    NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
+    [request setHTTPMethod:@"POST"];
+    NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    NSDictionary *users = [self makeServerRequestWithRequest:request];
+    
+    User *user;
+    //NSLog(@"Type of data received: %@, ", [users class]);
+    
+    // Parse user data
+    user = [[User alloc] init];
+    user.ID = users[@"id"];
+    user.created_at = users[@"created_at"];
+    user.updated_at = users[@"updated_at"];
+    user.username = users[@"username"];
+    user.email = users[@"email"];
+    user.first_name = users[@"first_name"];
+    NSLog(@"user name: %@", user.first_name);
+    user.last_name = users[@"last_name"];
+    user.fb_id = users[@"fb_id"];
+    user.fb_token = users[@"fb_token"];
+    user.fb_synced_at = users[@"fb_synced_at"];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    appDelegate.ID = user.ID;
+}
 - (void)postPoll:(Poll *)poll
 {
-    NSLog(@"Posting poll with URL: %@", pollDataURL);
+    NSLog(@"Posting poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
+    NSString *endDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *createDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *updateDate = [dateFormatter stringFromDate:poll.endDate];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"POST"];
-    NSString *pollData = [poll convertToJSON];
+   /* NSString *pollData = [poll convertToJSON];
     if(!pollData)
     {
         NSLog(@"Poll data didn't convert to JSON correctly!");
         return;
-    }
-    NSData *requestBodyData = [pollData dataUsingEncoding:NSUTF8StringEncoding];
+    }*/
+    NSString *postString = [NSString stringWithFormat:@"id=%@&created_at%@&updated_at=%@&title%@&description%@&user_id%@&ends_at%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
     NSDictionary *feedback = [self makeServerRequestWithRequest:request];
+    NSLog(@"Got return in postPoll: %@", feedback);
 }
 
 // Retrieve poll data from the server
@@ -269,19 +307,16 @@
     [updatePollsList removeAllObjects];
 }
 
-- (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID
+- (void)retrieveUsers:(NSMutableArray *) users
 {
-    NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
-    [request setHTTPMethod:@"POST"];
-    NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
-    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
-    NSDictionary *users = [self makeServerRequestWithRequest:request];
-
+    NSLog(@"Posting user token to session with URL: %@", userDataURL);
+    // Create the request with an appropriate URL
+    NSURLRequest *request = [NSURLRequest requestWithURL:userDataURL];
+    // Dispatch the request and save the returned data
+    NSDictionary *userdata = [self makeServerRequestWithRequest:request];
     User *user;
     //NSLog(@"Type of data received: %@, ", [users class]);
-    
+    /*
     // Parse user data
     user = [[User alloc] init];
     user.ID = users[@"id"];
@@ -294,11 +329,10 @@
     user.last_name = users[@"last_name"];
     user.fb_id = users[@"fb_id"];
     user.fb_token = users[@"fb_token"];
-    user.fb_synced_at = users[@"fb_synced_at"];
-    
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    appDelegate.ID = user.ID;
+    user.fb_synced_at = users[@"fb_synced_at"];*/
 }
+
+
 
 /*- (void)retrievePolls
 {

@@ -44,12 +44,13 @@
 
 - (void)loadData;
 + (PollDataController*)sharedInstance;
-
+//api calls
 - (NSDate *)convertJSONDate:(NSString *) dateString;
 - (void)postUser:(NSString *)appLinkToken fbID:(NSString *)fbID;
-//api calls
+- (void)retrieveUsers:(NSMutableArray *)users;
+- (void)postPoll:(Poll *) poll;
 - (void)retrievePolls;//:(NSArray *)polls;
 
--(void) determineExpiredPoll;
+- (void)determineExpiredPoll;
     
 @end

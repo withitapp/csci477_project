@@ -11,6 +11,7 @@
 @interface DataController : NSObject
 {
     dispatch_semaphore_t semaphore;
+    dispatch_semaphore_t semaphore_users;
 }
 
 @end

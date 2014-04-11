@@ -49,7 +49,7 @@
 //api calls
 - (NSDate *)convertJSONDate:(NSString *) dateString;
 - (void)postUser:(NSString *)appLinkToken fbID:(NSString *) fbID;
-- (void)retrieveUsers:(NSMutableArray *)users;
+
 - (Poll *)postPoll:(Poll *) poll;
 - (void)retrievePolls;//:(NSArray *)polls;
 

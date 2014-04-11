@@ -90,7 +90,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 }
 
 - (id)init {
-        semaphore = dispatch_semaphore_create(0);
+    semaphore = dispatch_semaphore_create(0);
         
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];
     self.masterPollsList = pollsList;
@@ -101,13 +101,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSMutableArray *expiredPollsList = [[NSMutableArray alloc] init];
     self.masterPollsExpiredList = expiredPollsList;
     
-    // [self retrievePolls];
     NSLog(@"Init polldatacontroller");
-    // [self addPollCreatedWithPoll:poll];
     return self;
-    
-        NSLog(@"Init polldatacontroller");
-        return self;
 }
 
 - (Poll *)objectInListAtIndex:(NSUInteger)theIndex {
@@ -333,32 +328,6 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     }
     [updatePollsList removeAllObjects];
 }
-
-- (void)retrieveUsers:(NSMutableArray *) users
-{
-    NSLog(@"Posting user token to session with URL: %@", userDataURL);
-    // Create the request with an appropriate URL
-    NSURLRequest *request = [NSURLRequest requestWithURL:userDataURL];
-    // Dispatch the request and save the returned data
-    NSDictionary *userdata = [self makeServerRequestWithRequest:request];
-    User *user;
-    //NSLog(@"Type of data received: %@, ", [users class]);
-    /*
-    // Parse user data
-    user = [[User alloc] init];
-    user.ID = users[@"id"];
-    user.created_at = users[@"created_at"];
-    user.updated_at = users[@"updated_at"];
-    user.username = users[@"username"];
-    user.email = users[@"email"];
-    user.first_name = users[@"first_name"];
-    NSLog(@"user name: %@", user.first_name);
-    user.last_name = users[@"last_name"];
-    user.fb_id = users[@"fb_id"];
-    user.fb_token = users[@"fb_token"];
-    user.fb_synced_at = users[@"fb_synced_at"];*/
-}
-
 
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

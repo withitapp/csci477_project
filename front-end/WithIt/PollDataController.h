@@ -16,6 +16,8 @@
     NSMutableData *_responseData;
 }
 
+
+
 // User information
 // User specific information
 @property (strong, nonatomic) NSString *userID;
@@ -44,12 +46,15 @@
 
 - (void)loadData;
 + (PollDataController*)sharedInstance;
-
-- (NSDate *)convertJSONDate:(NSString *) dateString;
-- (void)postUser:(NSString *)appLinkToken fbID:(NSString *)fbID;
 //api calls
+- (NSDate *)convertJSONDate:(NSString *) dateString;
+- (void)postUser:(NSString *)appLinkToken fbID:(NSString *) fbID;
+- (void)retrieveUsers:(NSMutableArray *)users;
+- (Poll *)postPoll:(Poll *) poll;
 - (void)retrievePolls;//:(NSArray *)polls;
 
--(void) determineExpiredPoll;
+- (void)postMembership:(Poll *) poll;
+
+- (void)determineExpiredPoll;
     
 @end

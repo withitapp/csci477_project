@@ -37,6 +37,7 @@
 		1DE577D718973ED500261B50 /* WIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE577D618973ED500261B50 /* WIViewController.m */; };
 		1DE577D818973ED500261B50 /* WIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE577D618973ED500261B50 /* WIViewController.m */; };
 		7C4D490218C14A6700985B3A /* DataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D490118C14A6700985B3A /* DataController.m */; };
+		7C826E1518F87E8300967AFD /* UserDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C826E1418F87E8300967AFD /* UserDataController.m */; };
 		7CC0B01D18998C280051C36E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0B01C18998C280051C36E /* User.m */; };
 		B609471118C16D9C00200524 /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B609471018C16D9C00200524 /* UserSettingViewController.m */; };
 		B609471218C16D9C00200524 /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B609471018C16D9C00200524 /* UserSettingViewController.m */; };
@@ -93,6 +94,8 @@
 		1DE577D618973ED500261B50 /* WIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WIViewController.m; sourceTree = "<group>"; };
 		7C4D490018C14A6700985B3A /* DataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataController.h; sourceTree = "<group>"; };
 		7C4D490118C14A6700985B3A /* DataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataController.m; sourceTree = "<group>"; };
+		7C826E1318F87E8300967AFD /* UserDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataController.h; sourceTree = "<group>"; };
+		7C826E1418F87E8300967AFD /* UserDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataController.m; sourceTree = "<group>"; };
 		7CC0B01B18998C280051C36E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		7CC0B01C18998C280051C36E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		B609470F18C16D9C00200524 /* UserSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserSettingViewController.h; path = ../UserSettingViewController.h; sourceTree = "<group>"; };
@@ -193,6 +196,8 @@
 				7CC0B01C18998C280051C36E /* User.m */,
 				1DA8931418641B0300904F8F /* PollDataController.h */,
 				1DA8931518641B0300904F8F /* PollDataController.m */,
+				7C826E1318F87E8300967AFD /* UserDataController.h */,
+				7C826E1418F87E8300967AFD /* UserDataController.m */,
 				1DA5DB2E18EF49CF00BCD3AA /* UserSettings.h */,
 				1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */,
 				1DA892D41863846D00904F8F /* Images.xcassets */,
@@ -338,6 +343,7 @@
 				1DA892CD1863846D00904F8F /* AppDelegate.m in Sources */,
 				7C4D490218C14A6700985B3A /* DataController.m in Sources */,
 				1DA8931618641B0300904F8F /* PollDataController.m in Sources */,
+				7C826E1518F87E8300967AFD /* UserDataController.m in Sources */,
 				1DA5DB3018EF49CF00BCD3AA /* UserSettings.m in Sources */,
 				B609471118C16D9C00200524 /* UserSettingViewController.m in Sources */,
 				7CC0B01D18998C280051C36E /* User.m in Sources */,

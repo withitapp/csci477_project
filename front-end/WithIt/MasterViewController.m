@@ -104,13 +104,16 @@
     [self.view addSubview:self.headerView];
     
     // Set up poll table view
-    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-100))];
+    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-170))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
     self.pollTableView.bounces = NO;
     self.pollTableView.scrollEnabled = YES;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
+    
     [self.view addSubview:self.pollTableView];
+   // self.navigationController.navigationBar.translucent= NO;
+    
     [self loadData];
 
     [self.dataController determineExpiredPoll];

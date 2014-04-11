@@ -442,7 +442,6 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
         }
         if([currentDate compare:pollDate] == NSOrderedDescending)
         {
-            NSLog(@"Expired Poll!!");
             [self addPollExpiredWithPoll:[self objectInListAtIndex:d]];
             [self deleteObjectInListAtIndex:d];
             d--;
@@ -472,7 +471,6 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
         NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
         if([currentDate compare:pollDate] == NSOrderedDescending)
         {
-            NSLog(@"Expired Poll!!");
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];
             [self deleteObjectInCreatedListAtIndex:d];
         }

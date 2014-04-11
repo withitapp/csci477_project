@@ -113,6 +113,7 @@
         // The user has cancelled a login. You can inspect the error
         // for more context. For this sample, we will simply ignore it.
         NSLog(@"user cancelled login");
+        NSLog(@"Error: %@", error.description);
     } else {
         // For simplicity, this sample treats other errors blindly, but you should
         // refer to https://developers.facebook.com/docs/technical-guides/iossdk/errors/ for more information.
@@ -149,6 +150,7 @@
     // on log out we reset the main view controller
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate resetMainViewController];
+    NSLog(@"Logged out user.");
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

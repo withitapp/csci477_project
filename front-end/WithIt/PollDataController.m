@@ -16,10 +16,14 @@
 
 #define serverURL [NSURL URLWithString:@"http://api.withitapp.com"]
 #define dummyURL [NSURL URLWithString:@"http://gist.githubusercontent.com/oguzbilgic/9283570/raw/9e63c13790a74ffc51c5ea4edb9004d7e5246622/polls.json"]
+#define membershipURL [NSURL URLWithString:@"http://withitapp.com:3000/memberships"]
 #define dummyPostURL [NSURL URLWithString:@"http://withitapp.com:3000/auth"]
 #define userDataURL [NSURL URLWithString:@"http://withitapp.com:3000/users"]
 #define pollDataURL [NSURL URLWithString:@"http://withitapp.com:3000/polls"]
 #define userDataPopURL [NSURL URLWithString:@"http://withitapp.com:3000/users?id=1"]
+
+//set to 1 for debug
+static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 @interface PollDataController () <NSURLConnectionDelegate>
 - (id)init;
@@ -125,8 +129,9 @@
 }
 
 - (void)addPollCreatedWithPoll:(Poll *)poll {
-    [self.masterPollsCreatedList addObject:poll];
-    [self postPoll:poll];
+    Poll *responsePoll = [self postPoll:poll];
+    NSLog(@"Adding responsePoll to Master pollList");
+    [self.masterPollsCreatedList addObject:responsePoll];
 }
 
 - (void)deleteObjectInCreatedListAtIndex:(NSUInteger)theIndex {
@@ -245,7 +250,7 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.ID = user.ID;
 }
-- (void)postPoll:(Poll *)poll
+- (Poll *)postPoll:(Poll *)poll
 {
     NSLog(@"Posting poll with URL: %@ and title: %@", pollDataURL, poll.title);
     
@@ -262,11 +267,33 @@
         NSLog(@"Poll data didn't convert to JSON correctly!");
         return;
     }*/
-    NSString *postString = [NSString stringWithFormat:@"id=%@&created_at%@&updated_at=%@&title%@&description%@&user_id%@&ends_at%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
+    NSString *postString = [NSString stringWithFormat:@"id=%@&created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
-    NSDictionary *feedback = [self makeServerRequestWithRequest:request];
-    NSLog(@"Got return in postPoll: %@", feedback);
+    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
+    pollFeedback = [self makeServerRequestWithRequest:request];
+    poll.pollID = pollFeedback[@"id"];
+    [self postMembership:poll];
+    NSLog(@"Got return in postPoll: %@", poll.pollID);
+    return poll;
+}
+
+//- deletPoll
+
+- (void)postMembership:(Poll *)poll
+{
+    NSLog(@"Posting MEMBERSHIP for URL: %@ and poll title %@", membershipURL, poll.title);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+    [request setHTTPMethod:@"POST"];
+    //dummy data, need to implement correct data
+    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",poll.creatorID, poll.pollID, @"true" ];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
+    membershipFeedback  = [self makeServerRequestWithRequest:request];
+   
+    [poll.membershipIDs addObject: membershipFeedback[@"id"]];
+    NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
 
 // Retrieve poll data from the server
@@ -334,104 +361,6 @@
 
 
 
-/*- (void)retrievePolls
-{
-    NSLog(@"Retrieving Poll Data");
-    NSLog(@"URL: %@", pollDataURL);
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:queue
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                               NSHTTPURLResponse *httpResponse = nil;
-                               if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                                   httpResponse = (NSHTTPURLResponse *) response;
-                               }
-                               
-                               // NSURLConnection's completionHandler is called on the background thread.
-                               // Prepare a block to show an alert on the main thread:
-                               __block NSString *message = @"";
-                               void (^showAlert)(void) = ^{
-                                   [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                       [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                                   }];
-                               };
-                               
-                               // Check for error or non-OK statusCode:
-                               if (error || httpResponse.statusCode != 200) {
-                                   message = @"Error fetching polls";
-                                   NSLog(@"URL error: %@", error);
-                                   showAlert();
-                                   return;
-                               }
-                               
-                               // Parse the JSON response:
-                               NSError *jsonError = nil;
-                               
-                               // Get poll data
-                               NSData *pollsData;// = [[NSData alloc] initWithContentsOfURL:dummyPostURL];
-                               NSError *pollDataError;
-                               NSLog(@"Trying to load JSON data");
-                               NSMutableArray *polls = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&pollDataError];//[@"polls"];
-                               
-                               NSLog(@"JSON poll data loaded.");
-                               if(pollDataError){
-                                   NSLog(@"Error loading poll data JSON: %@", [pollDataError localizedDescription]);
-                                   message = @"Error parsing response";
-                                   showAlert();
-                               }
-                               else {
-                                   NSLog(@"JSON poll data loaded.");
-                                   //NSLog(@"%@", polls);
-                               }
-                               
-                               // Parse poll data
-                               Poll *poll;
-                               
-                               for(NSDictionary *thePoll in polls){
-                                   poll = [[Poll alloc] init];
-                                   poll.pollID = thePoll[@"id"];
-                                   // poll.createDate = [self convertJSONDate:thePoll[@"created_at"]];
-                                   poll.createDate = thePoll[@"created_at"];
-                                   // poll.updatedAt = [self convertJSONDate:thePoll[@"updated_at"]];
-                                   poll.updatedAt = thePoll[@"updated_at"];
-                                   poll.title = thePoll[@"title"];
-                                   poll.description = thePoll[@"description"];
-                                   poll.creatorID = thePoll[@"user_id"];
-                                   // poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
-                                   poll.endDate = thePoll[@"ends_at"];
-                                   
-                                   //     poll.members = [polls valueForKey:@"member_ids"];
-                                   //     poll.membershipIDs = [polls valueForKey:@"membership_ids"];
-                                   //   description = [[weather objectAtIndex:0] objectForKey:@"description"];
-                                   // poll.members = thePoll[@"member_ids"];
-                                   // poll.membershipIDs = thePoll[@"membership_ids"];  = [updatePollsList mutableCopy]
-                                   [updatePollsList addObject:poll];
-                                   // break;
-                                   
-                               }
-                               for( poll in updatePollsList){
-                                  
-                                   if([appDelegate.ID isEqualToNumber:poll.creatorID]){
-                                       NSLog(@"Poll %@ added to created list.", poll.title);
-                                       [self.masterPollsCreatedList addObject:poll];
-                                   }
-                                   else{
-                                       [self.masterPollsList addObject:poll];
-                                   }
-                               }
-                               [updatePollsList removeAllObjects];
-                               
-                               
-                               dispatch_semaphore_signal(semaphore);
-                           }];
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    
-    //return polls;
-}*/
-
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     // A response has been received, this is where we initialize the instance var you created
     // so that we can append data to it in the didReceiveData method
@@ -447,119 +376,6 @@
     [_responseData appendData:data];
 }
 
-
-//post request of token
-/*- (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID//:(NSArray *)polls
-{
-    NSLog(@"Posting user token to session");
-    // NSURL *pollsURL = dummyPostURL;
-    NSLog(@"URL posting to is: %@", dummyPostURL);
-    NSMutableURLRequest *postRequest = [NSMutableURLRequest requestWithURL:dummyPostURL];
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSDictionary *requestData = [[NSDictionary alloc] initWithObjectsAndKeys:
-     fbID, @"facebook_id",
-     fbToken, @"fb_token",
-     nil];
-    // [postRequest setValue:requestData forHTTPHeaderField:@"Content-Type"];
-    [postRequest setHTTPMethod:@"POST"];
-    NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
-    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [postRequest setHTTPBody:requestBodyData];
-    
-    
-    // NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:postRequest delegate:self];
-    
-    
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    NSLog(@"Sending request");
-    [NSURLConnection sendAsynchronousRequest:postRequest
-                                       queue:queue
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                               NSHTTPURLResponse *httpResponse;
-                               if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                                   httpResponse = (NSHTTPURLResponse *) response;
-                                   NSLog(@"Got response!");
-                               }
-                               NSLog(@"response noted");
-                               // NSURLConnection's completionHandler is called on the background thread.
-                               // Prepare a block to show an alert on the main thread:
-                               __block NSString *message = @"";
-                               void (^showAlert)(void) = ^{
-                                   [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                       NSLog(@"$$ in operation queue $$");
-                                       [[[UIAlertView alloc] initWithTitle:nil message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                                   }];
-                               };
-                               
-                               // Check for error or non-OK statusCode:
-                               if (error || httpResponse.statusCode != 200) {
-                                   message = @"Error fetching users";
-                                   NSLog(@"URL error: %@", error);
-                                   showAlert();
-                                   return;
-                               }
-                               
-                                // Get user data including polls
-                              // NSData *userData= [[NSData alloc] init];
-                               NSError *userDataError;
-                    
-                               
-                               NSDictionary *users;
-                               @try{
-                                   users = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&userDataError];//[@"user"];
-                               
-                               } @catch (NSException *NSInvalidArgumentException){
-                                   NSLog(@"Got invalid data from server when posting user error is: %@", NSInvalidArgumentException);
-                               }
-                               
-                                if(userDataError){
-                                NSLog(@"Error loading user data JSON: %@", [userDataError localizedDescription]);
-                                }
-                                else {
-                                NSLog(@"JSON user data loaded after post request.");
-                                //NSLog(@"%@", users);
-                                }
-                               
-                               User *user;
-                               NSLog(@"Type of data received: %@, ", [users class]);
-                                // Parse user data
-                               NSDictionary *theUser = users;
-                               // for(theUser in users){
-                                    user = [[User alloc] init];
-                                  
-                                    user.ID = theUser[@"id"];
-                                   // NSLog(@"1User ID is: %@", theUser[@"id"]);
-                                    user.created_at = theUser[@"created_at"];
-                                    user.updated_at = theUser[@"updated_at"];
-                                    user.username = theUser[@"username"];
-                                    user.email = theUser[@"email"];
-                                    user.first_name = theUser[@"first_name"];
-                                    NSLog(@"user name: %@", user.first_name);
-                                    user.last_name = theUser[@"last_name"];
-                                    user.fb_id = theUser[@"fb_id"];
-                                    user.fb_token = theUser[@"fb_token"];
-                                    user.fb_synced_at = theUser[@"fb_synced_at"];
-                          
-                               appDelegate.ID = user.ID;
-                               NSLog(@"2User ID is: %@", appDelegate.ID);
-                               NSLog(@"3User ID is: %@", user.ID);
- 
-                                self.userName = theUser[@"name"]; // We actually want to check our stored name for the user with their current Facebook name here
-                                self.userFriendsList = theUser[@"friends"];
-                                self.userPollsList = theUser[@"polls"];
-                                break;
-                               
-                               
-                               NSLog(@"Outta here");
-                               
-                               dispatch_semaphore_signal(semaphore);
-                           }];
-    NSLog(@"Sempaphore dispatched");
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    
-    //return polls;
-}*/
 
 
 //- (void)retrieveUser
@@ -620,9 +436,10 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
         pollYear = [pollComponents year];
         pollMonth = [pollComponents month];
         pollDay = [pollComponents day];
-        
+        if (EXPIRE_TIME_DEBUG == 1){
         NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
+        }
         if([currentDate compare:pollDate] == NSOrderedDescending)
         {
             NSLog(@"Expired Poll!!");

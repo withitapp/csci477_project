@@ -48,15 +48,25 @@
     
     
     //Add logout button
-    NSInteger LogoutButtonHeight = self.InfoTableView.frame.origin.y + self.InfoTableView.frame.size.height + 30;
+   /* NSInteger LogoutButtonHeight = self.InfoTableView.frame.origin.y + self.InfoTableView.frame.size.height + 100;
     self.LogoutButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.LogoutButton.frame = CGRectMake(40, LogoutButtonHeight, 200, 40);
+    self.LogoutButton.frame = CGRectMake(40, (self.screenHeight - 200), 200, 40);
     [self.LogoutButton setTitle:@"Log Out" forState:UIControlStateNormal];
-    [self.LogoutButton addTarget:self action:@selector(logoutButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.LogoutButton addTarget:self action:@selector(logoutButtonWasPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.detailsView addSubview:self.LogoutButton];
+    
+    */
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Logout"
+    style:UIBarButtonItemStyleBordered
+    target:self
+    action:@selector(logoutButtonWasPressed:)];
 }
 
--()
+
+-(void)logoutButtonWasPressed:(id)sender {
+    [FBSession.activeSession closeAndClearTokenInformation];
+}
+
 
 - (CGFloat) tableView:(UITableView *)tableView
 heightForHeaderInSection:(NSInteger)section{

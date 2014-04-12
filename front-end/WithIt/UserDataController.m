@@ -31,12 +31,11 @@
 - (id)init {
     semaphore_users = dispatch_semaphore_create(0);
     
-    NSDictionary *friendsList = [[NSDictionary alloc] init];
+    NSMutableDictionary *friendsList = [[NSMutableDictionary alloc] init];
     self.masterFriendsList = friendsList;
     
-    NSDictionary *everyoneList = [[NSDictionary alloc] init];
+    NSMutableDictionary *everyoneList = [[NSMutableDictionary alloc] init];
     self.masterEveryoneList = everyoneList;
-    
     
     
     NSLog(@"Init UserDataController");
@@ -101,22 +100,60 @@
     // Create the request with an appropriate URL
     NSURLRequest *request = [NSURLRequest requestWithURL:membersURL];
     // Dispatch the request and save the returned data
-    NSDictionary *users = [self makeServerRequestWithRequest:request];
+    NSDictionary *members = [self makeServerRequestWithRequest:request];
     User *user;
-    //NSLog(@"Type of data received: %@, ", [users class]);
     
-     user = [[User alloc] init];
-     user.ID = users[@"id"];
-     user.created_at = users[@"created_at"];
-     user.updated_at = users[@"updated_at"];
-     user.username = users[@"username"];
-     user.email = users[@"email"];
-     user.first_name = users[@"first_name"];
-     NSLog(@"user name: %@", user.first_name);
-     user.last_name = users[@"last_name"];
-     user.fb_id = users[@"fb_id"];
-     user.fb_token = users[@"fb_token"];
-     user.fb_synced_at = users[@"fb_synced_at"];
+    NSMutableArray *updateMembersList = [[NSMutableArray alloc] init];//question: should we create this object every time?
+    
+    for(NSDictionary *theUser in members){
+        
+        user = [[User alloc] init];
+        user.ID = theUser[@"id"];
+        user.created_at = theUser[@"created_at"];
+        user.updated_at = theUser[@"updated_at"];
+        user.username = theUser[@"username"];
+        user.email = theUser[@"email"];
+        user.first_name = theUser[@"first_name"];
+        NSLog(@"user name: %@", user.first_name);
+        user.last_name = theUser[@"last_name"];
+        user.fb_id = theUser[@"fb_id"];
+        user.fb_token = theUser[@"fb_token"];
+        user.fb_synced_at = theUser[@"fb_synced_at"];
+        [updateMembersList addObject:user];
+    }
+    for(user in updateMembersList){
+        if([poll.members containsObject:user.ID]){
+            NSLog(@"Poll already contains user: %@", user.first_name);
+        }
+        else{
+            [poll.members addObject:user.ID];
+            }
+        
+        if([self.masterEveryoneList objectForKey: user.ID]){
+            
+             NSLog(@"Master everyone list already contains user - %@ -", user.first_name);
+        }
+        else{
+            
+            // Add user profile picture
+            dispatch_async(dispatch_get_global_queue(0,0), ^{
+                NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.ID]]];
+                if (!imageData){
+                    NSLog(@"Failed to download user profile picture.");
+                    return;
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    user.profilePictureView.image = [UIImage imageWithData: imageData];
+                });
+            });
+           
+        
+        user.full_name = [user.first_name stringByAppendingString:user.last_name];
+        NSLog(@"User [%@] added to everyone list.", user.first_name);
+        [self.masterEveryoneList setObject:user forKey:user.ID];
+        }}
+    [updateMembersList removeAllObjects];
+
 }
 
 - (void)retrieveFriends{
@@ -127,7 +164,7 @@
     // Dispatch the request and save the returned data
     NSDictionary *friends = [self makeServerRequestWithRequest:request];
     User *user;
-    NSMutableArray *updateFriendsList = [[NSMutableArray alloc] init];
+    NSMutableArray *updateFriendsList = [[NSMutableArray alloc] init];//question: should we create this object every time?
     
     for(NSDictionary *theUser in friends){
     
@@ -143,20 +180,66 @@
         user.fb_id = theUser[@"fb_id"];
         user.fb_token = theUser[@"fb_token"];
         user.fb_synced_at = theUser[@"fb_synced_at"];
-        [updateFriendsList addObject:poll];
+        [updateFriendsList addObject:user];
     }
-    for( poll in updateFriendsList){
-        
-        if([creatorID isEqualToNumber:poll.creatorID]){
-            NSLog(@"Poll %@ added to created list.", poll.title);
-            [self.masterPollsCreatedList addObject:poll];
+    for(user in updateFriendsList){
+        //add all friends to local dictionary storage
+        if([self.masterFriendsList objectForKey: user.ID]){
+            NSLog(@"User [%@] added to friends list.", user.first_name);
+            [self.masterFriendsList setObject:user forKey:user.ID];
         }
         else{
-            [self.masterPollsList addObject:poll];
+            NSLog(@"Master friends list already contains user - %@ -", user.first_name);
+        }
+        //make sure all friends are in everyone list... may want to remove later, not sure now 4/11
+        if([self.masterEveryoneList objectForKey: user.ID]){
+            NSLog(@"Master everyone list already contains user - %@ -", user.first_name);
+            
+        }
+        else{
+            // Add user profile picture
+            //user.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
+            dispatch_async(dispatch_get_global_queue(0,0), ^{
+                NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.ID]]];
+                if (!imageData){
+                    NSLog(@"Failed to download user profile picture.");
+                    return;
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    user.profilePictureView.image = [UIImage imageWithData: imageData];
+                });
+            });
+            
+        
+        user.full_name = [user.first_name stringByAppendingString:user.last_name];
+        NSLog(@"User [%@] added to everyone list.", user.first_name);
+        [self.masterEveryoneList setObject:user forKey:user.ID];
         }
     }
-    [updatePollsList removeAllObjects];
+    [updateFriendsList removeAllObjects];
 }
+
+-(User *)getUser:(NSNumber *) userID{
+    User * user;
+    user = [self.masterEveryoneList objectForKey:userID];
+    if(user == nil){
+        NSLog(@"In getUser, could not find user in local dictionary *HELP*");
+        
+    }
+
+    return user;
+}
+
++ (UserDataController*)sharedInstance
+{
+    static UserDataController *_sharedInstance = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        _sharedInstance = [[UserDataController alloc] init];
+    });
+    return _sharedInstance;
+}
+
 
 
 @end

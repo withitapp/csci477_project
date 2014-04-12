@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface User : NSObject
-//probably don't even need this class...
+
 @property NSNumber *ID;
 @property NSDate *created_at;
 @property NSDate *updated_at;
@@ -17,12 +17,15 @@
 @property NSString *email;
 @property NSString *first_name;
 @property NSString *last_name;
+@property NSString *full_name;
 @property NSString *fb_id;
 @property NSString *fb_token;
 @property NSDate *fb_synced_at;
 @property NSMutableArray *friendshipID;
 @property NSMutableArray *invitationID;
 @property NSMutableArray *membershipID;
+
+@property (strong, nonatomic) UIImageView *profilePictureView;
 
 
 @end

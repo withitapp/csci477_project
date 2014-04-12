@@ -17,8 +17,11 @@
 @property NSNumber *creatorID;
 @property NSDate *createDate;
 @property NSDate *endDate;
-@property NSMutableArray *members;
+@property NSMutableArray *members;//user IDs
 @property NSMutableArray *membershipIDs;
+//attending members user IDs
+@property NSMutableArray *attending;
+@property NSMutableArray *notAttending;
 
 -(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;

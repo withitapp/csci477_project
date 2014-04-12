@@ -96,6 +96,7 @@
 		7C4D490118C14A6700985B3A /* DataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataController.m; sourceTree = "<group>"; };
 		7C826E1318F87E8300967AFD /* UserDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataController.h; sourceTree = "<group>"; };
 		7C826E1418F87E8300967AFD /* UserDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataController.m; sourceTree = "<group>"; };
+		7CAC373B18F8C3C000C1CF74 /* Membership.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Membership.h; sourceTree = "<group>"; };
 		7CC0B01B18998C280051C36E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		7CC0B01C18998C280051C36E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		B609470F18C16D9C00200524 /* UserSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserSettingViewController.h; path = ../UserSettingViewController.h; sourceTree = "<group>"; };
@@ -186,6 +187,7 @@
 				1DA892FD1863E7FE00904F8F /* MasterViewController.m */,
 				1DA893041863F2F700904F8F /* PollDetailViewController.h */,
 				1DA893051863F2F700904F8F /* PollDetailViewController.m */,
+				7CAC373B18F8C3C000C1CF74 /* Membership.h */,
 				1DA893081863F38100904F8F /* CreatePollViewController.h */,
 				1DA893091863F38100904F8F /* CreatePollViewController.m */,
 				B6136DBF1890D46B0081B2AB /* PublishPollViewController.h */,

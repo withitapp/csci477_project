@@ -10,6 +10,7 @@
 #import "DataController.h"
 #import "Poll.h"
 #import "User.h"
+#import "Membership.h"
 //#import <FacebookSDK/FacebookSDK.h>
 
 @interface UserDataController : DataController
@@ -19,10 +20,10 @@
 
 
 //dictionary containting all user objects that are friends in the app (and facebook)
-@property (nonatomic, copy) NSMutableDictionary *masterFriendsList;
+@property (nonatomic, retain) NSMutableDictionary *masterFriendsList;
 //dictionary containing all user objects this instance has ever interacted with
-@property (nonatomic, copy) NSMutableDictionary *masterEveryoneList;
-@property (nonatomic, copy) NSMutableDictionary *masterMembershipsList;
+@property (nonatomic, retain) NSMutableDictionary *masterEveryoneList;
+@property (nonatomic, retain) NSMutableDictionary *masterMembershipsList;
 
 - (void)loadData;
 + (UserDataController*)sharedInstance;
@@ -30,6 +31,7 @@
 -(NSDictionary*) makeServerRequestWithRequest:(NSURLRequest *)request;
 - (void)retrieveFriends;
 - (void)retrieveMembers:(Poll *) poll;
+- (void)retrieveMemberships;
 
--(User *)getUser:(NSNumber *) userID;
+-(User *)getUser:(NSString *) userID;
 @end

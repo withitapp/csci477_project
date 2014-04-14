@@ -17,11 +17,11 @@
 @property NSNumber *creatorID;
 @property NSDate *createDate;
 @property NSDate *endDate;
-@property NSMutableArray *members;//user IDs
-@property NSMutableArray *membershipIDs;
+@property (nonatomic, copy) NSMutableArray *members;//user IDs
+@property (nonatomic, copy) NSMutableArray *membershipIDs;
 //attending members user IDs
-@property NSMutableArray *attending;
-@property NSMutableArray *notAttending;
+@property (nonatomic, copy) NSMutableArray *attending;
+@property (nonatomic, copy) NSMutableArray *notAttending;
 
 -(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;

@@ -45,6 +45,7 @@ const NSInteger ALIGN = 10;
     self.userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
     [self.userDataController retrieveMembers:self.poll];
+    NSLog(@"viewDidLoad count of members in poll: %lu",(unsigned long)[self.poll.members count]);
    
     [super viewDidLoad];
     
@@ -181,9 +182,10 @@ const NSInteger ALIGN = 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUInteger attendingRows = [self.poll.attending count];//TODO QUESTION how to determine who is attending and who isn't???
+    //NSUInteger attendingRows = [self.poll.attending count];//TODO QUESTION how to determine who is attending and who isn't???
     NSUInteger notAttendingRows = [self.poll.notAttending count];
-   
+    NSUInteger attendingRows = [self.poll.members count];
+    NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
     
     switch (section){
         case 0:
@@ -211,13 +213,13 @@ const NSInteger ALIGN = 10;
         //[cell.contentView addSubview: nameLabel];
     }
     
-    NSNumber *userIDAtIndex;
+    NSString *userIDAtIndex;
     User *user;
     switch (indexPath.section) {
         
         case 0:
             //gets user information
-            userIDAtIndex = [self.poll.attending objectAtIndex:(indexPath.row)];
+            userIDAtIndex = [self.poll.members objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
            // [[cell textLabel] setText:@"MemberName"];

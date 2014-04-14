@@ -244,6 +244,9 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.ID = user.ID;
+    UserDataController *userDataController = [UserDataController sharedInstance];
+    //retrieves friends from database
+    [userDataController loadData];
 }
 - (Poll *)postPoll:(Poll *)poll
 {
@@ -268,25 +271,33 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
     poll.pollID = pollFeedback[@"id"];
-    [self postMembership:poll];
+    NSNumber * n = [NSNumber numberWithInt:15];
+    [self postMembership:poll user:n];
+    n = [NSNumber numberWithInt:16];
+    [self postMembership:poll user:n];
+    n = [NSNumber numberWithInt:12];
+    [self postMembership:poll user:n];
+    n = [NSNumber numberWithInt:20];
+    [self postMembership:poll user:n];
+    
     NSLog(@"Got return in postPoll: %@", poll.pollID);
     return poll;
 }
 
 //- deletPoll
 
-- (void)postMembership:(Poll *)poll
+- (void)postMembership:(Poll *)poll user:(NSNumber *)userid
 {
-    NSLog(@"Posting MEMBERSHIP for URL: %@ and poll title %@", membershipURL, poll.title);
+    NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
     [request setHTTPMethod:@"POST"];
     //dummy data, need to implement correct data
-    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",poll.creatorID, poll.pollID, @"true" ];
+    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, @"true" ];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
     NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
     membershipFeedback  = [self makeServerRequestWithRequest:request];
-   
+
     [poll.membershipIDs addObject: membershipFeedback[@"id"]];
     NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
@@ -317,7 +328,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         [updatePollsList addObject:poll];
     }
     for( poll in updatePollsList){
-        
+        //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){
             NSLog(@"Poll %@ added to created list.", poll.title);
             [self.masterPollsCreatedList addObject:poll];

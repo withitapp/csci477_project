@@ -49,9 +49,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSLog(@"Launching WithItApp.");
     
     
-    self.userDataController = [UserDataController sharedInstance];
-    //retrieves friends from database
-    [self.userDataController loadData];
+    
     
     // Initialize FBLoginView
     [FBLoginView class];

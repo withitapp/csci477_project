@@ -11,6 +11,7 @@
 @interface User : NSObject
 
 @property NSNumber *ID;
+@property NSString* stringID;
 @property NSDate *created_at;
 @property NSDate *updated_at;
 @property NSString *username;

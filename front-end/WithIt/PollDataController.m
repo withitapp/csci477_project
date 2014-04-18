@@ -405,7 +405,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     
     NSLog(@"Time now is: %ld / %ld / %ld / %ld :%ld: %ld ",currentMonth,currentDay,currentYear, currentHour,(long)currentMinute,(long)currentSecond);
     
-    NSString *pollEndDate;
+    NSDate *pollEndDate;
     NSDateFormatter* df;
     NSDate* pollDate; //nil
 
@@ -423,24 +423,25 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
     for(int d = 0; d < [_masterPollsList count];d++)
     {
         pollEndDate = [self objectInListAtIndex:d].endDate;
-        df = [[NSDateFormatter alloc]init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SS'Z'"];
-        pollDate = [df dateFromString:pollEndDate]; //nil
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        pollDate = [df dateFromString:pollEndDate]; // Not nil
+        NSLog(@"Date: %@", pollEndDate.description);
+       // df = [[NSDateFormatter alloc]init];
+       // [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SS'Z'"];
+       // pollDate = [df dateFromString:pollEndDate]; //nil
+       // [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+       // pollDate = [df dateFromString:pollEndDate]; // Not nil
         
-        pollComponents = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit |NSMonthCalendarUnit | NSYearCalendarUnit fromDate:pollDate];
+        /*pollComponents = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit |NSMonthCalendarUnit | NSYearCalendarUnit fromDate:pollEndDate];
         pollHour = [pollComponents hour];
         pollMinute = [pollComponents minute];
         pollSecond = [pollComponents second];
         pollYear = [pollComponents year];
         pollMonth = [pollComponents month];
-        pollDay = [pollComponents day];
+        pollDay = [pollComponents day];*/
         if (EXPIRE_TIME_DEBUG == 1){
         NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
         }
-        if([currentDate compare:pollDate] == NSOrderedDescending)
+        if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
             [self addPollExpiredWithPoll:[self objectInListAtIndex:d]];
             [self deleteObjectInListAtIndex:d];
@@ -453,23 +454,23 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
     for(int d = 0; d < [_masterPollsCreatedList count];d++)
     {
         pollEndDate = [self objectInCreatedListAtIndex:d].endDate;
-        df = [[NSDateFormatter alloc]init];
+        /*df = [[NSDateFormatter alloc]init];
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SS'Z'"];
         pollDate = [df dateFromString:pollEndDate]; //nil
         [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        pollDate = [df dateFromString:pollEndDate]; // Not nil
+        pollDate = [df dateFromString:pollEndDate]; // Not nil*/
         
-        pollComponents = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit |NSMonthCalendarUnit | NSYearCalendarUnit fromDate:pollDate];
+        /*pollComponents = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit |NSMonthCalendarUnit | NSYearCalendarUnit fromDate:pollEndDate];
         pollHour = [pollComponents hour];
         pollMinute = [pollComponents minute];
         pollSecond = [pollComponents second];
         pollYear = [pollComponents year];
         pollMonth = [pollComponents month];
-        pollDay = [pollComponents day];
+        pollDay = [pollComponents day];*/
         
         NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
-        if([currentDate compare:pollDate] == NSOrderedDescending)
+        if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];
             [self deleteObjectInCreatedListAtIndex:d];

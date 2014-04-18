@@ -323,7 +323,7 @@ const NSInteger ALIGN = 10;
     self.memberTableView.tableFooterView = footerView;
 
 
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(Done)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector( Done)];
     self.navigationItem.rightBarButtonItem = doneButton;
 }
 
@@ -438,11 +438,13 @@ const NSInteger ALIGN = 10;
 
 
 - (void)changeSwitch:(id)sender{
-    
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if([sender isOn]){
-        NSLog(@"Switch is ON");
+        NSLog(@"Switch in poll %@ is ON", self.poll.title);
+        [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
     } else{
-        NSLog(@"Switch is OFF");
+        NSLog(@"Switch in poll %@ is OFF", self.poll.title);
+        [appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
     }
     
 }

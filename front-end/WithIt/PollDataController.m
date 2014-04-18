@@ -479,4 +479,13 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
     
 }
 
+
+- (void)toggleChanged:(Poll *)poll:(Boolean) IsOn
+{
+    if(IsOn == true)
+    NSLog(@"datacontroller got switch at %@ is true ", poll.title);
+    else
+        NSLog(@"datacontroller got switch at %@ is false", poll.title);
+}
+
 @end

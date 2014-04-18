@@ -56,5 +56,7 @@
 - (void)postMembership:(Poll *) poll;
 
 - (void)determineExpiredPoll;
+
+- (void)toggleChanged:(Poll *) poll:(Boolean) IsOn;
     
 @end

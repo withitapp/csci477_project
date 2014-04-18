@@ -18,6 +18,7 @@
 @property (strong, nonatomic) UITextView *titleLabel;
 @property (strong, nonatomic) UITextView *descriptionLabel;
 @property (strong, nonatomic) UILabel *timeRemainingLabel;
+@property (strong, nonatomic) UISwitch *toggleSwitch;
 @property (strong, nonatomic) UILabel *creatorNameLabel;
 @property (strong, nonatomic) UITextField *editPollTitle;
 @property (strong, nonatomic) UITextView *editPollDescription;

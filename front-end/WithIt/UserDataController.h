@@ -5,25 +5,33 @@
 //  Created by Patrick Dalton on 4/11/14.
 //  Copyright (c) 2014 WithIt. All rights reserved.
 //
-/*
+
 #import <Foundation/Foundation.h>
 #import "DataController.h"
+#import "Poll.h"
+#import "User.h"
+#import "Membership.h"
 //#import <FacebookSDK/FacebookSDK.h>
 
 @interface UserDataController : DataController
 
 
-// User information
-
 @property (strong, nonatomic) NSMutableArray *userFriendsList;
 
 
-//@property (nonatomic, copy) NSMutableArray *updatePollsList; //maybe make this a local array in datacontroller retrieve polls
-@property (nonatomic, copy) NSMutableArray *masterPollsList;
-@property (nonatomic, copy) NSMutableArray *masterPollsCreatedList;
+//dictionary containting all user objects that are friends in the app (and facebook)
+@property (nonatomic, retain) NSMutableDictionary *masterFriendsList;
+//dictionary containing all user objects this instance has ever interacted with
+@property (nonatomic, retain) NSMutableDictionary *masterEveryoneList;
+@property (nonatomic, retain) NSMutableDictionary *masterMembershipsList;
 
+- (void)loadData;
++ (UserDataController*)sharedInstance;
 
-- (void)determineExpiredPoll;
+-(NSDictionary*) makeServerRequestWithRequest:(NSURLRequest *)request;
+- (void)retrieveFriends;
+- (void)retrieveMembers:(Poll *) poll;
+- (void)retrieveMemberships;
 
+-(User *)getUser:(NSString *) userID;
 @end
-*/

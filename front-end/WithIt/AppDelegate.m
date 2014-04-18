@@ -48,6 +48,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"Launching WithItApp.");
     
+    
+    
+    
     // Initialize FBLoginView
     [FBLoginView class];
     

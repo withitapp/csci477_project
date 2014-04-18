@@ -23,6 +23,7 @@
         _updatedAt = endDate;
         _creatorID = [[NSNumber alloc] initWithInt:45];
         
+        _members = [[NSMutableArray alloc] init];
         
         
         return self;

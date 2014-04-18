@@ -90,7 +90,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 }
 
 - (id)init {
-        semaphore = dispatch_semaphore_create(0);
+    semaphore = dispatch_semaphore_create(0);
         
     NSMutableArray *pollsList = [[NSMutableArray alloc] init];
     self.masterPollsList = pollsList;
@@ -101,13 +101,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSMutableArray *expiredPollsList = [[NSMutableArray alloc] init];
     self.masterPollsExpiredList = expiredPollsList;
     
-    // [self retrievePolls];
     NSLog(@"Init polldatacontroller");
-    // [self addPollCreatedWithPoll:poll];
     return self;
-    
-        NSLog(@"Init polldatacontroller");
-        return self;
 }
 
 - (Poll *)objectInListAtIndex:(NSUInteger)theIndex {
@@ -249,6 +244,9 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.ID = user.ID;
+    UserDataController *userDataController = [UserDataController sharedInstance];
+    //retrieves friends from database
+    [userDataController loadData];
 }
 - (Poll *)postPoll:(Poll *)poll
 {
@@ -273,25 +271,33 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
     poll.pollID = pollFeedback[@"id"];
-    [self postMembership:poll];
+    NSNumber * n = [NSNumber numberWithInt:15];
+    [self postMembership:poll user:n];
+    n = [NSNumber numberWithInt:16];
+    [self postMembership:poll user:n];
+    n = [NSNumber numberWithInt:12];
+    [self postMembership:poll user:n];
+    n = [NSNumber numberWithInt:20];
+    [self postMembership:poll user:n];
+    
     NSLog(@"Got return in postPoll: %@", poll.pollID);
     return poll;
 }
 
 //- deletPoll
 
-- (void)postMembership:(Poll *)poll
+- (void)postMembership:(Poll *)poll user:(NSNumber *)userid
 {
-    NSLog(@"Posting MEMBERSHIP for URL: %@ and poll title %@", membershipURL, poll.title);
+    NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
     [request setHTTPMethod:@"POST"];
     //dummy data, need to implement correct data
-    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",poll.creatorID, poll.pollID, @"true" ];
+    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, @"true" ];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
     NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
     membershipFeedback  = [self makeServerRequestWithRequest:request];
-   
+
     [poll.membershipIDs addObject: membershipFeedback[@"id"]];
     NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
@@ -322,7 +328,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         [updatePollsList addObject:poll];
     }
     for( poll in updatePollsList){
-        
+        //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){
             NSLog(@"Poll %@ added to created list.", poll.title);
             [self.masterPollsCreatedList addObject:poll];
@@ -333,32 +339,6 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     }
     [updatePollsList removeAllObjects];
 }
-
-- (void)retrieveUsers:(NSMutableArray *) users
-{
-    NSLog(@"Posting user token to session with URL: %@", userDataURL);
-    // Create the request with an appropriate URL
-    NSURLRequest *request = [NSURLRequest requestWithURL:userDataURL];
-    // Dispatch the request and save the returned data
-    NSDictionary *userdata = [self makeServerRequestWithRequest:request];
-    User *user;
-    //NSLog(@"Type of data received: %@, ", [users class]);
-    /*
-    // Parse user data
-    user = [[User alloc] init];
-    user.ID = users[@"id"];
-    user.created_at = users[@"created_at"];
-    user.updated_at = users[@"updated_at"];
-    user.username = users[@"username"];
-    user.email = users[@"email"];
-    user.first_name = users[@"first_name"];
-    NSLog(@"user name: %@", user.first_name);
-    user.last_name = users[@"last_name"];
-    user.fb_id = users[@"fb_id"];
-    user.fb_token = users[@"fb_token"];
-    user.fb_synced_at = users[@"fb_synced_at"];*/
-}
-
 
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

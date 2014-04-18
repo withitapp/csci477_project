@@ -44,7 +44,7 @@
 {
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-    
+    self.userDataController = [UserDataController sharedInstance];
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -232,15 +232,38 @@
     
 
 }
+//TODO: cache this data better
+- (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker
+                 shouldIncludeUser:(id<FBGraphUser>)user
+{
+    //go through our users and determine if they should be included in friendPicker
+        if ([self.userDataController.masterFriendsList objectForKey:user.id]) {
+            // Friend is an WithIt user, include them in the display
+            NSLog(@"Deciding if I should include user: %@ and result is YES!", user.id);
+            return YES;
+        }
+    
+    // Friend is not an WithIt user, do not include them
+    return NO;
+}
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     NSMutableString *text = [[NSMutableString alloc] init];
     
     
+    /*FBFriendPickerViewController *fpc = (FBFriendPickerViewController *)sender;
+    for (id<FBGraphUser> user in fpc.selection) {
+        NSLog(@"Friend selected: %@", user.name);
+    }
+    [self dismissModalViewControllerAnimated:YES];*/
+    User * u;
     // we pick up the users from the selection, and create a string that we use to update the text view
     // at the bottom of the display; note that self.selection is a property inherited from our base class
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
         if(![_selectedFriends containsObject:user]){
+            u = [self.userDataController.masterFriendsList objectForKey:user.id];//get members WithIt id
+            if(u != nil){
+                [self.poll.members addObject:u.ID];    }
             [_selectedFriends addObject:user];  }
         /*if ([text length]) {
             [text appendString:@", "];

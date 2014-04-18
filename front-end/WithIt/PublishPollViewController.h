@@ -10,6 +10,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "WIViewController.h"
 #import "Poll.h"
+#import "UserDataController.h"
 
 
 @interface PublishPollViewController : WIViewController <FBFriendPickerDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -26,6 +27,7 @@
 @property (strong, nonatomic) UITextField *FriendsInvitedTextField;
 //@property (strong, nonatomic) UITextField *PollDescriptionTextField;
 
+@property (strong, nonatomic) UserDataController *userDataController;
 @property (strong, nonatomic) UITableView *memberTableView;
 @property (strong, nonatomic) Poll *poll;
 
@@ -33,5 +35,6 @@
 //@property (strong, nonatomic) UILabel *PollExpirationDateLabel;
 
 -(void)setPollCreated:(Poll*)poll;
+//- (void)facebookViewControllerDoneWasPressed:(id)sender;
 
 @end

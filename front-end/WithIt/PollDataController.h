@@ -44,6 +44,7 @@
 - (void)addPollExpiredWithPoll:(Poll *)poll;
 - (void)deleteObjectInExpiredListAtIndex:(NSUInteger)theIndex;
 
+
 - (void)loadData;
 + (PollDataController*)sharedInstance;
 //api calls
@@ -56,5 +57,7 @@
 - (void)postMembership:(Poll *) poll user:(NSNumber *)userid;
 
 - (void)determineExpiredPoll;
+- (void)deleteMembership:(NSNumber *)mem_id;
+- (void)deletePoll:(Poll *)poll;
     
 @end

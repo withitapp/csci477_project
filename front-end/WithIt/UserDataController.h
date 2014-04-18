@@ -17,7 +17,7 @@
 
 
 @property (strong, nonatomic) NSMutableArray *userFriendsList;
-
+@property (strong, nonatomic) NSMutableArray *myMemberships; //think about changing this...
 
 //dictionary containting all user objects that are friends in the app (and facebook)
 @property (nonatomic, retain) NSMutableDictionary *masterFriendsList;
@@ -31,7 +31,7 @@
 -(NSDictionary*) makeServerRequestWithRequest:(NSURLRequest *)request;
 - (void)retrieveFriends;
 - (void)retrieveMembers:(Poll *) poll;
-- (void)retrieveMemberships;
+- (void)retrieveMemberships:(Poll *) poll;
 
--(User *)getUser:(NSString *) userID;
+-(User *)getUser:(NSNumber *) userID;
 @end

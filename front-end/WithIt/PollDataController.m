@@ -46,7 +46,6 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 {
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
     NSLog(@"FB token string %@", fbtoken.accessToken);
@@ -115,7 +114,10 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 - (void)deleteObjectInListAtIndex:(NSUInteger)theIndex{
     if(theIndex < [self.masterPollsList count]){
+        
+        
         [self.masterPollsList removeObjectAtIndex:theIndex];
+        
     }
 }
 
@@ -217,6 +219,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 - (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID
 {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
     NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
     [request setHTTPMethod:@"POST"];
@@ -242,7 +246,6 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     user.fb_token = users[@"fb_token"];
     user.fb_synced_at = users[@"fb_synced_at"];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.ID = user.ID;
     UserDataController *userDataController = [UserDataController sharedInstance];
     //retrieves friends from database
@@ -271,20 +274,53 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
     poll.pollID = pollFeedback[@"id"];
-    NSNumber * n = [NSNumber numberWithInt:15];
-    [self postMembership:poll user:n];
-    n = [NSNumber numberWithInt:16];
-    [self postMembership:poll user:n];
-    n = [NSNumber numberWithInt:12];
-    [self postMembership:poll user:n];
-    n = [NSNumber numberWithInt:20];
-    [self postMembership:poll user:n];
+    //post memberships of members in poll
+    for(NSNumber *n in poll.members){
+        [self postMembership:poll user:n];  }
     
     NSLog(@"Got return in postPoll: %@", poll.pollID);
     return poll;
 }
 
-//- deletPoll
+- (void)deletePoll:(Poll *)poll
+{
+    NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"DELETE"];
+    
+    NSString *postString = [NSString stringWithFormat:@"id=%@", poll.pollID];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    
+    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
+    pollFeedback = [self makeServerRequestWithRequest:request];
+    
+    for(NSNumber *n in poll.membershipIDs){
+        [self deleteMembership:n];
+    }
+    if(pollFeedback!=nil){
+        NSLog(@"Got return in deletePoll: %@", pollFeedback);
+    }
+   
+}
+
+- (void)deleteMembership:(NSNumber *)mem_id
+{
+    NSLog(@"Deleting membership with URL: %@ and id: %@", membershipURL, mem_id);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+    [request setHTTPMethod:@"DELETE"];
+    
+    NSString *postString = [NSString stringWithFormat:@"id=%@", mem_id];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    
+    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
+    pollFeedback = [self makeServerRequestWithRequest:request];
+    if(pollFeedback!=nil){
+        NSLog(@"Got return in deleteMembership: %@", pollFeedback);
+    }
+    
+}
 
 - (void)postMembership:(Poll *)poll user:(NSNumber *)userid
 {
@@ -305,13 +341,23 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 // Retrieve poll data from the server
 - (void)retrievePolls
 {
-    NSLog(@"Retrieving poll data with URL: %@", pollDataURL);
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
     
+    /*
     // Create the request with an appropriate URL
-    NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"POST"];
+    NSString *postString = [NSString stringWithFormat:@"id=%@", appDelegate.ID];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
     // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
-    // Copy the creatorID from AppDelegate
+    // Copy the creatorID from AppDelegate*/
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    // Dispatch the request and save the returned data
+    NSDictionary *polls = [self makeServerRequestWithRequest:request];
     NSNumber *creatorID = ((AppDelegate *)[UIApplication sharedApplication].delegate).ID;
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
     Poll *poll;

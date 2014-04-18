@@ -130,11 +130,11 @@
     for(user in updateMembersList){
         NSString *userid = [user.ID stringValue];
         user.stringID = userid;
-        if([poll.members containsObject:user.stringID]){
+        if([poll.members containsObject:user.ID]){
             NSLog(@"1Poll already contains user: %@", user.first_name);
         }
         else{
-            [poll.members addObject:user.stringID];
+            [poll.members addObject:user.ID];
             }
         
         if([self.masterEveryoneList objectForKey: user.stringID]){
@@ -200,21 +200,21 @@
         NSString *userid = [user.ID stringValue];
         user.stringID = userid;
         //add all friends to local dictionary storage
-        if([self.masterFriendsList objectForKey: user.stringID]){
+        if([self.masterFriendsList objectForKey: user.fb_id]){
             
             NSLog(@"Master friends list already contains user - %@ -", user.first_name);
         }
         else{
             
-            NSLog(@"User [%@] added to friends list.", user.first_name);
+            NSLog(@"User [%@] added to friends list. ID: %@", user.first_name, user.fb_id);
             NSString * name = [user.first_name stringByAppendingString:@" "];
             user.full_name = [name stringByAppendingString:user.last_name];
             
-            [self.masterFriendsList setObject:user forKey:user.stringID];
+            [self.masterFriendsList setObject:user forKey:user.fb_id];
             
         }
         //make sure all friends are in everyone list... may want to remove later, not sure now 4/11
-        if([self.masterEveryoneList objectForKey: user.stringID]){
+        if([self.masterEveryoneList objectForKey: user.ID]){
             NSLog(@"Master everyone list already contains user - %@ -", user.first_name);
             
         }
@@ -242,7 +242,7 @@
             NSLog(@"fb_id of user: %@", user.fb_id);
             NSLog(@"Username of user: %@", user.username);*/
             
-        [self.masterEveryoneList setObject:user forKey:user.stringID];
+        [self.masterEveryoneList setObject:user forKey:user.ID];
         }
     }
     [updateFriendsList removeAllObjects];
@@ -269,7 +269,7 @@
     
 }
 
--(User *)getUser:(NSString *) userID{
+-(User *)getUser:(NSNumber *) userID{
     User * user;
     user = [self.masterEveryoneList objectForKey:userID];
     if(user == nil){

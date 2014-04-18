@@ -317,8 +317,15 @@
 }
 
 - (void) leavePollFunction:(NSUInteger)index
-{
-
+{  /* NSNumber *mem_id;
+    for(mem_id in myMemberships){
+        if([[self.dataController.masterPollsList objectAtIndex: index].membershipIDs containsObject:mem_id]{
+            NSLog(@"Leaving poll with membership ID: %@", mem_id);
+            [self.dataController deleteMembership:mem_id];//needs to be first called
+        }
+    }*/
+    
+    
     [self.dataController deleteObjectInListAtIndex:index];
     [self.pollTableView reloadData];
 }
@@ -326,6 +333,7 @@
 - (void) deletePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside delete Poll function!!");
+    [self.dataController deletePoll:[self.dataController.masterPollsCreatedList objectAtIndex: index]]; //needs to be first called
     [self.dataController deleteObjectInCreatedListAtIndex:index];
     [self.pollTableView reloadData];
 }

@@ -53,6 +53,7 @@
 
 - (Poll *)postPoll:(Poll *) poll;
 - (void)retrievePolls;//:(NSArray *)polls;
+- (void)updatePolls;
 
 - (void)postMembership:(Poll *) poll user:(NSNumber *)userid;
 

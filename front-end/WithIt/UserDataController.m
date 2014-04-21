@@ -249,15 +249,20 @@
 }
 
 -(void)retrieveMemberships:(Poll *) poll{
-    NSLog(@"Attempting to retrieve Memberships from URL %@", membershipURL);
-    NSURLRequest *request = [NSURLRequest requestWithURL:membershipURL];
-    // Dispatch the request and save the returned data
+   // NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
+   
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?poll_id=%@",poll.pollID];
+ 
+    NSLog(@"Sending to this endpoint: %@", s);
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:s]];
+   
     NSDictionary *memberships = [self makeServerRequestWithRequest:request];
     Membership *membership;
+    
     NSMutableArray *updateMembershipsList = [[NSMutableArray alloc] init];//question: should we create this object every time?
     
     for(NSDictionary *mship in memberships){
-        
+        NSLog(@"Got membership: %@", mship[@"id"]);
         membership.ID = mship[@"id"];
         membership.created_at = mship[@"created_at"];
         membership.updated_at = mship[@"updated_at"];

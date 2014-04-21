@@ -282,6 +282,34 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     return poll;
 }
 
+- (Poll *)updatePoll:(Poll *)poll
+{
+    NSLog(@"Updating poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
+    NSString *endDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *createDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *updateDate = [dateFormatter stringFromDate:poll.endDate];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"UPDATE"];
+    /* NSString *pollData = [poll convertToJSON];
+     if(!pollData)
+     {
+     NSLog(@"Poll data didn't convert to JSON correctly!");
+     return;
+     }*/
+    NSString *postString = [NSString stringWithFormat:@"id=%@&created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
+    pollFeedback = [self makeServerRequestWithRequest:request];
+    poll.pollID = pollFeedback[@"id"];
+    
+    NSLog(@"Got return in updatePoll: %@", poll.pollID);
+    return poll;
+}
+
 - (void)deletePoll:(Poll *)poll
 {
     NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
@@ -463,12 +491,12 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
         pollMonth = [pollComponents month];
         pollDay = [pollComponents day];
         if (EXPIRE_TIME_DEBUG == 1){
-        NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
-        NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
+       // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+       // NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
         }
         if([currentDate compare:pollDate] == NSOrderedDescending)
         {
-            NSLog(@"Expired Poll!!");
+           // NSLog(@"Expired Poll!!");
             [self addPollExpiredWithPoll:[self objectInListAtIndex:d]];
             [self deleteObjectInListAtIndex:d];
             d--;
@@ -494,8 +522,8 @@ NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregoria
         pollMonth = [pollComponents month];
         pollDay = [pollComponents day];
         
-        NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
-        NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
+       // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+       // NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
         if([currentDate compare:pollDate] == NSOrderedDescending)
         {
             NSLog(@"Expired Poll!!");

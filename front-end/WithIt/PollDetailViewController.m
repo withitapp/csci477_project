@@ -45,6 +45,7 @@ const NSInteger ALIGN = 10;
     self.userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
     [self.userDataController retrieveMembers:self.poll];
+    [self.userDataController retrieveMemberships:self.poll];
     NSLog(@"viewDidLoad count of members in poll: %lu",(unsigned long)[self.poll.members count]);
    
     [super viewDidLoad];

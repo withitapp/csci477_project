@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) UITableView *InfoTableView;
 
+@property (nonatomic, strong) UIButton *LogoutButton;
 
 
 

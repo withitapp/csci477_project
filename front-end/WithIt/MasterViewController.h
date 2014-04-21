@@ -17,6 +17,7 @@
 @property (strong, nonatomic) UITableView *pollTableView;
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UIImageView *profilePictureView;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 + (MasterViewController*)sharedInstance;
 

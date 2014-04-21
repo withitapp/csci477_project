@@ -18,9 +18,10 @@
         _description = description;
         _createDate = [[NSDate alloc] init];
         _endDate = endDate;
+        NSLog(@"Date format for poll %@: %@", _title, _endDate );
         // setting these for convenience, we need to actually set them later
         _pollID = [[NSNumber alloc] initWithInt:45];
-        _updatedAt = endDate;
+        _updatedAt = [NSDate date];
         _creatorID = [[NSNumber alloc] initWithInt:45];
         
         _members = [[NSMutableArray alloc] init];
@@ -39,6 +40,12 @@
         _creatorID = creatorName;
         _description = description;
         _createDate = [[NSDate alloc] init];
+        // need to actually set these later
+        _endDate = [NSDate date];
+        _pollID = [[NSNumber alloc] initWithInt:45];
+        _updatedAt = [NSDate date];
+        _creatorID = [[NSNumber alloc] initWithInt:45];
+        _members = [[NSMutableArray alloc] init];
         return self;
     }
     return nil;

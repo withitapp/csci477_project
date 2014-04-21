@@ -42,39 +42,15 @@
     
 }
 
-//Should be old edit mode
-/*
-- (void)setEditing:(BOOL)flag animated:(BOOL)animated
-
-{
-    
-    [super setEditing:flag animated:animated];
-    
-    if (flag == YES){
-        [self.pollTableView setEditing:YES animated:YES];
-    }
-    
-    else {
-        [self.pollTableView setEditing:NO animated:NO];
-    }
-    
-}*/
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
-
-    UIBarButtonItem *newPollButton = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(CreateNewPoll)];
-    self.navigationItem.rightBarButtonItem = newPollButton;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CreateNewPoll)];
     
-    UIBarButtonItem *userSettingButton = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
-    self.navigationItem.leftBarButtonItem = userSettingButton;
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editAction)];
-    
-    //self.navigationItem.leftBarButtonItem = self.editButton;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
     
     // Set up header view
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];
@@ -100,21 +76,25 @@
     self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
     self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
     [self.headerView addSubview:self.usernameLabel];
-    
     [self.view addSubview:self.headerView];
     
     // Set up poll table view
-    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-100))];
+    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-170))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
     self.pollTableView.bounces = NO;
     self.pollTableView.scrollEnabled = YES;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
-    [self.view addSubview:self.pollTableView];
-    [self loadData];
-
-    [self.dataController determineExpiredPoll];
     
+    [self.view addSubview:self.pollTableView];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self loadData];
+    [self.dataController determineExpiredPoll];
+    [self.pollTableView reloadData];
 }
 
 - (IBAction)CreateNewPoll

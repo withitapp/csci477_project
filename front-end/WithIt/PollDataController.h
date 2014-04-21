@@ -34,6 +34,8 @@
 @property (nonatomic, copy) NSMutableArray *masterPollsCreatedList;
 @property (nonatomic, copy) NSMutableArray *masterPollsExpiredList;
 
+@property (strong, nonatomic) NSMutableArray *myMemberships; //think about changing this...
+
 - (Poll *)objectInListAtIndex:(NSUInteger)theIndex;
 - (void)addPollWithPoll:(Poll *)poll;
 - (void)deleteObjectInListAtIndex:(NSUInteger)theIndex;

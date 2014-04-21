@@ -292,14 +292,22 @@
 }
 
 - (void) leavePollFunction:(NSUInteger)index
-{  /* NSNumber *mem_id;
-    for(mem_id in myMemberships){
-        if([[self.dataController.masterPollsList objectAtIndex: index].membershipIDs containsObject:mem_id]{
-            NSLog(@"Leaving poll with membership ID: %@", mem_id);
-            [self.dataController deleteMembership:mem_id];//needs to be first called
-        }
-    }*/
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    Poll * poll;
+    Membership * membership;
     
+    poll = [self.dataController.masterPollsList objectAtIndex: index];
+    for(NSNumber * mem_id in poll.memberships){
+        membership = [poll.memberships objectForKeyedSubscript:mem_id];
+        if(membership.user_id == appDelegate.ID){
+            [self.dataController.userDataController deleteMembership:mem_id];
+            
+            NSLog(@"Leaving poll with membership ID: %@", mem_id);
+        }
+        
+            //needs to be first called
+        }
     
     [self.dataController deleteObjectInListAtIndex:index];
     [self.pollTableView reloadData];

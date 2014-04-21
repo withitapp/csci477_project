@@ -254,8 +254,8 @@
     [request setHTTPBody:requestBodyData];
     NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
     membershipFeedback  = [self makeServerRequestWithRequest:request];
-    
-    [poll.memberships addObject: membershipFeedback[@"id"]];
+    //TODO: retrieve full membership info here
+  //  [poll.memberships setObject: membershipFeedback[@"id"]];
     NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
 
@@ -313,14 +313,16 @@
         [updateMembershipsList addObject:membership];
     }
     for(Membership *m in updateMembershipsList){
-        if([poll.memberships containsObject:m]){
+        if([poll.memberships objectForKeyedSubscript:m.ID]){
             
             
         }
         else{
             NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
-            [poll.memberships addObject:m];
+            
         }
+        [poll.memberships setObject:m forKey:m.ID];
+        NSLog(@"Memberships in the pollid %@: %lu", poll.pollID, (unsigned long)[poll.memberships count]);
     }
     
     

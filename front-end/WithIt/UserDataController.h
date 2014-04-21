@@ -17,7 +17,6 @@
 
 
 @property (strong, nonatomic) NSMutableArray *userFriendsList;
-@property (strong, nonatomic) NSMutableArray *myMemberships; //think about changing this...
 
 //dictionary containting all user objects that are friends in the app (and facebook)
 @property (nonatomic, retain) NSMutableDictionary *masterFriendsList;

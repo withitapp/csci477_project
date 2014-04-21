@@ -19,6 +19,7 @@
 @property NSDate *endDate;
 @property NSMutableArray *members;
 @property NSMutableArray *membershipIDs;
+@property Boolean isAttending;
 
 -(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;

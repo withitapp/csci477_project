@@ -22,6 +22,7 @@
         _pollID = [[NSNumber alloc] initWithInt:45];
         _updatedAt = endDate;
         _creatorID = [[NSNumber alloc] initWithInt:45];
+        _isAttending = true;
         
         
         

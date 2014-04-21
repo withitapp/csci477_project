@@ -104,6 +104,7 @@ const NSInteger ALIGN = 10;
         //Add toggle Switch
     self.toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(50, currentHeight, 50, 0)];
     [self.toggleSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+    [self.toggleSwitch setOn:self.poll.isAttending];
     
     currentHeight += 20;
     
@@ -156,12 +157,11 @@ const NSInteger ALIGN = 10;
     self.timeRemainingLabel.frame = CGRectMake((ALIGN+50), currentHeight, 200, 20);
         self.toggleSwitch.frame = CGRectMake((self.screenWidth - 75), currentHeight, 0, 0);
     currentHeight += 20;
+        [self.toggleSwitch setOn:self.poll.isAttending];
     
     self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
     currentHeight += 10;
     
-   /// self.toggleSwitch.frame = CGRectMake(50, currentHeight, 0, 0);
-   /// currentHeight += 80;
     
     self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
     currentHeight += 5;
@@ -440,10 +440,10 @@ const NSInteger ALIGN = 10;
 - (void)changeSwitch:(id)sender{
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if([sender isOn]){
-        NSLog(@"Switch in poll %@ is ON", self.poll.title);
+        self.poll.isAttending = true;
         [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
     } else{
-        NSLog(@"Switch in poll %@ is OFF", self.poll.title);
+        self.poll.isAttending = false;
         [appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
     }
     

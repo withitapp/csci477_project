@@ -12,10 +12,12 @@
 #import "MasterViewController.h"
 #import "PollDetailViewController.h"
 #import "PublishPollViewController.h"
+#import "UserDataController.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
 
+@property (strong, nonatomic) UserDataController *userDataController;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UINavigationController *navigationController;
 @property (strong, nonatomic) LoginViewController *loginViewController;

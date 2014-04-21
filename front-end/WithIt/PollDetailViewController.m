@@ -42,6 +42,11 @@ const NSInteger ALIGN = 10;
 - (void)viewDidLoad
 {
     NSLog(@"Loading detail view for poll %@.", self.poll.title);
+    self.userDataController = [UserDataController sharedInstance];
+    //retrieves members in poll from database
+    [self.userDataController retrieveMembers:self.poll];
+    NSLog(@"viewDidLoad count of members in poll: %lu",(unsigned long)[self.poll.members count]);
+   
     [super viewDidLoad];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
@@ -85,7 +90,7 @@ const NSInteger ALIGN = 10;
     [self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
     
     if(self.poll.endDate != nil)
-    {NSLog(@"1");
+    {
         @try {
        // self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
             self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:self.poll.endDate];}
@@ -95,10 +100,9 @@ const NSInteger ALIGN = 10;
     }
     else
     {
-        NSLog(@"2");
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
-    [self.detailsView addSubview:self.timeRemainingLabel];
-    NSLog(@"After poll endDate");
+        [self.detailsView addSubview:self.timeRemainingLabel];
+        NSLog(@"After poll endDate");
     }
     
         //Add toggle Switch
@@ -113,7 +117,7 @@ const NSInteger ALIGN = 10;
     self.creatorNameLabel.font = [UIFont systemFontOfSize:10.0];
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
-    NSLog(@"3");
+    
     [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", self.poll.creatorID]];
    // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
     currentHeight += 10;
@@ -192,20 +196,23 @@ const NSInteger ALIGN = 10;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUInteger numRows = 0;
+    //NSUInteger attendingRows = [self.poll.attending count];//TODO QUESTION how to determine who is attending and who isn't???
+    NSUInteger notAttendingRows = [self.poll.notAttending count];
+    NSUInteger attendingRows = [self.poll.members count];
+    NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
+    
     switch (section){
         case 0:
-            numRows = 3; // need to add member lists to poll data
-            break;
+           // need to add member lists to poll data
+            return attendingRows;
         case 1:
-            numRows = 8; // same problem
-            break;
+            return notAttendingRows;// same problem
     }
-    return numRows;
+    return attendingRows + notAttendingRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    NSLog(@"Getting cell information in PollDetailViewController");
     static NSString *CellIdentifier = @"PollMemberCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
@@ -220,18 +227,31 @@ const NSInteger ALIGN = 10;
         //[cell.contentView addSubview: nameLabel];
     }
     
-    // *pollAtIndex;
-    
+    NSString *userIDAtIndex;
+    User *user;
     switch (indexPath.section) {
+        
         case 0:
-            [[cell textLabel] setText:@"MemberName"];
+            //gets user information
+            userIDAtIndex = [self.poll.members objectAtIndex:(indexPath.row)];
+            user = [self.userDataController getUser:userIDAtIndex];
+            [[cell textLabel] setText:user.full_name];
+           // [[cell textLabel] setText:@"MemberName"];
+            cell.imageView.image = user.profilePictureView.image;
+            
             break;
             
         case 1:
-            [[cell textLabel] setText:@"MemberName"];
+           
+            userIDAtIndex = [self.poll.notAttending objectAtIndex:(indexPath.row)];
+            user = [self.userDataController getUser:userIDAtIndex];
+            [[cell textLabel] setText:user.full_name];
+            // [[cell textLabel] setText:@"MemberName"];
+            cell.imageView.image = user.profilePictureView.image;
+            
             break;
     }
-    cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
+    // cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
 
     return cell;
 }

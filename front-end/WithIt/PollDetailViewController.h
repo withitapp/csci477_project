@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "WIViewController.h"
 #import "Poll.h"
+#import "UserDataController.h"
+
 
 @interface PollDetailViewController : WIViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
@@ -22,6 +24,8 @@
 @property (strong, nonatomic) UILabel *creatorNameLabel;
 @property (strong, nonatomic) UITextField *editPollTitle;
 @property (strong, nonatomic) UITextView *editPollDescription;
+
+@property (strong, nonatomic) UserDataController *userDataController;
 
 @property (strong, nonatomic) UITableView *memberTableView;
 @property (nonatomic, strong) UIButton *DeletePollButton;

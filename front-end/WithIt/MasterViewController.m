@@ -176,7 +176,6 @@
     // Only create the date formatter once
     static NSDateFormatter *formatter = nil;
     Poll *pollAtIndex;
-    UISwitch *toggleSwitch = [[UISwitch alloc] init];
     
 
     
@@ -190,11 +189,7 @@
             pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            
-            // Add toggle switch to polls the user did not create
-            cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-            [cell.accessoryView addSubview:toggleSwitch];
-            
+            cell.accessoryView = nil; 
             break;
             
         case 1:

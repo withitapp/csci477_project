@@ -23,6 +23,7 @@
 //attending members user IDs
 @property (nonatomic, copy) NSMutableArray *attending;
 @property (nonatomic, copy) NSMutableArray *notAttending;
+@property Boolean isAttending;
 
 -(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;
 -(id)initWithName:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description;

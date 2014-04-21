@@ -82,9 +82,9 @@ const NSInteger ALIGN = 10;
     currentHeight += self.descriptionLabel.frame.size.height;
     
     // Add time remaining for poll label
-    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20)];
+    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake((ALIGN+20), currentHeight, 300, 20)];
     self.timeRemainingLabel.font = [UIFont systemFontOfSize:10.0];
-    [self.timeRemainingLabel setTextAlignment: NSTextAlignmentCenter];
+    [self.timeRemainingLabel setTextAlignment: NSTextAlignmentLeft];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
@@ -105,6 +105,12 @@ const NSInteger ALIGN = 10;
         [self.detailsView addSubview:self.timeRemainingLabel];
         NSLog(@"After poll endDate");
     }
+    
+        //Add toggle Switch
+    self.toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(50, currentHeight, 50, 0)];
+    [self.toggleSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+    [self.toggleSwitch setOn:self.poll.isAttending];
+    
     currentHeight += 20;
     
     // Add poll creator name label
@@ -117,10 +123,15 @@ const NSInteger ALIGN = 10;
    // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
     currentHeight += 10;
     
+
+    
+    
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, currentHeight)];
     [self.detailsView addSubview:self.titleLabel];
     [self.detailsView addSubview:self.descriptionLabel];
     [self.detailsView addSubview:self.timeRemainingLabel];
+    if (self.pollSection == 0){
+        [self.detailsView addSubview:self.toggleSwitch];}
     [self.detailsView addSubview:self.creatorNameLabel];
     [self.view addSubview:self.detailsView];
     
@@ -148,11 +159,14 @@ const NSInteger ALIGN = 10;
     [self.descriptionLabel layoutIfNeeded];
     currentHeight += self.descriptionLabel.frame.size.height;
     
-    self.timeRemainingLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20);
+    self.timeRemainingLabel.frame = CGRectMake((ALIGN+50), currentHeight, 200, 20);
+        self.toggleSwitch.frame = CGRectMake((self.screenWidth - 75), currentHeight, 0, 0);
     currentHeight += 20;
+        [self.toggleSwitch setOn:self.poll.isAttending];
     
     self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
     currentHeight += 10;
+    
     
     self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
     currentHeight += 5;
@@ -330,7 +344,7 @@ const NSInteger ALIGN = 10;
     self.memberTableView.tableFooterView = footerView;
 
 
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(Done)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector( Done)];
     self.navigationItem.rightBarButtonItem = doneButton;
 }
 
@@ -440,6 +454,19 @@ const NSInteger ALIGN = 10;
     [appDelegate.masterViewController.pollTableView reloadData];
 
     [self Back];
+    
+}
+
+
+- (void)changeSwitch:(id)sender{
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    if([sender isOn]){
+        self.poll.isAttending = true;
+        [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
+    } else{
+        self.poll.isAttending = false;
+        [appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
+    }
     
 }
 

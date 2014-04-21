@@ -23,6 +23,7 @@
         _pollID = [[NSNumber alloc] initWithInt:45];
         _updatedAt = [NSDate date];
         _creatorID = [[NSNumber alloc] initWithInt:45];
+        _isAttending = true;
         
         _members = [[NSMutableArray alloc] init];
         

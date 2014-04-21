@@ -129,7 +129,7 @@
     }
     for(user in updateMembersList){
         NSString *userid = [user.ID stringValue];
-        user.stringID = userid;
+        user.ID = userid;
         if([poll.members containsObject:user.ID]){
             NSLog(@"1Poll already contains user: %@", user.first_name);
         }
@@ -137,7 +137,7 @@
             [poll.members addObject:user.ID];
             }
         
-        if([self.masterEveryoneList objectForKey: user.stringID]){
+        if([self.masterEveryoneList objectForKey: user.ID]){
             
              NSLog(@"1Master everyone list already contains user - %@ -", user.first_name);
         }
@@ -158,7 +158,7 @@
             NSString * name = [user.first_name stringByAppendingString:@" "];
             user.full_name = [name stringByAppendingString:user.last_name];
         NSLog(@"User [%@] added to everyone list.", user.first_name);
-        [self.masterEveryoneList setObject:user forKey:user.stringID];
+        [self.masterEveryoneList setObject:user forKey:user.ID];
         }}
     NSLog(@"Number of members in poll: %lu", (unsigned long)[poll.members count]);
     [updateMembersList removeAllObjects];
@@ -198,7 +198,7 @@
     
     for(user in updateFriendsList){
         NSString *userid = [user.ID stringValue];
-        user.stringID = userid;
+        user.ID = userid;
         //add all friends to local dictionary storage
         if([self.masterFriendsList objectForKey: user.fb_id]){
             
@@ -234,18 +234,43 @@
             });
             
             NSString * name = [user.first_name stringByAppendingString:@" "];
-       user.full_name = [name stringByAppendingString:user.last_name];
-       /* NSLog(@"User [%@] added to everyone list.", user.first_name);
-        NSLog(@"ID of user: %@", user.ID);
-            NSLog(@"Full name of user: %@", user.full_name);
-            NSLog(@"Email of user: %@", user.email);
-            NSLog(@"fb_id of user: %@", user.fb_id);
-            NSLog(@"Username of user: %@", user.username);*/
+            user.full_name = [name stringByAppendingString:user.last_name];
+    
             
         [self.masterEveryoneList setObject:user forKey:user.ID];
         }
     }
     [updateFriendsList removeAllObjects];
+}
+
+-(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response{
+   
+    NSLog(@"Updating membership with mem_id: %@ and response: %@", mem_id, response);
+    // Create the request with an appropriate URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+    [request setHTTPMethod:@"PATCH"];
+    NSString *postString = [NSString stringWithFormat:@"id=%@&response=%@", mem_id, response];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    // Dispatch the request and save the returned data
+    NSDictionary *membership = [self makeServerRequestWithRequest:request];
+}
+
+-(void)deleteMembership:(NSNumber *) mem_id{
+    
+    NSLog(@"Deleting membership with mem_id: %@", mem_id);
+    // Create the request with an appropriate URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+    [request setHTTPMethod:@"DELETE"];
+    NSString *postString = [NSString stringWithFormat:@"id=%@", mem_id];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    // Dispatch the request and save the returned data
+    NSDictionary *membership = [self makeServerRequestWithRequest:request];
+    if(membership!=nil){
+        NSLog(@"Got return in deleteMembership: %@", membership);
+    }
+    
 }
 
 -(void)retrieveMemberships:(Poll *) poll{
@@ -260,7 +285,7 @@
     Membership *membership;
     
     NSMutableArray *updateMembershipsList = [[NSMutableArray alloc] init];//question: should we create this object every time?
-    
+    //[poll.memberships addObject:membership];
     for(NSDictionary *mship in memberships){
         NSLog(@"Got membership: %@", mship[@"id"]);
         membership.ID = mship[@"id"];
@@ -269,8 +294,19 @@
         membership.user_id = mship[@"user_id"];
         membership.poll_id = mship[@"poll_id"];
         membership.response = mship[@"response"];
-        
+        [updateMembershipsList addObject:membership];
     }
+    for(Membership *m in updateMembershipsList){
+        if([poll.memberships containsObject:m]){
+            
+            
+        }
+        else{
+            NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
+            [poll.memberships addObject:m];
+        }
+    }
+    
     
 }
 

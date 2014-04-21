@@ -251,6 +251,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     //retrieves friends from database
     [userDataController loadData];
 }
+
 - (Poll *)postPoll:(Poll *)poll
 {
     NSLog(@"Posting poll with URL: %@ and title: %@", pollDataURL, poll.title);
@@ -282,7 +283,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     return poll;
 }
 
-- (Poll *)updatePoll:(Poll *)poll
+- updatePoll:(Poll *)poll
 {
     NSLog(@"Updating poll with URL: %@ and title: %@", pollDataURL, poll.title);
     
@@ -292,7 +293,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSString *createDate = [dateFormatter stringFromDate:poll.endDate];
     NSString *updateDate = [dateFormatter stringFromDate:poll.endDate];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
-    [request setHTTPMethod:@"UPDATE"];
+    [request setHTTPMethod:@"PATCH"];
     /* NSString *pollData = [poll convertToJSON];
      if(!pollData)
      {
@@ -323,31 +324,13 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
     
-    for(NSNumber *n in poll.membershipIDs){
+    for(NSNumber *n in poll.memberships){
         [self deleteMembership:n];
     }
     if(pollFeedback!=nil){
         NSLog(@"Got return in deletePoll: %@", pollFeedback);
     }
    
-}
-
-- (void)deleteMembership:(NSNumber *)mem_id
-{
-    NSLog(@"Deleting membership with URL: %@ and id: %@", membershipURL, mem_id);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
-    [request setHTTPMethod:@"DELETE"];
-    
-    NSString *postString = [NSString stringWithFormat:@"id=%@", mem_id];
-    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
-    
-    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
-    pollFeedback = [self makeServerRequestWithRequest:request];
-    if(pollFeedback!=nil){
-        NSLog(@"Got return in deleteMembership: %@", pollFeedback);
-    }
-    
 }
 
 - (void)postMembership:(Poll *)poll user:(NSNumber *)userid
@@ -362,7 +345,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
     membershipFeedback  = [self makeServerRequestWithRequest:request];
 
-    [poll.membershipIDs addObject: membershipFeedback[@"id"]];
+    [poll.memberships addObject: membershipFeedback[@"id"]];
     NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
 

@@ -29,9 +29,15 @@
 + (UserDataController*)sharedInstance;
 
 -(NSDictionary*) makeServerRequestWithRequest:(NSURLRequest *)request;
+
+
 - (void)retrieveFriends;
 - (void)retrieveMembers:(Poll *) poll;
+
+//all 4 memberships done
 - (void)retrieveMemberships:(Poll *) poll;
+-(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response;
+-(void)deleteMembership:(NSNumber *) mem_id;
 
 -(User *)getUser:(NSNumber *) userID;
 @end

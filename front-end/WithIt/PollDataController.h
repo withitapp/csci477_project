@@ -51,14 +51,15 @@
 - (NSDate *)convertJSONDate:(NSString *) dateString;
 - (void)postUser:(NSString *)appLinkToken fbID:(NSString *) fbID;
 
+//all 4 done
 - (Poll *)postPoll:(Poll *) poll;
-- (void)retrievePolls;//:(NSArray *)polls;
-- (void)updatePolls;
+- (void)retrievePolls;
+- (void)updatePoll:(Poll *)poll;
+- (void)deletePoll:(Poll *)poll;
 
 - (void)postMembership:(Poll *) poll user:(NSNumber *)userid;
 
 - (void)determineExpiredPoll;
-- (void)deleteMembership:(NSNumber *)mem_id;
-- (void)deletePoll:(Poll *)poll;
+
     
 @end

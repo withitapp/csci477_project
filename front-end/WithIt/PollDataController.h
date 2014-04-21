@@ -10,6 +10,7 @@
 #import "Poll.h"
 #import "DataController.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "UserDataController.h"
 
 @interface PollDataController : DataController
 {
@@ -20,6 +21,7 @@
 
 // User information
 // User specific information
+@property (strong, nonatomic) UserDataController *userDataController;
 @property (strong, nonatomic) NSString *userID;
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSMutableArray *userFriendsList;
@@ -57,7 +59,7 @@
 - (void)updatePoll:(Poll *)poll;
 - (void)deletePoll:(Poll *)poll;
 
-- (void)postMembership:(Poll *) poll user:(NSNumber *)userid;
+
 
 - (void)determineExpiredPoll;
 

@@ -243,6 +243,22 @@
     [updateFriendsList removeAllObjects];
 }
 
+- (void)postMembership:(Poll *)poll user:(NSNumber *)userid
+{
+    NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+    [request setHTTPMethod:@"POST"];
+    //dummy data, need to implement correct data
+    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, @"true" ];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
+    membershipFeedback  = [self makeServerRequestWithRequest:request];
+    
+    [poll.memberships addObject: membershipFeedback[@"id"]];
+    NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
+}
+
 -(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response{
    
     NSLog(@"Updating membership with mem_id: %@ and response: %@", mem_id, response);

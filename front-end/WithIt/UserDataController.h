@@ -38,6 +38,7 @@
 - (void)retrieveMemberships:(Poll *) poll;
 -(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response;
 -(void)deleteMembership:(NSNumber *) mem_id;
+- (void)postMembership:(Poll *) poll user:(NSNumber *)userid;
 
 -(User *)getUser:(NSNumber *) userID;
 @end

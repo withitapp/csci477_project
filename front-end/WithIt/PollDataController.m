@@ -53,7 +53,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     [formatter setDateStyle:NSDateFormatterFullStyle];
     NSLog(@"FB token expiration date %@", [formatter stringFromDate:fbtoken.expirationDate]);
     NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
-    
+    self.userDataController = [UserDataController sharedInstance];
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
     [self retrievePolls];
 }
@@ -247,9 +247,9 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     user.fb_synced_at = users[@"fb_synced_at"];
     
     appDelegate.ID = user.ID;
-    UserDataController *userDataController = [UserDataController sharedInstance];
+    
     //retrieves friends from database
-    [userDataController loadData];
+    [self.userDataController loadData];
 }
 
 - (Poll *)postPoll:(Poll *)poll
@@ -277,7 +277,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     poll.pollID = pollFeedback[@"id"];
     //post memberships of members in poll
     for(NSNumber *n in poll.members){
-        [self postMembership:poll user:n];  }
+        [self.userDataController postMembership:poll user:n];  }
     
     NSLog(@"Got return in postPoll: %@", poll.pollID);
     return poll;
@@ -325,28 +325,12 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     pollFeedback = [self makeServerRequestWithRequest:request];
     
     for(NSNumber *n in poll.memberships){
-        [self deleteMembership:n];
+        [self.userDataController deleteMembership:n];
     }
     if(pollFeedback!=nil){
         NSLog(@"Got return in deletePoll: %@", pollFeedback);
     }
    
-}
-
-- (void)postMembership:(Poll *)poll user:(NSNumber *)userid
-{
-    NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
-    [request setHTTPMethod:@"POST"];
-    //dummy data, need to implement correct data
-    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, @"true" ];
-    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
-    NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
-    membershipFeedback  = [self makeServerRequestWithRequest:request];
-
-    [poll.memberships addObject: membershipFeedback[@"id"]];
-    NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
 
 // Retrieve poll data from the server
@@ -432,8 +416,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     {
         pollEndDate = [self objectInListAtIndex:d].endDate;
         if (EXPIRE_TIME_DEBUG == 1){
-       // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
-       // NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
+            NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         }
         if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
@@ -447,23 +430,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(int d = 0; d < [_masterPollsCreatedList count];d++)
     {
         pollEndDate = [self objectInCreatedListAtIndex:d].endDate;
-        df = [[NSDateFormatter alloc]init];
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SS'Z'"];
-        pollDate = [df dateFromString:pollEndDate]; //nil
-        [df setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        pollDate = [df dateFromString:pollEndDate]; // Not nil
-        
-        pollComponents = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSDayCalendarUnit |NSMonthCalendarUnit | NSYearCalendarUnit fromDate:pollDate];
-        pollHour = [pollComponents hour];
-        pollMinute = [pollComponents minute];
-        pollSecond = [pollComponents second];
-        pollYear = [pollComponents year];
-        pollMonth = [pollComponents month];
-        pollDay = [pollComponents day];
-        
-       // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
-       // NSLog(@"Poll %d is: %ld / %ld / %ld / %ld :%ld: %ld ",d,pollMonth,pollDay,pollYear, pollHour,(long)pollMinute,(long)pollSecond);
-        if([currentDate compare:pollDate] == NSOrderedDescending)
+        NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+        if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];
             [self deleteObjectInCreatedListAtIndex:d];

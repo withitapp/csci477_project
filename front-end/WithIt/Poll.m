@@ -26,7 +26,7 @@
         _isAttending = true;
         
         _members = [[NSMutableArray alloc] init];
-        
+        _memberships = [[NSMutableDictionary alloc] init];
         
         return self;
     }
@@ -47,6 +47,7 @@
         _updatedAt = [NSDate date];
         _creatorID = [[NSNumber alloc] initWithInt:45];
         _members = [[NSMutableArray alloc] init];
+        _memberships = [[NSMutableDictionary alloc] init];
         return self;
     }
     return nil;

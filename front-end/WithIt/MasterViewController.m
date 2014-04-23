@@ -298,8 +298,11 @@
     Membership * membership;
     
     poll = [self.dataController.masterPollsList objectAtIndex: index];
+    [self.dataController.userDataController retrieveMemberships:poll];
+    NSLog(@"APP ID: %@", appDelegate.ID);
     for(NSNumber * mem_id in poll.memberships){
         membership = [poll.memberships objectForKeyedSubscript:mem_id];
+        NSLog(@"mem_id: %@", membership.user_id);
         if(membership.user_id == appDelegate.ID){
             [self.dataController.userDataController deleteMembership:mem_id];
             

@@ -460,12 +460,28 @@ const NSInteger ALIGN = 10;
 
 - (void)changeSwitch:(id)sender{
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        Membership * membership;
     if([sender isOn]){
         self.poll.isAttending = true;
-        [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
+        
+        for(NSNumber * mem_id in self.poll.memberships){
+            
+            membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
+            
+            if(membership.user_id == appDelegate.ID){
+                [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"true"];
+            }}
+        // [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
     } else{
         self.poll.isAttending = false;
-        [appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
+        for(NSNumber * mem_id in self.poll.memberships){
+            
+            membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
+            
+            if(membership.user_id == appDelegate.ID){
+                [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"false"];
+            }}
+        //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
     }
     
 }

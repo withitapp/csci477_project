@@ -283,7 +283,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     return poll;
 }
 
-- updatePoll:(Poll *)poll
+- (void)updatePoll:(Poll *)poll
 {
     NSLog(@"Updating poll with URL: %@ and title: %@", pollDataURL, poll.title);
     
@@ -308,18 +308,22 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     poll.pollID = pollFeedback[@"id"];
     
     NSLog(@"Got return in updatePoll: %@", poll.pollID);
-    return poll;
+    //return poll;
 }
 
 - (void)deletePoll:(Poll *)poll
 {
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/polls?id=%@", poll.pollID];
+   
+    // Create the request with an appropriate URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+   // NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"DELETE"];
     
-    NSString *postString = [NSString stringWithFormat:@"id=%@", poll.pollID];
+   /* NSString *postString = [NSString stringWithFormat:@"id=%@", poll.pollID];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
+    [request setHTTPBody:requestBodyData];*/
     
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
@@ -339,8 +343,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
     
-    /*
-    // Create the request with an appropriate URL
+    
+   /* // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"POST"];
     NSString *postString = [NSString stringWithFormat:@"id=%@", appDelegate.ID];
@@ -371,7 +375,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for( poll in updatePollsList){
         //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){
-            NSLog(@"Poll %@ added to created list.", poll.title);
+           // NSLog(@"Poll %@ added to created list.", poll.title);
             [self.masterPollsCreatedList addObject:poll];
         }
         else{
@@ -416,7 +420,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     {
         pollEndDate = [self objectInListAtIndex:d].endDate;
         if (EXPIRE_TIME_DEBUG == 1){
-            NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+           // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         }
         if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
@@ -430,7 +434,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(int d = 0; d < [_masterPollsCreatedList count];d++)
     {
         pollEndDate = [self objectInCreatedListAtIndex:d].endDate;
-        NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+       // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];

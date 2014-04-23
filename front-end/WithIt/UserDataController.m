@@ -274,13 +274,14 @@
 
 -(void)deleteMembership:(NSNumber *) mem_id{
     
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?id=%@", mem_id];
     NSLog(@"Deleting membership with mem_id: %@", mem_id);
     // Create the request with an appropriate URL
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     [request setHTTPMethod:@"DELETE"];
-    NSString *postString = [NSString stringWithFormat:@"id=%@", mem_id];
+    /*NSString *postString = [NSString stringWithFormat:@"id=%@", mem_id];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
+    [request setHTTPBody:requestBodyData];*/
     // Dispatch the request and save the returned data
     NSDictionary *membership = [self makeServerRequestWithRequest:request];
     if(membership!=nil){
@@ -296,31 +297,55 @@
  
     NSLog(@"Sending to this endpoint: %@", s);
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:s]];
-   
+    if([poll.memberships count]==0){
+        NSLog(@"memberships count is 0, init alloc");
+        poll.memberships = [[NSMutableDictionary alloc] init];
+    }
     NSDictionary *memberships = [self makeServerRequestWithRequest:request];
     Membership *membership;
-    
-    NSMutableArray *updateMembershipsList = [[NSMutableArray alloc] init];//question: should we create this object every time?
+    Membership *m;
+    NSMutableArray *updateMembershipsList = [[NSMutableArray  alloc] init];//question: should we create this object every time?
     //[poll.memberships addObject:membership];
     for(NSDictionary *mship in memberships){
+        membership = [[Membership alloc] init];
         NSLog(@"Got membership: %@", mship[@"id"]);
         membership.ID = mship[@"id"];
+        NSLog(@"Got membership: %@", membership.ID);
+        //if(mship[@"created_at"]=!nil && mship[@"updated_at"]!=nil){
         membership.created_at = mship[@"created_at"];
+        NSLog(@"Got membership: %@", mship[@"created_at"]);
         membership.updated_at = mship[@"updated_at"];
+        NSLog(@"Got membership: %@", mship[@"updated_at"]);
         membership.user_id = mship[@"user_id"];
+        NSLog(@"Got membership: %@", mship[@"user_id"]);
         membership.poll_id = mship[@"poll_id"];
+        NSLog(@"Got membership: %@", mship[@"poll_id"]);
         membership.response = mship[@"response"];
+       /* if(mship[@"response"] == 1){
+            membership.response = @"true";
+        }
+        else
+            membership.response = @"false";*/
+        
+        NSLog(@"1");
         [updateMembershipsList addObject:membership];
+        
     }
-    for(Membership *m in updateMembershipsList){
-        if([poll.memberships objectForKeyedSubscript:m.ID]){
+    for(int i=0; i<[updateMembershipsList count]; i++){
+        m = [updateMembershipsList objectAtIndex: i];
+        NSLog(@"mem_id = %@", m.ID);
+    }
+    for(m in updateMembershipsList){
+    //  Membership *m1 = [[Membership alloc] init];
+       /* if([poll.memberships objectForKeyedSubscript:m.ID]){
             
             
         }
         else{
-            NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
+        
             
-        }
+        }*/
+        NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
         [poll.memberships setObject:m forKey:m.ID];
         NSLog(@"Memberships in the pollid %@: %lu", poll.pollID, (unsigned long)[poll.memberships count]);
     }

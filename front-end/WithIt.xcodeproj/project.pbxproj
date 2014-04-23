@@ -38,6 +38,7 @@
 		1DE577D818973ED500261B50 /* WIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE577D618973ED500261B50 /* WIViewController.m */; };
 		7C4D490218C14A6700985B3A /* DataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D490118C14A6700985B3A /* DataController.m */; };
 		7C826E1518F87E8300967AFD /* UserDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C826E1418F87E8300967AFD /* UserDataController.m */; };
+		7CA93938190840C0007BC77A /* Membership.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CA93937190840C0007BC77A /* Membership.m */; };
 		7CC0B01D18998C280051C36E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0B01C18998C280051C36E /* User.m */; };
 		B609471118C16D9C00200524 /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B609471018C16D9C00200524 /* UserSettingViewController.m */; };
 		B609471218C16D9C00200524 /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B609471018C16D9C00200524 /* UserSettingViewController.m */; };
@@ -96,6 +97,7 @@
 		7C4D490118C14A6700985B3A /* DataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataController.m; sourceTree = "<group>"; };
 		7C826E1318F87E8300967AFD /* UserDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataController.h; sourceTree = "<group>"; };
 		7C826E1418F87E8300967AFD /* UserDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataController.m; sourceTree = "<group>"; };
+		7CA93937190840C0007BC77A /* Membership.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Membership.m; sourceTree = "<group>"; };
 		7CAC373B18F8C3C000C1CF74 /* Membership.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Membership.h; sourceTree = "<group>"; };
 		7CC0B01B18998C280051C36E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		7CC0B01C18998C280051C36E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				1DA893041863F2F700904F8F /* PollDetailViewController.h */,
 				1DA893051863F2F700904F8F /* PollDetailViewController.m */,
 				7CAC373B18F8C3C000C1CF74 /* Membership.h */,
+				7CA93937190840C0007BC77A /* Membership.m */,
 				1DA893081863F38100904F8F /* CreatePollViewController.h */,
 				1DA893091863F38100904F8F /* CreatePollViewController.m */,
 				B6136DBF1890D46B0081B2AB /* PublishPollViewController.h */,
@@ -344,6 +347,7 @@
 				1DE577D718973ED500261B50 /* WIViewController.m in Sources */,
 				1DA892FE1863E7FE00904F8F /* MasterViewController.m in Sources */,
 				1DA8930A1863F38100904F8F /* CreatePollViewController.m in Sources */,
+				7CA93938190840C0007BC77A /* Membership.m in Sources */,
 				1DA892D31863846D00904F8F /* LoginViewController.m in Sources */,
 				1DA892CD1863846D00904F8F /* AppDelegate.m in Sources */,
 				7C4D490218C14A6700985B3A /* DataController.m in Sources */,

@@ -12,6 +12,12 @@
 #import "UserSettingViewController.h"
 #import "AppDelegate.h"
 
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface MasterViewController ()
 
 @end
@@ -75,10 +81,10 @@
     [self.headerView addSubview:self.profilePictureView];
     
     // Add user welcome label
-    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake((profilePictureSide + 15), align, (self.screenWidth - (profilePictureSide + 15)), 20) ];
-    self.usernameLabel.textColor = [UIColor blackColor];
+    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake((profilePictureSide + 15), align, (self.screenWidth - (profilePictureSide + 15)), 40) ];
+    self.usernameLabel.textColor = UIColorFromRGB(0x40BFAC);
     self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
-    self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+    self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:24];
     [self.headerView addSubview:self.usernameLabel];
     [self.view addSubview:self.headerView];
     
@@ -119,6 +125,31 @@
 {
     return 3;
 }
+////////
+/*
+- (CGFloat) tableView:(UITableView *)tableView
+heightForHeaderInSection:(NSInteger)section{
+    
+    CGFloat result = 0.0f;
+    if ([tableView isEqual:self.pollTableView]){
+        result = 30.0f;
+        
+    }
+    return result;
+}
+*/
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
+        castView.contentView.backgroundColor = UIColorFromRGB(0x40BFAC);
+        [castView.textLabel setTextColor:[UIColor whiteColor]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 20.0f]];
+    }
+}
+
+/////////
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
 //Set the Names of Sections of the table
@@ -196,6 +227,10 @@
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
             
             // Add toggle switch to polls the user did not create
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
             
@@ -210,6 +245,10 @@
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
             break;
         case 2:
@@ -221,6 +260,11 @@
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             break;
     }

@@ -65,7 +65,7 @@ const NSInteger ALIGN = 10;
         self.navigationItem.rightBarButtonItem = leaveButton;
     }
     
-   NSInteger currentHeight = 65;
+    NSInteger currentHeight = 65;
     
     // Add poll title label
     self.titleLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
@@ -109,7 +109,18 @@ const NSInteger ALIGN = 10;
         //Add toggle Switch
     self.toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(50, currentHeight, 50, 0)];
     [self.toggleSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
-    [self.toggleSwitch setOn:self.poll.isAttending];
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        if([m1.user_id isEqualToNumber:appDelegate.ID]){
+            if(m1.response == true){
+                [self.toggleSwitch setOn:TRUE];
+            }
+            else{
+                [self.toggleSwitch setOn:FALSE];
+            }
+        }
+    }
     
     currentHeight += 20;
     
@@ -198,8 +209,22 @@ const NSInteger ALIGN = 10;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //NSUInteger attendingRows = [self.poll.attending count];//TODO QUESTION how to determine who is attending and who isn't???
-    NSUInteger notAttendingRows = [self.poll.notAttending count];
-    NSUInteger attendingRows = [self.poll.members count];
+    NSUInteger notAttendingRows = 0;
+    NSUInteger attendingRows = 0;
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+       
+        if(m1.response == true){
+            attendingRows++;
+            
+        }
+        else{
+            notAttendingRows++;
+        }
+        
+    }
+    
     NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
     
     switch (section){
@@ -468,7 +493,7 @@ const NSInteger ALIGN = 10;
             
             membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
             
-            if(membership.user_id == appDelegate.ID){
+            if([membership.user_id isEqualToNumber: appDelegate.ID]){
                 [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"true"];
             }}
         // [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
@@ -478,7 +503,7 @@ const NSInteger ALIGN = 10;
             
             membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
             
-            if(membership.user_id == appDelegate.ID){
+            if([membership.user_id isEqualToNumber:appDelegate.ID ]){
                 [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"false"];
             }}
         //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];

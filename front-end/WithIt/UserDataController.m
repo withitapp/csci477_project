@@ -299,9 +299,8 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:s]];
     
     if(!poll.memberships){
-        NSMutableDictionary * newDict = [[NSMutableDictionary alloc] init];
         NSLog(@"memberships count is 0, init alloc");
-        poll.memberships = [newDict mutableCopy]; //becomes immutable here
+        poll.memberships = [[NSMutableDictionary alloc] init]; //becomes immutable here
     }
     NSDictionary *memberships = [self makeServerRequestWithRequest:request];
     Membership *membership;
@@ -338,15 +337,7 @@
         NSLog(@"mem_id = %@", m.ID);
     }
     for(m in updateMembershipsList){
-    //  Membership *m1 = [[Membership alloc] init];
-       /* if([poll.memberships objectForKeyedSubscript:m.ID]){
-            
-            
-        }
-        else{
-        
-            
-        }*/
+    
         NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
         [poll.memberships setObject:m forKey:m.ID];
         NSLog(@"Memberships in the pollid %@: %lu", poll.pollID, (unsigned long)[poll.memberships count]);

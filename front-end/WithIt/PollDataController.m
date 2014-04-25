@@ -342,7 +342,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
-    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/polls?id=%@", appDelegate.ID];
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/mypolls?user_id=%@", appDelegate.ID];
     
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];

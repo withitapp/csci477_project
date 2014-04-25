@@ -17,12 +17,12 @@
 @property NSNumber *creatorID;
 @property NSDate *createDate;
 @property NSDate *endDate;
-@property (nonatomic, retain) NSMutableArray *members;//user IDs
-@property (nonatomic, retain) NSMutableDictionary *memberships;//array of membership objects
+@property NSMutableArray *members;//user IDs
+@property NSMutableDictionary *memberships;//array of membership objects
 
 //attending members user IDs
-@property (nonatomic, copy) NSMutableArray *attending;
-@property (nonatomic, copy) NSMutableArray *notAttending;
+@property NSMutableArray *attending;
+@property NSMutableArray *notAttending;
 @property Boolean isAttending;
 
 -(id)initWithInfo:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description endDate:(NSDate *)endDate;

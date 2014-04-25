@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		12A5A43818C139BB00D9229F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12A5A43618C139BB00D9229F /* Main.storyboard */; };
 		1D16751C186828C100A839D3 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D16751B186828C100A839D3 /* placeholder.png */; };
+		1D809F251905992B00889833 /* almost_empty_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D809F201905992B00889833 /* almost_empty_circle.png */; };
+		1D809F261905992B00889833 /* almost_full_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D809F211905992B00889833 /* almost_full_circle.png */; };
+		1D809F271905992B00889833 /* empty_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D809F221905992B00889833 /* empty_circle.png */; };
+		1D809F281905992B00889833 /* full_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D809F231905992B00889833 /* full_circle.png */; };
+		1D809F291905992B00889833 /* half_full_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D809F241905992B00889833 /* half_full_circle.png */; };
 		1DA5DB3018EF49CF00BCD3AA /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */; };
 		1DA5DB3118EF49CF00BCD3AA /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */; };
 		1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BC1863846C00904F8F /* Foundation.framework */; };
@@ -61,6 +66,11 @@
 /* Begin PBXFileReference section */
 		12A5A43718C139BB00D9229F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
 		1D16751B186828C100A839D3 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = placeholder.png; path = WithIt/placeholder.png; sourceTree = "<group>"; };
+		1D809F201905992B00889833 /* almost_empty_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = almost_empty_circle.png; path = WithIt/Images.xcassets/almost_empty_circle.png; sourceTree = "<group>"; };
+		1D809F211905992B00889833 /* almost_full_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = almost_full_circle.png; path = WithIt/Images.xcassets/almost_full_circle.png; sourceTree = "<group>"; };
+		1D809F221905992B00889833 /* empty_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = empty_circle.png; path = WithIt/Images.xcassets/empty_circle.png; sourceTree = "<group>"; };
+		1D809F231905992B00889833 /* full_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = full_circle.png; path = WithIt/Images.xcassets/full_circle.png; sourceTree = "<group>"; };
+		1D809F241905992B00889833 /* half_full_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = half_full_circle.png; path = WithIt/Images.xcassets/half_full_circle.png; sourceTree = "<group>"; };
 		1DA5DB2E18EF49CF00BCD3AA /* UserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettings.h; sourceTree = "<group>"; };
 		1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettings.m; sourceTree = "<group>"; };
 		1DA892B91863846C00904F8F /* WithIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +155,11 @@
 		1DA892B01863846C00904F8F = {
 			isa = PBXGroup;
 			children = (
+				1D809F201905992B00889833 /* almost_empty_circle.png */,
+				1D809F211905992B00889833 /* almost_full_circle.png */,
+				1D809F221905992B00889833 /* empty_circle.png */,
+				1D809F231905992B00889833 /* full_circle.png */,
+				1D809F241905992B00889833 /* half_full_circle.png */,
 				1D16751B186828C100A839D3 /* placeholder.png */,
 				1DA892C21863846D00904F8F /* WithIt */,
 				1DA892E11863846D00904F8F /* WithItTests */,
@@ -324,7 +339,12 @@
 			files = (
 				1DA892D51863846D00904F8F /* Images.xcassets in Resources */,
 				1D16751C186828C100A839D3 /* placeholder.png in Resources */,
+				1D809F261905992B00889833 /* almost_full_circle.png in Resources */,
+				1D809F251905992B00889833 /* almost_empty_circle.png in Resources */,
+				1D809F291905992B00889833 /* half_full_circle.png in Resources */,
+				1D809F271905992B00889833 /* empty_circle.png in Resources */,
 				1DA892C71863846D00904F8F /* InfoPlist.strings in Resources */,
+				1D809F281905992B00889833 /* full_circle.png in Resources */,
 				12A5A43818C139BB00D9229F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

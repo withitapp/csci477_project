@@ -9,6 +9,12 @@
 #import "UserSettingViewController.h"
 #import "AppDelegate.h"
 
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface UserSettingViewController ()
 
 @end
@@ -136,6 +142,8 @@ heightForHeaderInSection:(NSInteger)section{
         [nameLabel setTag:1];
         [nameLabel setBackgroundColor:[UIColor clearColor]]; // transparent label background
         [nameLabel setFont:[UIFont boldSystemFontOfSize:17.0]];
+        [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+
         // custom views should be added as subviews of the cell's contentView:
         [cell.contentView addSubview:nameLabel];
         //[nameLabel release];

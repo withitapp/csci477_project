@@ -58,6 +58,7 @@
     self.PollTitleTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.PollTitleTextField.returnKeyType = UIReturnKeyDone;
     self.PollTitleTextField.borderStyle = UITextBorderStyleRoundedRect;
+
     self.PollTitleTextField.tag= 2;
     self.PollTitleTextField.delegate = self;
     [self.detailsView addSubview:self.PollTitleTextField];
@@ -71,6 +72,7 @@
     self.PollDescriptionTextField.layer.cornerRadius = 5.0f;
     [[self.PollDescriptionTextField layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
     [[self.PollDescriptionTextField layer] setBorderWidth:1.2];
+    self.PollDescriptionTextField.font = [UIFont fontWithName: @"HelveticaNeue" size: 16.0f];
     self.PollDescriptionTextField.tag= 2;
     self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;

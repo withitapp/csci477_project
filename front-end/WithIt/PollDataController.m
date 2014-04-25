@@ -372,7 +372,24 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         poll.description = thePoll[@"description"];
         poll.creatorID = thePoll[@"user_id"];
         poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
-        [updatePollsList addObject:poll];
+        Boolean newPoll = true;
+        for(Poll *pollExist in self.masterPollsCreatedList)
+        {
+            if(poll.pollID == pollExist.pollID)
+                newPoll = false;
+        }
+        for(Poll *pollExist in self.masterPollsList)
+        {
+            if(poll.pollID == pollExist.pollID)
+                newPoll = false;
+        }
+        for(Poll *pollExist in self.masterPollsExpiredList)
+        {
+            if(poll.pollID == pollExist.pollID)
+                newPoll = false;
+        }
+        if(newPoll == true){
+            [updatePollsList addObject:poll];}
     }
     if([updatePollsList count]>0){
         [self.masterPollsCreatedList removeAllObjects];

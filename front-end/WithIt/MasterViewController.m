@@ -12,6 +12,12 @@
 #import "UserSettingViewController.h"
 #import "AppDelegate.h"
 
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface MasterViewController ()
 
 @end
@@ -46,40 +52,12 @@
 {
     [super viewDidLoad];
 
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CreateNewPoll)];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
     
-    // Set up header view
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];
-    
-    // Add user profile picture
-    self.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", appDelegate.userID]]];
-        if (!imageData){
-            NSLog(@"Failed to download user profile picture.");
-            return;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.profilePictureView.image = [UIImage imageWithData: imageData];
-        });
-    });
-    
-    [self.headerView addSubview:self.profilePictureView];
-    
-    // Add user welcome label
-    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(65, 10, (self.screenWidth - 75), 20) ];
-    self.usernameLabel.textColor = [UIColor blackColor];
-    self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
-    self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-    [self.headerView addSubview:self.usernameLabel];
-    [self.view addSubview:self.headerView];
-    
     // Set up poll table view
-    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-170))];
+    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, (self.screenHeight-64))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
     self.pollTableView.bounces = NO;
@@ -115,6 +93,19 @@
 {
     return 3;
 }
+////////
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
+        castView.contentView.backgroundColor = UIColorFromRGB(0xCEEEEA);
+        [castView.textLabel setTextColor:[UIColor darkGrayColor]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
+    }
+}
+
+/////////
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
 //Set the Names of Sections of the table
@@ -123,13 +114,13 @@
     NSString *sectionName;
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@" Friends' polls:", @" Friends' polls:");
+            sectionName = NSLocalizedString(@"   Friends' Polls", @"   Friends' Polls");
             break;
         case 1:
-            sectionName = NSLocalizedString(@" My polls:", @" My polls:");
+            sectionName = NSLocalizedString(@"   My Polls", @"   My Polls");
             break;
         case 2:
-            sectionName = NSLocalizedString(@" Expired polls:", @" Expired polls:");
+            sectionName = NSLocalizedString(@"   Expired Polls", @"   Expired Polls");
             break;
     }
     return sectionName;
@@ -201,6 +192,10 @@
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
             break;
         case 2:
@@ -212,10 +207,17 @@
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             break;
     }
-    cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
+    
+    // TODO: add some code to figure out what percentage of members are attending and choose an image
+    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
 
     return cell;
 }

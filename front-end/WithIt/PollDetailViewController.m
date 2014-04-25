@@ -94,7 +94,8 @@ const NSInteger ALIGN = 10;
     {
         @try {
        // self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
-            self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:self.poll.endDate];}
+            NSString *dateString = [dateFormatter stringFromDate:self.poll.endDate];
+            self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:dateString];}
         @catch (NSException *NSInvalidArgumentException){
             NSLog(@"Caught invalid argument exception on end date label");
         }

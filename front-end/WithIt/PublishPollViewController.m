@@ -9,6 +9,11 @@
 #import "PublishPollViewController.h"
 #import "AppDelegate.h"
 
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface PublishPollViewController ()
 
@@ -101,6 +106,19 @@
     [self.view addSubview:self.memberTableView];
 }
 
+///////
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
+        castView.contentView.backgroundColor = UIColorFromRGB(0x40BFAC);
+        [castView.textLabel setTextColor:[UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue" size: 20.0f]];
+    }
+}
+////////
+
+
 #pragma mark - Poll Detail Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -145,6 +163,8 @@
     if(!cell){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        //[[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+        [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
         //UILabel * nameLabel = [[UILabel alloc] initWithFrame: CGRectMake( 0, 15, box.size.width, 19.0f)];
         //nameLabel.tag = NAME_LABEL_TAG;
         //[nameLabel setTextColor: [UIColor colorWithRed: 79.0f/255.0f green:79.0f/255.0f blue:79.0f/255.0f alpha:1.0f]];

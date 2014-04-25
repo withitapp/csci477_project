@@ -52,13 +52,17 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
     
+    NSInteger align = 10;
+    NSInteger profilePictureSide = 75;
+    NSInteger headerHeight = 95;
+    
     // Set up header view
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, 100)];
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, (headerHeight - 1))];
     
     // Add user profile picture
-    self.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
+    self.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(align, align, profilePictureSide, profilePictureSide)];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", appDelegate.userID]]];
+        NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=150&height=150", appDelegate.userID]]];
         if (!imageData){
             NSLog(@"Failed to download user profile picture.");
             return;
@@ -71,7 +75,7 @@
     [self.headerView addSubview:self.profilePictureView];
     
     // Add user welcome label
-    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake(65, 10, (self.screenWidth - 75), 20) ];
+    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake((profilePictureSide + 15), align, (self.screenWidth - (profilePictureSide + 15)), 20) ];
     self.usernameLabel.textColor = [UIColor blackColor];
     self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
     self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
@@ -79,7 +83,7 @@
     [self.view addSubview:self.headerView];
     
     // Set up poll table view
-    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 100, self.screenWidth, (self.screenHeight-170))];
+    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, headerHeight, self.screenWidth, (self.screenHeight-164))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
     self.pollTableView.bounces = NO;
@@ -220,7 +224,9 @@
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             break;
     }
-    cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
+    
+    // TODO: add some code to figure out what percentage of members are attending and choose an image
+    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
 
     return cell;
 }

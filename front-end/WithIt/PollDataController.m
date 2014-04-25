@@ -311,6 +311,12 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
     // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
+    
+    // Want to change this to update rather than delete everything and recreated, maybe? Not sure which is slower
+    [self.masterPollsList removeAllObjects];
+    [self.masterPollsCreatedList removeAllObjects];
+    [self.masterPollsExpiredList removeAllObjects];
+    
     // Copy the creatorID from AppDelegate
     NSNumber *creatorID = ((AppDelegate *)[UIApplication sharedApplication].delegate).ID;
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];

@@ -62,7 +62,7 @@ const NSInteger ALIGN = 10;
     NSLog(@"App delegate id: %@", appDelegate.ID);
     NSLog(@"Poll Creator id: %@", self.poll.creatorID);
     //You can edit your own poll
-    if(self.poll.creatorID == appDelegate.ID) {
+    if([self.poll.creatorID isEqualToNumber: appDelegate.ID]) {
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
         self.navigationItem.rightBarButtonItem = editButton;
     }
@@ -116,18 +116,7 @@ const NSInteger ALIGN = 10;
         //Add toggle Switch
     self.toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(50, currentHeight, 50, 0)];
     [self.toggleSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
-    Membership *m1;
-    for(Membership *m in self.poll.memberships){
-        m1 = [self.poll.memberships objectForKeyedSubscript:m];
-        if([m1.user_id isEqualToNumber:appDelegate.ID]){
-            if(m1.response == true){
-                [self.toggleSwitch setOn:TRUE];
-            }
-            else{
-                [self.toggleSwitch setOn:FALSE];
-            }
-        }
-    }
+    
     
     currentHeight += 20;
     
@@ -165,6 +154,7 @@ const NSInteger ALIGN = 10;
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSInteger currentHeight = 65;
     [self.titleLabel setText:self.poll.title];
     [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x,currentHeight, self.screenWidth, self.screenHeight)];
@@ -181,7 +171,19 @@ const NSInteger ALIGN = 10;
     self.timeRemainingLabel.frame = CGRectMake((ALIGN+50), currentHeight, 200, 20);
         self.toggleSwitch.frame = CGRectMake((self.screenWidth - 75), currentHeight, 0, 0);
     currentHeight += 20;
-        [self.toggleSwitch setOn:self.poll.isAttending];
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        if([m1.user_id isEqualToNumber:appDelegate.ID]){
+            if([m1.response isEqual: @(YES)]){
+                [self.toggleSwitch setOn:TRUE];
+            }
+            else{
+                [self.toggleSwitch setOn:FALSE];
+            }
+        }
+    }
+    // [self.toggleSwitch setOn:self.poll.isAttending];
     
     self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
     currentHeight += 10;
@@ -239,14 +241,27 @@ const NSInteger ALIGN = 10;
     NSUInteger notAttendingRows = 0;
     NSUInteger attendingRows = 0;
     Membership *m1;
+    if(!self.poll.attending){
+        self.poll.attending = [[NSMutableArray alloc] init];
+    }
+    if(!self.poll.notAttending){
+        self.poll.notAttending = [[NSMutableArray alloc] init];
+    }
+    if([self.poll.attending count]>0){
+        [self.poll.attending removeAllObjects];
+    }
+    if([self.poll.notAttending count]>0){
+        [self.poll.notAttending removeAllObjects];
+    }
     for(Membership *m in self.poll.memberships){
         m1 = [self.poll.memberships objectForKeyedSubscript:m];
-       
-        if(m1.response == true){
+        
+        if([m1.response  isEqual: @(YES)]){
+            [self.poll.attending addObject:m1.user_id];
             attendingRows++;
-            
         }
         else{
+            [self.poll.notAttending addObject:m1.user_id];
             notAttendingRows++;
         }
         
@@ -292,27 +307,29 @@ const NSInteger ALIGN = 10;
     
     NSNumber *userIDAtIndex;
     User *user;
-    Membership *m;
-    
-    NSArray *keys = [self.poll.memberships allKeys];
-    
-    userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
-    m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
     
     switch (indexPath.section) {
         
         case 0:
             //gets user information
+            //keys = [self.poll.memberships allKeys];
             
-            user = [self.userDataController getUser:m.user_id];
+           // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
+           // m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
+            userIDAtIndex = [self.poll.attending objectAtIndex:(indexPath.row)];
+            user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
             cell.imageView.image = user.profilePictureView.image;
             
             break;
             
         case 1:
-           
-            user = [self.userDataController getUser:m.user_id];
+           // keys = [self.poll.memberships allKeys];
+            
+           // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
+          //  m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
+            userIDAtIndex = [self.poll.notAttending objectAtIndex:(indexPath.row)];
+            user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
             cell.imageView.image = user.profilePictureView.image;
             
@@ -454,8 +471,9 @@ const NSInteger ALIGN = 10;
     //bring back the edit button so the user can make further changes
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
-    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.pollDataController = [PollDataController sharedInstance];
+    [self.pollDataController updatePoll:self.poll];
     [appDelegate.masterViewController.pollTableView reloadData];
 }
 
@@ -549,7 +567,7 @@ const NSInteger ALIGN = 10;
             }}
         //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
     }
-    
+   // [self viewDidAppear:YES];
 }
 
 - (void)didReceiveMemoryWarning

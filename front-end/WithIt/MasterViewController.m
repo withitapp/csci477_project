@@ -114,13 +114,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSString *sectionName;
     switch (section){
         case 0:
+            if([self.dataController.masterPollsList count]!= 0){
             sectionName = NSLocalizedString(@"   Friends' Polls", @"   Friends' Polls");
-            break;
+            }
+                break;
         case 1:
+            if([self.dataController.masterPollsCreatedList count] != 0){
             sectionName = NSLocalizedString(@"   My Polls", @"   My Polls");
-            break;
+            }
+                break;
         case 2:
+            if([self.dataController.masterPollsExpiredList count]!= 0){
             sectionName = NSLocalizedString(@"   Expired Polls", @"   Expired Polls");
+            }
             break;
     }
     return sectionName;

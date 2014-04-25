@@ -281,11 +281,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     // we pick up the users from the selection, and create a string that we use to update the text view
     // at the bottom of the display; note that self.selection is a property inherited from our base class
+    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+    [f setNumberStyle:NSNumberFormatterDecimalStyle];
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
         if(![_selectedFriends containsObject:user]){
             u = [self.userDataController.masterFriendsList objectForKey:user.id];//get members WithIt id
             if(u != nil){
-                [self.poll.members addObject:u.ID];    }
+                
+                [self.poll.members addObject:[f numberFromString:u.ID]];    }
             [_selectedFriends addObject:user];  }
         /*if ([text length]) {
             [text appendString:@", "];

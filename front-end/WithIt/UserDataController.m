@@ -244,13 +244,13 @@
     [updateFriendsList removeAllObjects];
 }
 
-- (void)postMembership:(Poll *)poll user:(NSNumber *)userid
+- (void)postMembership:(Poll *)poll user:(NSNumber *)userid Response:(NSString *)response
 {
     NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
     [request setHTTPMethod:@"POST"];
     //dummy data, need to implement correct data
-    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, @"true" ];
+    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, response ];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
     NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
@@ -261,10 +261,12 @@
 }
 
 -(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response{
-   
+    
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?id=%@&response=%@", mem_id, response];
     NSLog(@"Updating membership with mem_id: %@ and response: %@", mem_id, response);
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     // Create the request with an appropriate URL
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
+  //  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
     [request setHTTPMethod:@"PATCH"];
     NSString *postString = [NSString stringWithFormat:@"id=%@&response=%@", mem_id, response];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
@@ -329,7 +331,6 @@
         else
             membership.response = @"false";*/
         
-        NSLog(@"1");
         [updateMembershipsList addObject:membership];
         
     }

@@ -269,15 +269,21 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         NSLog(@"Poll data didn't convert to JSON correctly!");
         return;
     }*/
-    NSString *postString = [NSString stringWithFormat:@"id=%@&created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
+    NSString *postString = [NSString stringWithFormat:@"created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@",createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
     poll.pollID = pollFeedback[@"id"];
     //post memberships of members in poll
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    //NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+    //[f setNumberStyle:NSNumberFormatterDecimalStyle];
     for(NSNumber *n in poll.members){
-        [self.userDataController postMembership:poll user:n];  }
+        if([appDelegate.ID isEqualToNumber:n])
+            [self.userDataController postMembership:poll user:n Response:@"true"];
+        else
+            [self.userDataController postMembership:poll user:n Response:@"false"];}
     
     NSLog(@"Got return in postPoll: %@", poll.pollID);
     return poll;
@@ -293,7 +299,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSString *createDate = [dateFormatter stringFromDate:poll.endDate];
     NSString *updateDate = [dateFormatter stringFromDate:poll.endDate];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
-    [request setHTTPMethod:@"PATCH"];
+    [request setHTTPMethod:@"POST"];
     /* NSString *pollData = [poll convertToJSON];
      if(!pollData)
      {

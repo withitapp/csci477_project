@@ -12,6 +12,12 @@
 #import "UserSettingViewController.h"
 #import "AppDelegate.h"
 
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface MasterViewController ()
 
 @end
@@ -87,6 +93,19 @@
 {
     return 3;
 }
+////////
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
+        castView.contentView.backgroundColor = UIColorFromRGB(0xCEEEEA);
+        [castView.textLabel setTextColor:[UIColor darkGrayColor]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
+    }
+}
+
+/////////
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
 //Set the Names of Sections of the table
@@ -164,6 +183,10 @@
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
             
             // Add toggle switch to polls the user did not create
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
             
@@ -178,6 +201,10 @@
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
             break;
         case 2:
@@ -189,6 +216,11 @@
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             break;
     }

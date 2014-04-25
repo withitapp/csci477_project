@@ -212,7 +212,7 @@ const NSInteger ALIGN = 10;
     for(Membership *m in self.poll.memberships){
         m1 = [self.poll.memberships objectForKeyedSubscript:m];
         
-        if(m1.response == true){
+        if([m1.response isEqual:@(YES)]){
             attendingRows++;
             
         }

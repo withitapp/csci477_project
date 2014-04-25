@@ -17,8 +17,8 @@
 @property NSNumber *creatorID;
 @property NSDate *createDate;
 @property NSDate *endDate;
-@property (nonatomic, copy) NSMutableArray *members;//user IDs
-@property (nonatomic, copy) NSMutableDictionary *memberships;//array of membership objects
+@property (nonatomic, retain) NSMutableArray *members;//user IDs
+@property (nonatomic, retain) NSMutableDictionary *memberships;//array of membership objects
 
 //attending members user IDs
 @property (nonatomic, copy) NSMutableArray *attending;

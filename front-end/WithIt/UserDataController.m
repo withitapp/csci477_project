@@ -128,8 +128,8 @@
         [updateMembersList addObject:user];
     }
     for(user in updateMembersList){
-        NSString *userid = [user.ID stringValue];
-        user.ID = userid;
+      //  NSString *userid = [user.ID stringValue];
+     //   user.ID = userid;
         if([poll.members containsObject:user.ID]){
             NSLog(@"1Poll already contains user: %@", user.first_name);
         }
@@ -297,9 +297,11 @@
  
     NSLog(@"Sending to this endpoint: %@", s);
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:s]];
-    if([poll.memberships count]==0){
+    
+    if(!poll.memberships){
+        NSMutableDictionary * newDict = [[NSMutableDictionary alloc] init];
         NSLog(@"memberships count is 0, init alloc");
-        poll.memberships = [[NSMutableDictionary alloc] init];
+        poll.memberships = [newDict mutableCopy]; //becomes immutable here
     }
     NSDictionary *memberships = [self makeServerRequestWithRequest:request];
     Membership *membership;

@@ -342,9 +342,12 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/polls?id=%@", appDelegate.ID];
     
+    // Create the request with an appropriate URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     
-   /* // Create the request with an appropriate URL
+    /*// Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"POST"];
     NSString *postString = [NSString stringWithFormat:@"id=%@", appDelegate.ID];
@@ -353,8 +356,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
     // Copy the creatorID from AppDelegate*/
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"GET"];
     // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
     NSNumber *creatorID = ((AppDelegate *)[UIApplication sharedApplication].delegate).ID;
@@ -372,6 +374,9 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
         [updatePollsList addObject:poll];
     }
+    if([updatePollsList count]>0){
+        [self.masterPollsCreatedList removeAllObjects];
+        [self.masterPollsList removeAllObjects];
     for( poll in updatePollsList){
         //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){
@@ -381,7 +386,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         else{
             [self.masterPollsList addObject:poll];
         }
-    }
+    }}
     [updatePollsList removeAllObjects];
 }
 

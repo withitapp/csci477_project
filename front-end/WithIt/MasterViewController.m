@@ -303,7 +303,7 @@
     for(NSNumber * mem_id in poll.memberships){
         membership = [poll.memberships objectForKeyedSubscript:mem_id];
         NSLog(@"mem_id: %@", membership.user_id);
-        if(membership.user_id == appDelegate.ID){
+        if([membership.user_id isEqualToNumber:appDelegate.ID]){
             [self.dataController.userDataController deleteMembership:mem_id];
             
             NSLog(@"Leaving poll with membership ID: %@", mem_id);

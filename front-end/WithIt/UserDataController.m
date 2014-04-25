@@ -144,8 +144,9 @@
         else{
             
             // Add user profile picture
+            user.profilePictureView = [[UIImageView alloc] init];
             dispatch_async(dispatch_get_global_queue(0,0), ^{
-                NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.ID]]];
+                NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.fb_id]]];
                 if (!imageData){
                     NSLog(@"Failed to download user profile picture.");
                     return;
@@ -352,6 +353,19 @@
     if(user == nil){
         NSLog(@"In getUser, could not find user in local dictionary *HELP*");
         
+    }
+    if(user.profilePictureView.image == nil){
+      //  user.profilePictureView.image = [[UIImage alloc] init];
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
+            NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.fb_id]]];
+            if (!imageData){
+                NSLog(@"Failed to download user profile picture.");
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                user.profilePictureView.image = [UIImage imageWithData: imageData];
+            });
+        });
     }
 
     return user;

@@ -180,7 +180,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            cell.accessoryView = nil; 
+            
+            // Add toggle switch to polls the user did not create
+            /////
+            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+            /////
+            cell.accessoryView = nil;
+            //[[UIView alloc] initWithFrame:toggleSwitch.frame];
+            //[cell.accessoryView addSubview:toggleSwitch];
+            
             break;
             
         case 1:

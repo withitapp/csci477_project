@@ -131,7 +131,8 @@ const NSInteger ALIGN = 10;
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
     
-    [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", self.poll.creatorID]];
+    User * u = [self.userDataController.masterEveryoneList objectForKeyedSubscript:self.poll.creatorID];
+    [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", u.full_name]];
    // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
     currentHeight += 10;
     
@@ -254,26 +255,30 @@ const NSInteger ALIGN = 10;
         //[cell.contentView addSubview: nameLabel];
     }
     
-    NSString *userIDAtIndex;
+    NSNumber *userIDAtIndex;
     User *user;
+    Membership *m;
+    
+    NSArray *keys = [self.poll.memberships allKeys];
+    
+    userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
+    m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
+    
     switch (indexPath.section) {
         
         case 0:
             //gets user information
-            userIDAtIndex = [self.poll.members objectAtIndex:(indexPath.row)];
-            user = [self.userDataController getUser:userIDAtIndex];
+            
+            user = [self.userDataController getUser:m.user_id];
             [[cell textLabel] setText:user.full_name];
-           // [[cell textLabel] setText:@"MemberName"];
             cell.imageView.image = user.profilePictureView.image;
             
             break;
             
         case 1:
            
-            userIDAtIndex = [self.poll.notAttending objectAtIndex:(indexPath.row)];
-            user = [self.userDataController getUser:userIDAtIndex];
+            user = [self.userDataController getUser:m.user_id];
             [[cell textLabel] setText:user.full_name];
-            // [[cell textLabel] setText:@"MemberName"];
             cell.imageView.image = user.profilePictureView.image;
             
             break;

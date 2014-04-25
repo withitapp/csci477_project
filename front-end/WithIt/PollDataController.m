@@ -372,7 +372,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         poll.description = thePoll[@"description"];
         poll.creatorID = thePoll[@"user_id"];
         poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
-        Boolean newPoll = true;
+       /* Boolean newPoll = true;
         for(Poll *pollExist in self.masterPollsCreatedList)
         {
             if(poll.pollID == pollExist.pollID)
@@ -388,12 +388,13 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
             if(poll.pollID == pollExist.pollID)
                 newPoll = false;
         }
-        if(newPoll == true){
-            [updatePollsList addObject:poll];}
+        if(newPoll == true){*/
+            [updatePollsList addObject:poll];
     }
     if([updatePollsList count]>0){
         [self.masterPollsCreatedList removeAllObjects];
         [self.masterPollsList removeAllObjects];
+        [self.masterPollsExpiredList removeAllObjects];
     for( poll in updatePollsList){
         //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){

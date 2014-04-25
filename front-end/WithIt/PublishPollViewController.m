@@ -277,6 +277,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     [self dismissModalViewControllerAnimated:YES];*/
     User * u;
+    
+    
     // we pick up the users from the selection, and create a string that we use to update the text view
     // at the bottom of the display; note that self.selection is a property inherited from our base class
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
@@ -351,7 +353,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     PollDataController *dataController = [PollDataController sharedInstance];
     self.poll.creatorID = appDelegate.ID;
+    [self.poll.members addObject:appDelegate.ID];//add creator to poll members
     [dataController addPollCreatedWithPoll:self.poll];
+    
     
     [appDelegate.masterViewController.pollTableView reloadData];
     

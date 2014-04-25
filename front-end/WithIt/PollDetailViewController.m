@@ -198,12 +198,31 @@ const NSInteger ALIGN = 10;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *sectionName;
+    NSUInteger notAttendingRows = 0;
+    NSUInteger attendingRows = 0;
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        
+        if(m1.response == true){
+            attendingRows++;
+            
+        }
+        else{
+            notAttendingRows++;
+        }
+        
+    }
+    
+    
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@" Attending:", @" Attending:");
+            if(attendingRows != 0){
+                sectionName = NSLocalizedString(@" Attending:", @" Attending:");}
             break;
         case 1:
-            sectionName = NSLocalizedString(@" Not attending:", @" Not attending:");
+            if(notAttendingRows != 0){
+                sectionName = NSLocalizedString(@" Not attending:", @" Not attending:");}
             break;
     }
     return sectionName;

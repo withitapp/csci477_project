@@ -46,44 +46,12 @@
 {
     [super viewDidLoad];
 
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CreateNewPoll)];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
     
-    NSInteger align = 10;
-    NSInteger profilePictureSide = 75;
-    NSInteger headerHeight = 95;
-    
-    // Set up header view
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, (headerHeight - 1))];
-    
-    // Add user profile picture
-    self.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(align, align, profilePictureSide, profilePictureSide)];
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=150&height=150", appDelegate.userID]]];
-        if (!imageData){
-            NSLog(@"Failed to download user profile picture.");
-            return;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.profilePictureView.image = [UIImage imageWithData: imageData];
-        });
-    });
-    
-    [self.headerView addSubview:self.profilePictureView];
-    
-    // Add user welcome label
-    self.usernameLabel = [ [UILabel alloc ] initWithFrame:CGRectMake((profilePictureSide + 15), align, (self.screenWidth - (profilePictureSide + 15)), 20) ];
-    self.usernameLabel.textColor = [UIColor blackColor];
-    self.usernameLabel.text = [NSString stringWithFormat: @"Hi, %@!", appDelegate.username];
-    self.usernameLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-    [self.headerView addSubview:self.usernameLabel];
-    [self.view addSubview:self.headerView];
-    
     // Set up poll table view
-    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, headerHeight, self.screenWidth, (self.screenHeight-164))];
+    self.pollTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, (self.screenHeight-64))];
     self.pollTableView.delegate = self;
     self.pollTableView.dataSource = self;
     self.pollTableView.bounces = NO;

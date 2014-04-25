@@ -13,11 +13,8 @@
 @interface MasterViewController : WIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) PollDataController *dataController;
-@property (strong, nonatomic) UIView *headerView;
 @property (strong, nonatomic) UITableView *pollTableView;
-@property (strong, nonatomic) UILabel *usernameLabel;
-@property (strong, nonatomic) UIImageView *profilePictureView;
-@property (strong, nonatomic) UIRefreshControl *refreshControl;
+
 
 + (MasterViewController*)sharedInstance;
 

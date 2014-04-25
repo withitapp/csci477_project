@@ -114,13 +114,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSString *sectionName;
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@" Friends' polls:", @" Friends' polls:");
+            sectionName = NSLocalizedString(@"   Friends' Polls", @"   Friends' Polls");
             break;
         case 1:
-            sectionName = NSLocalizedString(@" My polls:", @" My polls:");
+            sectionName = NSLocalizedString(@"   My Polls", @"   My Polls");
             break;
         case 2:
-            sectionName = NSLocalizedString(@" Expired polls:", @" Expired polls:");
+            sectionName = NSLocalizedString(@"   Expired Polls", @"   Expired Polls");
             break;
     }
     return sectionName;

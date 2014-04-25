@@ -126,26 +126,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     return 3;
 }
 ////////
-/*
-- (CGFloat) tableView:(UITableView *)tableView
-heightForHeaderInSection:(NSInteger)section{
-    
-    CGFloat result = 0.0f;
-    if ([tableView isEqual:self.pollTableView]){
-        result = 30.0f;
-        
-    }
-    return result;
-}
-*/
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
-        castView.contentView.backgroundColor = UIColorFromRGB(0x40BFAC);
-        [castView.textLabel setTextColor:[UIColor whiteColor]];
-        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 20.0f]];
+        castView.contentView.backgroundColor = UIColorFromRGB(0xCEEEEA);
+        [castView.textLabel setTextColor:[UIColor darkGrayColor]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
     }
 }
 

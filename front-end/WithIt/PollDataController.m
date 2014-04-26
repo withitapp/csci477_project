@@ -420,4 +420,133 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     }
 }
 
++ (NSString*)differenceBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime
+{
+    NSString* returnStr;
+    
+    NSDate *fromDate;
+    NSDate *toDate;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&fromDate
+                 interval:NULL forDate:fromDateTime];
+    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&toDate
+                 interval:NULL forDate:toDateTime];
+    
+    if ([fromDate compare:toDate] == NSOrderedDescending)
+    {
+        NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:toDate toDate:fromDate options:0];
+        
+        if ([difference year] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu years ago",(long)[difference year]];
+        }
+        else if ([difference year] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 year ago"];
+        }
+        
+        else if ([difference month] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu months ago",(long)[difference month]];
+        }
+        else if ([difference month] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 month ago"];
+        }
+        
+        else if ([difference day] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu days ago",(long)[difference day]];
+        }
+        else if ([difference day] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 day ago"];
+        }
+        
+        else if ([difference hour] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu hours ago",(long)[difference hour]];
+        }
+        else if ([difference hour] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 hour ago"];
+        }
+        
+        else if ([difference minute] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu minutes ago",(long)[difference minute]];
+        }
+        else if ([difference minute] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 minute ago"];
+        }
+        else
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Happening now"];
+        }
+        
+        return returnStr;
+        
+    }
+    else if ([fromDate compare:toDate] != NSOrderedAscending) {
+        return [[NSString alloc] initWithFormat:@"Happening now"];
+        
+    }
+    
+    NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:fromDate toDate:toDate options:0];
+    
+    if ([difference year] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu years",(long)[difference year]];
+    }
+    else if ([difference year] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 year"];
+    }
+    
+    else if ([difference month] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu months",(long)[difference month]];
+    }
+    else if ([difference month] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 month"];
+    }
+    
+    else if ([difference day] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu days",(long)[difference day]];
+    }
+    else if ([difference day] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 day"];
+    }
+    
+    else if ([difference hour] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu hours",(long)[difference hour]];
+    }
+    else if ([difference hour] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 hour"];
+    }
+    
+    else if ([difference minute] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu minutes",(long)[difference minute]];
+    }
+    else if ([difference minute] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 minute"];
+    }
+    else
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"Happening now"];
+    }
+    
+    return returnStr;
+}
+
 @end

@@ -93,7 +93,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return 3;
 }
-////////
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
@@ -104,8 +103,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
     }
 }
-
-/////////
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
 //Set the Names of Sections of the table
@@ -165,68 +162,138 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     
     // Only create the date formatter once
-    static NSDateFormatter *formatter = nil;
+    static NSDateFormatter *formatter;
+    if (!formatter) {
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+    }
+    
+    // Add toggle switch to polls the user did not create
+    [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+    [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+    
     Poll *pollAtIndex;
     UISwitch *toggleSwitch = [[UISwitch alloc] init];
     
 
-    
+    NSDate* today = [NSDate date];
     switch (indexPath.section) {
         case 0:
-            if (!formatter) {
-                formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterMediumStyle];
-            }
-            
             pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
             
-            // Add toggle switch to polls the user did not create
-            /////
-            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
-            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
-            /////
             cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
             [cell.accessoryView addSubview:toggleSwitch];
+            
+            // TODO: add some code to figure out what percentage of members are attending and choose an image
+            if ([pollAtIndex.members count] > 0)
+            {
+                float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
+                if (percentageAttending >= 0.9)
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
+                }
+                else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
+                }
+                else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
+                }
+                else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
+                }
+                else
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+                }
+            }
+            else
+            {
+                cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+            }
+
             
             break;
             
         case 1:
-            if (!formatter) {
-                formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterMediumStyle];
-            }
-            
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            /////
-            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
-            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
-            /////
+            [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
             cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
-            break;
-        case 2:
-            if (!formatter) {
-                formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterMediumStyle];
+            
+            // TODO: add some code to figure out what percentage of members are attending and choose an image
+            if ([pollAtIndex.members count] > 0)
+            {
+                float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
+                if (percentageAttending >= 0.9)
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
+                }
+                else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
+                }
+                else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
+                }
+                else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
+                }
+                else
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+                }
+            }
+            else
+            {
+                cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
             }
             
+            break;
+            
+        case 2:
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            
-            /////
-            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
-            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
-            /////
             cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
+            
+            // TODO: add some code to figure out what percentage of members are attending and choose an image
+            if ([pollAtIndex.members count] > 0)
+            {
+                float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
+                if (percentageAttending >= 0.9)
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
+                }
+                else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
+                }
+                else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
+                }
+                else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
+                }
+                else
+                {
+                    cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+                }
+            }
+            else
+            {
+                cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+            }
+            
             break;
     }
-    
-    // TODO: add some code to figure out what percentage of members are attending and choose an image
-    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
 
     return cell;
 }
@@ -397,10 +464,8 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             NSLog(@"Something went wrong!");
             return @"Something went wrong!";
 
+    }
 }
-}
-
-
 
 
 

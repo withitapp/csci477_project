@@ -11,6 +11,7 @@
 #import "CreatePollViewController.h"
 #import "AppDelegate.h"
 
+
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -324,7 +325,7 @@ const NSInteger ALIGN = 10;
     switch (indexPath.section) {
         
         case 0:
-            //gets user information
+        { //gets user information
             //keys = [self.poll.memberships allKeys];
             
            // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
@@ -333,11 +334,31 @@ const NSInteger ALIGN = 10;
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
             cell.imageView.image = user.profilePictureView.image;
+
+            
+            //BezierPath
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 50, 50)];
+            
+            // Create an image context containing the original UIImage.
+            UIGraphicsBeginImageContext(user.profilePictureView.image.size);
+            
+            // Clip to the bezier path and clear that portion of the image.
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            CGContextAddPath(context,bezierPath.CGPath);
+            CGContextClip(context);
+            
+            // Draw here when the context is clipped
+            [user.profilePictureView.image drawAtPoint:CGPointZero];
+            
+            // Build a new UIImage from the image context.
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            cell.imageView.image = newImage;
             
             break;
-            
+        }
         case 1:
-           // keys = [self.poll.memberships allKeys];
+        { // keys = [self.poll.memberships allKeys];
             
            // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
           //  m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
@@ -345,8 +366,26 @@ const NSInteger ALIGN = 10;
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
             cell.imageView.image = user.profilePictureView.image;
+            //BezierPath
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 50, 50)];
             
+            // Create an image context containing the original UIImage.
+            UIGraphicsBeginImageContext(user.profilePictureView.image.size);
+            
+            // Clip to the bezier path and clear that portion of the image.
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            CGContextAddPath(context,bezierPath.CGPath);
+            CGContextClip(context);
+            
+            // Draw here when the context is clipped
+            [user.profilePictureView.image drawAtPoint:CGPointZero];
+            
+            // Build a new UIImage from the image context.
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            cell.imageView.image = newImage;
             break;
+        }
     }
     // cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
 

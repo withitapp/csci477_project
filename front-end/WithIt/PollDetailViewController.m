@@ -239,11 +239,11 @@ const NSInteger ALIGN = 10;
     switch (section){
         case 0:
             if(attendingRows != 0){
-                sectionName = NSLocalizedString(@" Attending:", @" Attending:");}
+                sectionName = NSLocalizedString(@"   Attending", @"   Attending");}
             break;
         case 1:
             if(notAttendingRows != 0){
-                sectionName = NSLocalizedString(@" Not attending:", @" Not attending:");}
+                sectionName = NSLocalizedString(@"   Not Attending", @"   Not Attending");}
             break;
     }
     return sectionName;

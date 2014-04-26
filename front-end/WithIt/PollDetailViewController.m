@@ -164,6 +164,22 @@ const NSInteger ALIGN = 10;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.memberTableView];
     
+    
+    
+    // Add swipeGestures
+    UISwipeGestureRecognizer *oneFingerSwipeLeft = [[UISwipeGestureRecognizer alloc]
+                                                     initWithTarget:self
+                                                     action:@selector(oneFingerSwipeLeft:)];
+    [oneFingerSwipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:oneFingerSwipeLeft];
+    
+    UISwipeGestureRecognizer *oneFingerSwipeRight = [[UISwipeGestureRecognizer alloc]
+                                                      initWithTarget:self
+                                                      action:@selector(oneFingerSwipeRight:)];
+    [oneFingerSwipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:oneFingerSwipeRight];
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -621,6 +637,18 @@ const NSInteger ALIGN = 10;
     }
    // [self viewDidAppear:YES];
 }
+
+- (void)oneFingerSwipeLeft:(UITapGestureRecognizer *)recognizer {
+    // Insert your own code to handle swipe left
+}
+
+//Go back
+- (void)oneFingerSwipeRight:(UITapGestureRecognizer *)recognizer {
+    // Insert your own code to handle swipe right
+    [self Back];
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {

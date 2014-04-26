@@ -116,6 +116,19 @@ const NSInteger ALIGN = 10;
         //Add toggle Switch
     self.toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(50, currentHeight, 50, 0)];
     [self.toggleSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        if([m1.user_id isEqualToNumber:appDelegate.ID]){
+            if([m1.response isEqual: @(YES)]){
+                [self.toggleSwitch setOn:TRUE];
+            }
+            else{
+                [self.toggleSwitch setOn:FALSE];
+            }
+        }
+    }
+    
     
     
     currentHeight += 20;
@@ -138,7 +151,7 @@ const NSInteger ALIGN = 10;
     [self.detailsView addSubview:self.titleLabel];
     [self.detailsView addSubview:self.descriptionLabel];
     [self.detailsView addSubview:self.timeRemainingLabel];
-    if (self.pollSection == 0){
+    if (self.pollSection != 2){
         [self.detailsView addSubview:self.toggleSwitch];}
     [self.detailsView addSubview:self.creatorNameLabel];
     [self.view addSubview:self.detailsView];

@@ -66,6 +66,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     [self.view addSubview:self.pollTableView];
     
+    
+    // Add swipeGestures
+    UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]
+                                                     initWithTarget:self
+                                                     action:@selector(oneFingerSwipeDown:)];
+    [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    [self.view addGestureRecognizer:oneFingerSwipeDown];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -425,7 +433,10 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 }
 }
 
-
+- (void)oneFingerSwipeDown:(UITapGestureRecognizer *)recognizer {
+    // Insert your own code to handle swipe left
+    [self viewDidAppear:TRUE];
+}
 
 
 

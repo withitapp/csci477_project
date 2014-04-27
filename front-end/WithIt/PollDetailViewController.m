@@ -179,7 +179,7 @@ const NSInteger ALIGN = 10;
     [oneFingerSwipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.view addGestureRecognizer:oneFingerSwipeRight];
     
-        //[self.memberTableView reloadData];
+
     
 }
 

@@ -299,13 +299,14 @@ const NSInteger ALIGN = 10;
         
     }
     
-    NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
+    
     
     switch (section){
         case 0:
-           // need to add member lists to poll data
+            NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
             return attendingRows;
         case 1:
+            NSLog(@"Number of notAttendingRows is: %lu", (unsigned long)notAttendingRows);
             return notAttendingRows;// same problem
     }
     return attendingRows + notAttendingRows;
@@ -634,10 +635,14 @@ const NSInteger ALIGN = 10;
             
             if([membership.user_id isEqualToNumber:appDelegate.ID ]){
                 [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"false"];
+                
             }}
         //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
     }
-
+    
+    [self.userDataController retrieveMemberships:self.poll];
+    
+    [self.memberTableView reloadData];
 
 }
 

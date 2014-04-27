@@ -73,6 +73,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                                      action:@selector(oneFingerSwipeDown:)];
     [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
     [self.view addGestureRecognizer:oneFingerSwipeDown];
+    
+    self.refreshLabel = [[UILabel alloc] initWithFrame: CGRectMake( 0, self.screenHeight/2, self.screenWidth, 40.0f)];
+    [self.refreshLabel setTextColor:UIColorFromRGB(0xCEEEA)];
+    [self.refreshLabel setFont: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 18.0f]];
+    [self.refreshLabel setBackgroundColor: [UIColor clearColor]];
+    //[self.refreshLabel setBackgroundColor:UIColorFromRGB(0xCEEEEA)];
+    self.refreshLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview: self.refreshLabel];
+    
 
 }
 
@@ -436,6 +445,22 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)oneFingerSwipeDown:(UITapGestureRecognizer *)recognizer {
     // Insert your own code to handle swipe left
+    
+    [self.refreshLabel setBackgroundColor:[UIColor colorWithRed: 79.0f/255.0f green:79.0f/255.0f blue:79.0f/255.0f alpha:1.0f]];
+    self.refreshLabel.text = @"Refresh";
+    [self.refreshLabel setHidden:TRUE];
+    [self.refreshLabel setAlpha:1.0];
+    CGPoint location;
+    location.x = 160;
+    location.y = 50;
+    self.refreshLabel.center = location;
+    location.x = 160;
+    location.y = 350;
+    [self.refreshLabel setHidden:FALSE];
+    [UIView animateWithDuration:0.9 animations:^{
+        self.refreshLabel.alpha = 0.0;
+        self.refreshLabel.center = location;
+    }];
     [self viewDidAppear:TRUE];
 }
 

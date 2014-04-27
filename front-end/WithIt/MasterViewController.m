@@ -81,6 +81,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self loadData];
     [self.dataController determineExpiredPoll];
     [self.pollTableView reloadData];
+    NSLog(@"viewDidAppear");
 }
 
 - (IBAction)CreateNewPoll

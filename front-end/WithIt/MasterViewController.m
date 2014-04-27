@@ -51,7 +51,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CreateNewPoll)];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];

@@ -30,6 +30,7 @@
 @property (strong, nonatomic) UserDataController *userDataController;
 @property (strong, nonatomic) UITableView *memberTableView;
 @property (strong, nonatomic) Poll *poll;
+@property (strong, nonatomic) NSArray *selection;
 
 //Labels
 //@property (strong, nonatomic) UILabel *PollExpirationDateLabel;

@@ -240,11 +240,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         // Create friend picker, and get data loaded into it.
         self.friendPickerController = [[FBFriendPickerViewController alloc] init];
         self.friendPickerController.title = @"Pick Friends";
+        
         self.friendPickerController.delegate = self;
     }
     
+    self.friendPickerController.selection = [_selectedFriends copy];
     [self.friendPickerController loadData];
-    [self.friendPickerController clearSelection];
+    //[self.friendPickerController clearSelection];
     
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
     NSLog(@"Returning from Pick Friends Button Click");
@@ -283,18 +285,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // at the bottom of the display; note that self.selection is a property inherited from our base class
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
-    for (id<FBGraphUser> user in self.friendPickerController.selection) {
+    /*for (id<FBGraphUser> user in self.friendPickerController.selection) {
         if(![_selectedFriends containsObject:user]){
             u = [self.userDataController.masterFriendsList objectForKey:user.id];//get members WithIt id
             if(u != nil){
                 
                 [self.poll.members addObject:[f numberFromString:u.ID]];    }
-            [_selectedFriends addObject:user];  }
-        /*if ([text length]) {
-            [text appendString:@", "];
-        }
-        [text appendString:user.name];*/
-    }
+            [_selectedFriends addObject:user];  }*/
+    _selectedFriends = [self.friendPickerController.selection copy];
+  
+    
     
     [self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
     

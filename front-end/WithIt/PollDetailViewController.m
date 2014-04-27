@@ -179,6 +179,7 @@ const NSInteger ALIGN = 10;
     [oneFingerSwipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.view addGestureRecognizer:oneFingerSwipeRight];
     
+        //[self.memberTableView reloadData];
     
 }
 
@@ -223,6 +224,7 @@ const NSInteger ALIGN = 10;
     currentHeight += 5;
     self.memberTableView.frame = CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight));
     
+            [self.memberTableView reloadData];
 }
 
 #pragma mark - Poll Detail Table View
@@ -635,7 +637,8 @@ const NSInteger ALIGN = 10;
             }}
         //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
     }
-   // [self viewDidAppear:YES];
+
+
 }
 
 - (void)oneFingerSwipeLeft:(UITapGestureRecognizer *)recognizer {

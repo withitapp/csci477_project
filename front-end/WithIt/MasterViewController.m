@@ -92,7 +92,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self loadData];
     [self.dataController determineExpiredPoll];
     [self.pollTableView reloadData];
-    NSLog(@"viewDidAppear");
+    //NSLog(@"viewDidAppear");
 }
 
 - (IBAction)CreateNewPoll
@@ -155,15 +155,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
+            //NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
+            //NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
             break;
         case 2:
             numRows = [self.dataController.masterPollsExpiredList count];
-            NSLog(@"Number of expired polls: %lu.", (unsigned long)numRows);
+            //NSLog(@"Number of expired polls: %lu.", (unsigned long)numRows);
             break;
     }
     return numRows;
@@ -286,6 +286,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             if ([pollAtIndex.members count] > 0)
             {
                 float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
+                NSLog(@"ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", (unsigned long)[pollAtIndex.attending count], (unsigned long)[pollAtIndex.notAttending count], percentageAttending);
                 if (percentageAttending >= 0.9)
                 {
                     cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
@@ -335,7 +336,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Selected row %ld in section %ld.", (long)indexPath.row, (long)indexPath.section);
+    //NSLog(@"Selected row %ld in section %ld.", (long)indexPath.row, (long)indexPath.section);
     Poll *pollAtIndex;
     switch (indexPath.section) {
         case 0:
@@ -355,7 +356,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             return;
     }
     
-    NSLog(@"Selected poll: %@.", pollAtIndex.title);
+    //NSLog(@"Selected poll: %@.", pollAtIndex.title);
     
     [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -397,14 +398,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     poll = [self.dataController.masterPollsList objectAtIndex: index];
     [self.dataController.userDataController retrieveMemberships:poll];
-    NSLog(@"APP ID: %@", appDelegate.ID);
+    //NSLog(@"APP ID: %@", appDelegate.ID);
     for(NSNumber * mem_id in poll.memberships){
         membership = [poll.memberships objectForKeyedSubscript:mem_id];
-        NSLog(@"mem_id: %@", membership.user_id);
+        //NSLog(@"mem_id: %@", membership.user_id);
         if([membership.user_id isEqualToNumber:appDelegate.ID]){
             [self.dataController.userDataController deleteMembership:mem_id];
             
-            NSLog(@"Leaving poll with membership ID: %@", mem_id);
+            //NSLog(@"Leaving poll with membership ID: %@", mem_id);
         }
         
             //needs to be first called
@@ -416,7 +417,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) deletePollFunction:(NSUInteger)index
 {
-    NSLog(@"Inside delete Poll function!!");
+    //NSLog(@"Inside delete Poll function!!");
     [self.dataController deletePoll:[self.dataController.masterPollsCreatedList objectAtIndex: index]]; //needs to be first called
     [self.dataController deleteObjectInCreatedListAtIndex:index];
     [self.pollTableView reloadData];
@@ -424,7 +425,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) erasePollFunction:(NSUInteger)index
 {
-    NSLog(@"Inside erase Poll function!!");
+    //NSLog(@"Inside erase Poll function!!");
     [self.dataController deleteObjectInExpiredListAtIndex:index];
     [self.pollTableView reloadData];
 }
@@ -438,24 +439,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"Inside leave Poll function!!");
+    //NSLog(@"Inside leave Poll function!!");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete a poll?" message:@"Do you really want to delete this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
     
     
     //TODO::: function for delete a poll / leave a poll
      switch (indexPath.section) {
      case 0:
-             NSLog(@"leavePoll pressed");
+             //NSLog(@"leavePoll pressed");
              alert.tag = (indexPath.row * 10) + 1;
              break;
      
      case 1:
-             NSLog(@"DeletePoll pressed");
+             //NSLog(@"DeletePoll pressed");
              alert.tag = (indexPath.row * 10) + 2;
              break;
      
      case 2:
-             NSLog(@"ErasePoll pressed");
+             //NSLog(@"ErasePoll pressed");
              alert.tag = (indexPath.row * 10) + 3;
              break;
      

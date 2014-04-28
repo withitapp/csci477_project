@@ -48,20 +48,20 @@ const NSInteger ALIGN = 10;
 
 - (void)viewDidLoad
 {
-    NSLog(@"Loading detail view for poll %@.", self.poll.title);
+    //NSLog(@"Loading detail view for poll %@.", self.poll.title);
     self.userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
     [self.userDataController retrieveMembers:self.poll];
     [self.userDataController retrieveMemberships:self.poll];
-    NSLog(@"viewDidLoad count of members in poll: %lu",(unsigned long)[self.poll.members count]);
+    //NSLog(@"viewDidLoad count of members in poll: %lu",(unsigned long)[self.poll.members count]);
    
     [super viewDidLoad];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSLog(@"App delegate id: %@", appDelegate.ID);
-    NSLog(@"Poll Creator id: %@", self.poll.creatorID);
+    //NSLog(@"App delegate id: %@", appDelegate.ID);
+    //NSLog(@"Poll Creator id: %@", self.poll.creatorID);
     //You can edit your own poll
     if([self.poll.creatorID isEqualToNumber: appDelegate.ID]) {
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
@@ -111,7 +111,6 @@ const NSInteger ALIGN = 10;
     {
         self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:@"None Given"];
         [self.detailsView addSubview:self.timeRemainingLabel];
-        NSLog(@"After poll endDate");
     }
     
         //Add toggle Switch
@@ -303,10 +302,10 @@ const NSInteger ALIGN = 10;
     
     switch (section){
         case 0:
-            NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
+            //NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
             return attendingRows;
         case 1:
-            NSLog(@"Number of notAttendingRows is: %lu", (unsigned long)notAttendingRows);
+            //NSLog(@"Number of notAttendingRows is: %lu", (unsigned long)notAttendingRows);
             return notAttendingRows;// same problem
     }
     return attendingRows + notAttendingRows;
@@ -323,7 +322,7 @@ const NSInteger ALIGN = 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Getting cell information in PollDetailViewController");
+    //NSLog(@"Getting cell information in PollDetailViewController");
     static NSString *CellIdentifier = @"PollMemberCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
@@ -426,14 +425,14 @@ const NSInteger ALIGN = 10;
 //Back button
 - (IBAction)Back
 {
-    NSLog(@"Back button pressed.");
+    //NSLog(@"Back button pressed.");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 //Edit button
 - (IBAction)Edit
 {
-    NSLog(@"Edit button in polldetailview pressed.");
+    //NSLog(@"Edit button in polldetailview pressed.");
     [self editPoll];
 }
 
@@ -504,7 +503,6 @@ const NSInteger ALIGN = 10;
 
 //when clicking the return button in the keybaord only for title
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    NSLog(@"Keyboard Return Working");
     [textField resignFirstResponder];
     return YES;
 }
@@ -518,7 +516,7 @@ const NSInteger ALIGN = 10;
 
 - (IBAction)Done
 {
-    NSLog(@"Done button in edit polldetailview pressed.");
+    //NSLog(@"Done button in edit polldetailview pressed.");
     [self.DeletePollButton removeFromSuperview];
     [self donePoll];
 }
@@ -552,14 +550,14 @@ const NSInteger ALIGN = 10;
 //Leave button
 - (IBAction)Leave
 {
-    NSLog(@"Leave button in polldetailview pressed.");
+    //NSLog(@"Leave button in polldetailview pressed.");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Are you sure you want to leave this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
     alert.tag = 0;
     [alert show];
 }
 
 -(IBAction)Delete{
-    NSLog(@"Delete button in polldetailview pressed.");
+    //NSLog(@"Delete button in polldetailview pressed.");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Are you sure you want to delete this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
     alert.tag = 1;
     [alert show];

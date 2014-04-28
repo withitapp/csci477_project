@@ -9,6 +9,11 @@
 #import "LoginViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "AppDelegate.h"
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface LoginViewController () <FBLoginViewDelegate>
 
@@ -26,7 +31,8 @@
     }
     // Create Login View so that the app will be granted "status_update" permission.
     FBLoginView *loginview = [[FBLoginView alloc] initWithReadPermissions:@[@"email", @"user_friends"]];
-    loginview.frame = CGRectOffset(loginview.frame, 50, 50);
+    //loginview.frame = CGRectOffset(loginview.frame, 50, 50);
+    loginview.frame = CGRectMake((self.screenWidth/2 - 100), 300, 200, 100);
 #ifdef __IPHONE_7_0
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0
@@ -37,10 +43,19 @@
 #endif
 #endif
     loginview.delegate = self;
+    [self.view setBackgroundColor:UIColorFromRGB(0xA2CFC8)];
+    
+    //Add icon
+    UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(((self.screenWidth/2) -60), 100, 120, 120)];
+    
+    iconImage.image = [UIImage imageNamed:@"WithIt_icon_120.png"];
+
+    
+    [self.view addSubview:iconImage];
     
     [self.view addSubview:loginview];
     
-    [loginview sizeToFit];
+    //[loginview sizeToFit];
     
     return self;
 }

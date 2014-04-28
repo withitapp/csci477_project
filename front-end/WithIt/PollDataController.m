@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DataController.h"
 #import "PollDataController.h"
-#include "AppDelegate.h"
+#import "AppDelegate.h"
 #import "Poll.h"
 #import "User.h"
 #import <FacebookSDK/FBSessionTokenCachingStrategy.h>
@@ -599,6 +599,14 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     }
     
     return returnStr;
+}
+
+- (void)toggleChanged:(Poll *)poll isOn:(Boolean)isOn
+{
+    if(isOn == true)
+        NSLog(@"datacontroller got switch at %@ is true ", poll.title);
+    else
+        NSLog(@"datacontroller got switch at %@ is false", poll.title);
 }
 
 @end

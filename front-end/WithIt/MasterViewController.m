@@ -208,9 +208,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             [[cell textLabel] setText:pollAtIndex.title];
             [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
             
-            cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-            [cell.accessoryView addSubview:toggleSwitch];
-            
             // TODO: add some code to figure out what percentage of members are attending and choose an image
             if ([pollAtIndex.members count] > 0)
             {
@@ -248,7 +245,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
-            cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
             
             // TODO: add some code to figure out what percentage of members are attending and choose an image
             if ([pollAtIndex.members count] > 0)
@@ -285,7 +281,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         case 2:
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             
             // TODO: add some code to figure out what percentage of members are attending and choose an image
             if ([pollAtIndex.members count] > 0)
@@ -509,6 +504,27 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             return @"Something went wrong!";
 
     }
+}
+
+- (void)oneFingerSwipeDown:(UITapGestureRecognizer *)recognizer {
+    // Insert your own code to handle swipe left
+    
+    [self.refreshLabel setBackgroundColor:[UIColor colorWithRed: 79.0f/255.0f green:79.0f/255.0f blue:79.0f/255.0f alpha:1.0f]];
+    self.refreshLabel.text = @"Refresh";
+    [self.refreshLabel setHidden:TRUE];
+    [self.refreshLabel setAlpha:1.0];
+    CGPoint location;
+    location.x = 160;
+    location.y = 50;
+    self.refreshLabel.center = location;
+    location.x = 160;
+    location.y = 350;
+    [self.refreshLabel setHidden:FALSE];
+    [UIView animateWithDuration:0.9 animations:^{
+        self.refreshLabel.alpha = 0.0;
+        self.refreshLabel.center = location;
+    }];
+    [self viewDidAppear:TRUE];
 }
 
 

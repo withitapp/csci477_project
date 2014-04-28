@@ -90,7 +90,8 @@
     self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (self.screenWidth - 20), 60)];
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
-    [self.PollExpirationDatePicker setMinimumDate: [NSDate date]];
+    [self.PollExpirationDatePicker setMinimumDate: [NSDate dateWithTimeIntervalSinceNow:86400]];
+    
     [self.detailsView addSubview:self.PollExpirationDatePicker];
 }
 

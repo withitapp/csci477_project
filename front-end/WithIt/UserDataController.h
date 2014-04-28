@@ -18,7 +18,6 @@
 
 @property (strong, nonatomic) NSMutableArray *userFriendsList;
 
-
 //dictionary containting all user objects that are friends in the app (and facebook)
 @property (nonatomic, retain) NSMutableDictionary *masterFriendsList;
 //dictionary containing all user objects this instance has ever interacted with
@@ -29,9 +28,16 @@
 + (UserDataController*)sharedInstance;
 
 -(NSDictionary*) makeServerRequestWithRequest:(NSURLRequest *)request;
+
+
 - (void)retrieveFriends;
 - (void)retrieveMembers:(Poll *) poll;
-- (void)retrieveMemberships;
 
--(User *)getUser:(NSString *) userID;
+//all 4 memberships done
+- (void)retrieveMemberships:(Poll *) poll;
+-(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response;
+-(void)deleteMembership:(NSNumber *) mem_id;
+- (void)postMembership:(Poll *) poll user:(NSNumber *)userid Response:(NSString *) response;
+
+-(User *)getUser:(NSNumber *) userID;
 @end

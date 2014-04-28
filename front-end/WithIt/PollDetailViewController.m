@@ -11,6 +11,13 @@
 #import "CreatePollViewController.h"
 #import "AppDelegate.h"
 
+
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 const NSInteger ALIGN = 10;
 
 @interface PollDetailViewController ()
@@ -45,6 +52,7 @@ const NSInteger ALIGN = 10;
     self.userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
     [self.userDataController retrieveMembers:self.poll];
+    [self.userDataController retrieveMemberships:self.poll];
     NSLog(@"viewDidLoad count of members in poll: %lu",(unsigned long)[self.poll.members count]);
    
     [super viewDidLoad];
@@ -55,7 +63,7 @@ const NSInteger ALIGN = 10;
     NSLog(@"App delegate id: %@", appDelegate.ID);
     NSLog(@"Poll Creator id: %@", self.poll.creatorID);
     //You can edit your own poll
-    if(self.poll.creatorID == appDelegate.ID) {
+    if([self.poll.creatorID isEqualToNumber: appDelegate.ID]) {
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
         self.navigationItem.rightBarButtonItem = editButton;
     }
@@ -64,7 +72,7 @@ const NSInteger ALIGN = 10;
         self.navigationItem.rightBarButtonItem = leaveButton;
     }
     
-   NSInteger currentHeight = 65;
+    NSInteger currentHeight = 65;
     
     // Add poll title label
     self.titleLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
@@ -81,9 +89,9 @@ const NSInteger ALIGN = 10;
     currentHeight += self.descriptionLabel.frame.size.height;
     
     // Add time remaining for poll label
-    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20)];
+    self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake((ALIGN+20), currentHeight, 300, 20)];
     self.timeRemainingLabel.font = [UIFont systemFontOfSize:10.0];
-    [self.timeRemainingLabel setTextAlignment: NSTextAlignmentCenter];
+    [self.timeRemainingLabel setTextAlignment: NSTextAlignmentLeft];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
@@ -105,6 +113,25 @@ const NSInteger ALIGN = 10;
         [self.detailsView addSubview:self.timeRemainingLabel];
         NSLog(@"After poll endDate");
     }
+    
+        //Add toggle Switch
+    self.toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(50, currentHeight, 50, 0)];
+    [self.toggleSwitch addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        if([m1.user_id isEqualToNumber:appDelegate.ID]){
+            if([m1.response isEqual: @(YES)]){
+                [self.toggleSwitch setOn:TRUE];
+            }
+            else{
+                [self.toggleSwitch setOn:FALSE];
+            }
+        }
+    }
+    
+    
+    
     currentHeight += 20;
     
     // Add poll creator name label
@@ -113,14 +140,20 @@ const NSInteger ALIGN = 10;
      self.creatorNameLabel.textColor = [UIColor lightGrayColor];
     [self.creatorNameLabel setTextAlignment: NSTextAlignmentCenter];
     
-    [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", self.poll.creatorID]];
+    User * u = [self.userDataController.masterEveryoneList objectForKeyedSubscript:self.poll.creatorID];
+    [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", u.full_name]];
    // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
     currentHeight += 10;
+    
+
+    
     
     self.detailsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.screenWidth, currentHeight)];
     [self.detailsView addSubview:self.titleLabel];
     [self.detailsView addSubview:self.descriptionLabel];
     [self.detailsView addSubview:self.timeRemainingLabel];
+    if (self.pollSection != 2){
+        [self.detailsView addSubview:self.toggleSwitch];}
     [self.detailsView addSubview:self.creatorNameLabel];
     [self.view addSubview:self.detailsView];
     
@@ -131,10 +164,28 @@ const NSInteger ALIGN = 10;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
     [self.view addSubview:self.memberTableView];
     
+    
+    
+    // Add swipeGestures
+    UISwipeGestureRecognizer *oneFingerSwipeLeft = [[UISwipeGestureRecognizer alloc]
+                                                     initWithTarget:self
+                                                     action:@selector(oneFingerSwipeLeft:)];
+    [oneFingerSwipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:oneFingerSwipeLeft];
+    
+    UISwipeGestureRecognizer *oneFingerSwipeRight = [[UISwipeGestureRecognizer alloc]
+                                                      initWithTarget:self
+                                                      action:@selector(oneFingerSwipeRight:)];
+    [oneFingerSwipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:oneFingerSwipeRight];
+    
+
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSInteger currentHeight = 65;
     [self.titleLabel setText:self.poll.title];
     [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x,currentHeight, self.screenWidth, self.screenHeight)];
@@ -148,16 +199,32 @@ const NSInteger ALIGN = 10;
     [self.descriptionLabel layoutIfNeeded];
     currentHeight += self.descriptionLabel.frame.size.height;
     
-    self.timeRemainingLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 20);
+    self.timeRemainingLabel.frame = CGRectMake((ALIGN+50), currentHeight, 200, 20);
+        self.toggleSwitch.frame = CGRectMake((self.screenWidth - 75), currentHeight, 0, 0);
     currentHeight += 20;
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        if([m1.user_id isEqualToNumber:appDelegate.ID]){
+            if([m1.response isEqual: @(YES)]){
+                [self.toggleSwitch setOn:TRUE];
+            }
+            else{
+                [self.toggleSwitch setOn:FALSE];
+            }
+        }
+    }
+    // [self.toggleSwitch setOn:self.poll.isAttending];
     
     self.creatorNameLabel.frame = CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), 10);
     currentHeight += 10;
+    
     
     self.detailsView.frame = CGRectMake(0, 0, self.screenWidth, currentHeight);
     currentHeight += 5;
     self.memberTableView.frame = CGRectMake(0, currentHeight, self.screenWidth, (self.screenHeight-currentHeight));
     
+            [self.memberTableView reloadData];
 }
 
 #pragma mark - Poll Detail Table View
@@ -171,12 +238,31 @@ const NSInteger ALIGN = 10;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *sectionName;
+    NSUInteger notAttendingRows = 0;
+    NSUInteger attendingRows = 0;
+    Membership *m1;
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        
+        if([m1.response isEqual:@(YES)]){
+            attendingRows++;
+            
+        }
+        else{
+            notAttendingRows++;
+        }
+        
+    }
+    
+    
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@" Attending:", @" Attending:");
+            if(attendingRows != 0){
+                sectionName = NSLocalizedString(@"   Attending", @"   Attending");}
             break;
         case 1:
-            sectionName = NSLocalizedString(@" Not attending:", @" Not attending:");
+            if(notAttendingRows != 0){
+                sectionName = NSLocalizedString(@"   Not Attending", @"   Not Attending");}
             break;
     }
     return sectionName;
@@ -184,18 +270,56 @@ const NSInteger ALIGN = 10;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //NSUInteger attendingRows = [self.poll.attending count];//TODO QUESTION how to determine who is attending and who isn't???
-    NSUInteger notAttendingRows = [self.poll.notAttending count];
-    NSUInteger attendingRows = [self.poll.members count];
-    NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
+    NSUInteger notAttendingRows = 0;
+    NSUInteger attendingRows = 0;
+    Membership *m1;
+    if(!self.poll.attending){
+        self.poll.attending = [[NSMutableArray alloc] init];
+    }
+    if(!self.poll.notAttending){
+        self.poll.notAttending = [[NSMutableArray alloc] init];
+    }
+    if([self.poll.attending count]>0){
+        [self.poll.attending removeAllObjects];
+    }
+    if([self.poll.notAttending count]>0){
+        [self.poll.notAttending removeAllObjects];
+    }
+    for(Membership *m in self.poll.memberships){
+        m1 = [self.poll.memberships objectForKeyedSubscript:m];
+        
+        if([m1.response  isEqual: @(YES)]){
+            [self.poll.attending addObject:m1.user_id];
+            attendingRows++;
+        }
+        else{
+            [self.poll.notAttending addObject:m1.user_id];
+            notAttendingRows++;
+        }
+        
+    }
+    
+    
     
     switch (section){
         case 0:
-           // need to add member lists to poll data
+            NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
             return attendingRows;
         case 1:
+            NSLog(@"Number of notAttendingRows is: %lu", (unsigned long)notAttendingRows);
             return notAttendingRows;// same problem
     }
     return attendingRows + notAttendingRows;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
+        castView.contentView.backgroundColor = UIColorFromRGB(0xCEEEEA);
+        [castView.textLabel setTextColor:[UIColor darkGrayColor]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -214,29 +338,73 @@ const NSInteger ALIGN = 10;
         //[cell.contentView addSubview: nameLabel];
     }
     
-    NSString *userIDAtIndex;
+    NSNumber *userIDAtIndex;
     User *user;
+    
     switch (indexPath.section) {
         
         case 0:
-            //gets user information
-            userIDAtIndex = [self.poll.members objectAtIndex:(indexPath.row)];
+        { //gets user information
+            //keys = [self.poll.memberships allKeys];
+            
+           // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
+           // m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
+            userIDAtIndex = [self.poll.attending objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
-           // [[cell textLabel] setText:@"MemberName"];
             cell.imageView.image = user.profilePictureView.image;
+
+            
+            //BezierPath
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 50, 50)];
+            
+            // Create an image context containing the original UIImage.
+            UIGraphicsBeginImageContext(user.profilePictureView.image.size);
+            
+            // Clip to the bezier path and clear that portion of the image.
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            CGContextAddPath(context,bezierPath.CGPath);
+            CGContextClip(context);
+            
+            // Draw here when the context is clipped
+            [user.profilePictureView.image drawAtPoint:CGPointZero];
+            
+            // Build a new UIImage from the image context.
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            cell.imageView.image = newImage;
             
             break;
-            
+        }
         case 1:
-           
+        { // keys = [self.poll.memberships allKeys];
+            
+           // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
+          //  m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
             userIDAtIndex = [self.poll.notAttending objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
-            // [[cell textLabel] setText:@"MemberName"];
             cell.imageView.image = user.profilePictureView.image;
+            //BezierPath
+            UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 50, 50)];
             
+            // Create an image context containing the original UIImage.
+            UIGraphicsBeginImageContext(user.profilePictureView.image.size);
+            
+            // Clip to the bezier path and clear that portion of the image.
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            CGContextAddPath(context,bezierPath.CGPath);
+            CGContextClip(context);
+            
+            // Draw here when the context is clipped
+            [user.profilePictureView.image drawAtPoint:CGPointZero];
+            
+            // Build a new UIImage from the image context.
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            cell.imageView.image = newImage;
             break;
+        }
     }
     // cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
 
@@ -330,7 +498,7 @@ const NSInteger ALIGN = 10;
     self.memberTableView.tableFooterView = footerView;
 
 
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(Done)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector( Done)];
     self.navigationItem.rightBarButtonItem = doneButton;
 }
 
@@ -374,8 +542,9 @@ const NSInteger ALIGN = 10;
     //bring back the edit button so the user can make further changes
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
-    
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.pollDataController = [PollDataController sharedInstance];
+    [self.pollDataController updatePoll:self.poll];
     [appDelegate.masterViewController.pollTableView reloadData];
 }
 
@@ -442,6 +611,52 @@ const NSInteger ALIGN = 10;
     [self Back];
     
 }
+
+
+- (void)changeSwitch:(id)sender{
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        Membership * membership;
+    if([sender isOn]){
+        self.poll.isAttending = true;
+        
+        for(NSNumber * mem_id in self.poll.memberships){
+            
+            membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
+            
+            if([membership.user_id isEqualToNumber: appDelegate.ID]){
+                [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"true"];
+            }}
+        // [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
+    } else{
+        self.poll.isAttending = false;
+        for(NSNumber * mem_id in self.poll.memberships){
+            
+            membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
+            
+            if([membership.user_id isEqualToNumber:appDelegate.ID ]){
+                [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"false"];
+                
+            }}
+        //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
+    }
+    
+    [self.userDataController retrieveMemberships:self.poll];
+    
+    [self.memberTableView reloadData];
+
+}
+
+- (void)oneFingerSwipeLeft:(UITapGestureRecognizer *)recognizer {
+    // Insert your own code to handle swipe left
+}
+
+//Go back
+- (void)oneFingerSwipeRight:(UITapGestureRecognizer *)recognizer {
+    // Insert your own code to handle swipe right
+    [self Back];
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {

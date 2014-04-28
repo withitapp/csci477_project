@@ -27,8 +27,8 @@
 // Facebook user info
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) FBAccessTokenData * fbToken;
-@property (strong, nonatomic) NSString *userID;
-@property (strong, nonatomic) NSNumber *ID;
+@property (strong, nonatomic) NSString *userID; //?
+@property (strong, nonatomic) NSNumber *ID; //WithIt id of user
 
 - (void)resetMainViewController;
 

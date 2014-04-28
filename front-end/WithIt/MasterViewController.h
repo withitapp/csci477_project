@@ -14,6 +14,8 @@
 
 @property (strong, nonatomic) PollDataController *dataController;
 @property (strong, nonatomic) UITableView *pollTableView;
+@property (strong, nonatomic) UILabel *refreshLabel;
+
 
 
 + (MasterViewController*)sharedInstance;

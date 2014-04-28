@@ -51,7 +51,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(CreateNewPoll)];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Setting" style:UIBarButtonItemStyleBordered target:self action:@selector(UserSetting)];
@@ -66,6 +68,23 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     [self.view addSubview:self.pollTableView];
     
+    
+    // Add swipeGestures
+    UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]
+                                                     initWithTarget:self
+                                                     action:@selector(oneFingerSwipeDown:)];
+    [oneFingerSwipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    [self.view addGestureRecognizer:oneFingerSwipeDown];
+    
+    self.refreshLabel = [[UILabel alloc] initWithFrame: CGRectMake( 0, self.screenHeight/2, self.screenWidth, 40.0f)];
+    [self.refreshLabel setTextColor:UIColorFromRGB(0xCEEEA)];
+    [self.refreshLabel setFont: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 18.0f]];
+    [self.refreshLabel setBackgroundColor: [UIColor clearColor]];
+    //[self.refreshLabel setBackgroundColor:UIColorFromRGB(0xCEEEEA)];
+    self.refreshLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview: self.refreshLabel];
+    
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -73,6 +92,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self loadData];
     [self.dataController determineExpiredPoll];
     [self.pollTableView reloadData];
+    NSLog(@"viewDidAppear");
 }
 
 - (IBAction)CreateNewPoll
@@ -111,13 +131,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSString *sectionName;
     switch (section){
         case 0:
+            if([self.dataController.masterPollsList count]!= 0){
             sectionName = NSLocalizedString(@"   Friends' Polls", @"   Friends' Polls");
-            break;
+            }
+                break;
         case 1:
+            if([self.dataController.masterPollsCreatedList count] != 0){
             sectionName = NSLocalizedString(@"   My Polls", @"   My Polls");
-            break;
+            }
+                break;
         case 2:
+            if([self.dataController.masterPollsExpiredList count]!= 0){
             sectionName = NSLocalizedString(@"   Expired Polls", @"   Expired Polls");
+            }
             break;
     }
     return sectionName;
@@ -173,7 +199,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
     
     Poll *pollAtIndex;
-    UISwitch *toggleSwitch = [[UISwitch alloc] init];
     
 
     NSDate* today = [NSDate date];
@@ -371,7 +396,25 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) leavePollFunction:(NSUInteger)index
 {
-
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    Poll * poll;
+    Membership * membership;
+    
+    poll = [self.dataController.masterPollsList objectAtIndex: index];
+    [self.dataController.userDataController retrieveMemberships:poll];
+    NSLog(@"APP ID: %@", appDelegate.ID);
+    for(NSNumber * mem_id in poll.memberships){
+        membership = [poll.memberships objectForKeyedSubscript:mem_id];
+        NSLog(@"mem_id: %@", membership.user_id);
+        if([membership.user_id isEqualToNumber:appDelegate.ID]){
+            [self.dataController.userDataController deleteMembership:mem_id];
+            
+            NSLog(@"Leaving poll with membership ID: %@", mem_id);
+        }
+        
+            //needs to be first called
+        }
+    
     [self.dataController deleteObjectInListAtIndex:index];
     [self.pollTableView reloadData];
 }
@@ -379,6 +422,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void) deletePollFunction:(NSUInteger)index
 {
     NSLog(@"Inside delete Poll function!!");
+    [self.dataController deletePoll:[self.dataController.masterPollsCreatedList objectAtIndex: index]]; //needs to be first called
     [self.dataController deleteObjectInCreatedListAtIndex:index];
     [self.pollTableView reloadData];
 }

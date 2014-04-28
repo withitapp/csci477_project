@@ -11,8 +11,8 @@
 @interface Membership : NSObject
 
 @property NSNumber *ID;
-@property NSDate *created_at;
-@property NSDate *updated_at;
+@property NSString *created_at;
+@property NSString *updated_at;
 @property NSNumber *user_id;
 @property NSNumber *poll_id;
 @property NSString *response;

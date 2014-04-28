@@ -46,7 +46,6 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 {
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
     NSLog(@"FB token string %@", fbtoken.accessToken);
@@ -54,7 +53,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     [formatter setDateStyle:NSDateFormatterFullStyle];
     NSLog(@"FB token expiration date %@", [formatter stringFromDate:fbtoken.expirationDate]);
     NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
-    
+    self.userDataController = [UserDataController sharedInstance];
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
     [self retrievePolls];
 }
@@ -115,7 +114,10 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 - (void)deleteObjectInListAtIndex:(NSUInteger)theIndex{
     if(theIndex < [self.masterPollsList count]){
+        
+        
         [self.masterPollsList removeObjectAtIndex:theIndex];
+        
     }
 }
 
@@ -217,6 +219,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 - (void)postUser:(NSString *)fbToken fbID:(NSString *)fbID
 {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
     NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
     [request setHTTPMethod:@"POST"];
@@ -242,12 +246,12 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     user.fb_token = users[@"fb_token"];
     user.fb_synced_at = users[@"fb_synced_at"];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     appDelegate.ID = user.ID;
-    UserDataController *userDataController = [UserDataController sharedInstance];
+    
     //retrieves friends from database
-    [userDataController loadData];
+    [self.userDataController loadData];
 }
+
 - (Poll *)postPoll:(Poll *)poll
 {
     NSLog(@"Posting poll with URL: %@ and title: %@", pollDataURL, poll.title);
@@ -265,59 +269,102 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         NSLog(@"Poll data didn't convert to JSON correctly!");
         return;
     }*/
+    NSString *postString = [NSString stringWithFormat:@"created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@",createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
+    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
+    pollFeedback = [self makeServerRequestWithRequest:request];
+    poll.pollID = pollFeedback[@"id"];
+    //post memberships of members in poll
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    //NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+    //[f setNumberStyle:NSNumberFormatterDecimalStyle];
+    for(NSNumber *n in poll.members){
+        if([appDelegate.ID isEqualToNumber:n])
+            [self.userDataController postMembership:poll user:n Response:@"true"];
+        else
+            [self.userDataController postMembership:poll user:n Response:@"false"];}
+    
+    NSLog(@"Got return in postPoll: %@", poll.pollID);
+    return poll;
+}
+
+- (void)updatePoll:(Poll *)poll
+{
+    NSLog(@"Updating poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
+    NSString *endDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *createDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *updateDate = [dateFormatter stringFromDate:poll.endDate];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"POST"];
+    /* NSString *pollData = [poll convertToJSON];
+     if(!pollData)
+     {
+     NSLog(@"Poll data didn't convert to JSON correctly!");
+     return;
+     }*/
     NSString *postString = [NSString stringWithFormat:@"id=%@&created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:requestBodyData];
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
     poll.pollID = pollFeedback[@"id"];
-    NSNumber * n = [NSNumber numberWithInt:15];
-    [self postMembership:poll user:n];
-    n = [NSNumber numberWithInt:16];
-    [self postMembership:poll user:n];
-    n = [NSNumber numberWithInt:12];
-    [self postMembership:poll user:n];
-    n = [NSNumber numberWithInt:20];
-    [self postMembership:poll user:n];
     
-    NSLog(@"Got return in postPoll: %@", poll.pollID);
-    return poll;
+    NSLog(@"Got return in updatePoll: %@", poll.pollID);
+    //return poll;
 }
 
-//- deletPoll
-
-- (void)postMembership:(Poll *)poll user:(NSNumber *)userid
+- (void)deletePoll:(Poll *)poll
 {
-    NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
-    [request setHTTPMethod:@"POST"];
-    //dummy data, need to implement correct data
-    NSString *postString = [NSString stringWithFormat:@"user_id=%@&poll_id=%@&response=%@",userid, poll.pollID, @"true" ];
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/polls?id=%@", poll.pollID];
+   
+    // Create the request with an appropriate URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
+    NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
+   // NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"DELETE"];
+    
+   /* NSString *postString = [NSString stringWithFormat:@"id=%@", poll.pollID];
     NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
-    NSDictionary *membershipFeedback = [[NSDictionary alloc] init];
-    membershipFeedback  = [self makeServerRequestWithRequest:request];
-
-    [poll.membershipIDs addObject: membershipFeedback[@"id"]];
-    NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
+    [request setHTTPBody:requestBodyData];*/
+    
+    NSDictionary *pollFeedback = [[NSDictionary alloc] init];
+    pollFeedback = [self makeServerRequestWithRequest:request];
+    
+    for(NSNumber *n in poll.memberships){
+        [self.userDataController deleteMembership:n];
+    }
+    if(pollFeedback!=nil){
+        NSLog(@"Got return in deletePoll: %@", pollFeedback);
+    }
+   
 }
 
 // Retrieve poll data from the server
 - (void)retrievePolls
 {
-    NSLog(@"Retrieving poll data with URL: %@", pollDataURL);
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
+    NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/mypolls?user_id=%@", appDelegate.ID];
     
     // Create the request with an appropriate URL
-    NSURLRequest *request = [NSURLRequest requestWithURL:pollDataURL];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
+    
+    /*// Create the request with an appropriate URL
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+    [request setHTTPMethod:@"POST"];
+    NSString *postString = [NSString stringWithFormat:@"id=%@", appDelegate.ID];
+    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:requestBodyData];
     // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
-    
-    // Want to change this to update rather than delete everything and recreated, maybe? Not sure which is slower
-    [self.masterPollsList removeAllObjects];
-    [self.masterPollsCreatedList removeAllObjects];
-    [self.masterPollsExpiredList removeAllObjects];
-    
-    // Copy the creatorID from AppDelegate
+    // Copy the creatorID from AppDelegate*/
+    [request setHTTPMethod:@"GET"];
+    // Dispatch the request and save the returned data
+    NSDictionary *polls = [self makeServerRequestWithRequest:request];
     NSNumber *creatorID = ((AppDelegate *)[UIApplication sharedApplication].delegate).ID;
     NSMutableArray *updatePollsList = [[NSMutableArray alloc] init];
     Poll *poll;
@@ -331,7 +378,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         poll.description = thePoll[@"description"];
         poll.creatorID = thePoll[@"user_id"];
         poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
-        Boolean newPoll = true;
+       /* Boolean newPoll = true;
         for(Poll *pollExist in self.masterPollsCreatedList)
         {
             if(poll.pollID == pollExist.pollID)
@@ -347,19 +394,23 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
             if(poll.pollID == pollExist.pollID)
                 newPoll = false;
         }
-        if(newPoll == true){
-            [updatePollsList addObject:poll];}
+        if(newPoll == true){*/
+            [updatePollsList addObject:poll];
     }
+    if([updatePollsList count]>0){
+        [self.masterPollsCreatedList removeAllObjects];
+        [self.masterPollsList removeAllObjects];
+        [self.masterPollsExpiredList removeAllObjects];
     for( poll in updatePollsList){
         //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){
-            NSLog(@"Poll %@ added to created list.", poll.title);
+           // NSLog(@"Poll %@ added to created list.", poll.title);
             [self.masterPollsCreatedList addObject:poll];
         }
         else{
             [self.masterPollsList addObject:poll];
         }
-    }
+    }}
     [updatePollsList removeAllObjects];
 }
 
@@ -398,10 +449,11 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     {
         pollEndDate = [self objectInListAtIndex:d].endDate;
         if (EXPIRE_TIME_DEBUG == 1){
-            NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+           // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         }
         if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
+           // NSLog(@"Expired Poll!!");
             [self addPollExpiredWithPoll:[self objectInListAtIndex:d]];
             [self deleteObjectInListAtIndex:d];
             d--;
@@ -411,7 +463,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(int d = 0; d < [_masterPollsCreatedList count];d++)
     {
         pollEndDate = [self objectInCreatedListAtIndex:d].endDate;
-        NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
+       // NSLog(@"Poll %d end time is %@ ",d, pollEndDate);
         if([currentDate compare:pollEndDate] == NSOrderedDescending)
         {
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];

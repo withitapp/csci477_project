@@ -49,7 +49,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     NSLog(@"Loading PublishPoll view.");
     [super viewDidLoad];
-    
+    self.userDataController = [UserDataController sharedInstance];
     //Back Button
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(Back)];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -240,11 +240,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         // Create friend picker, and get data loaded into it.
         self.friendPickerController = [[FBFriendPickerViewController alloc] init];
         self.friendPickerController.title = @"Pick Friends";
+        
         self.friendPickerController.delegate = self;
     }
     
+    self.friendPickerController.selection = [_selectedFriends copy];
     [self.friendPickerController loadData];
-    [self.friendPickerController clearSelection];
+    //[self.friendPickerController clearSelection];
     
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
     NSLog(@"Returning from Pick Friends Button Click");
@@ -252,21 +254,47 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
 
 }
+//TODO: cache this data better
+- (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker
+                 shouldIncludeUser:(id<FBGraphUser>)user
+{
+    //go through our users and determine if they should be included in friendPicker
+        if ([self.userDataController.masterFriendsList objectForKey:user.id]) {
+            // Friend is an WithIt user, include them in the display
+            NSLog(@"Deciding if I should include user: %@ and result is YES!", user.id);
+            return YES;
+        }
+    
+    // Friend is not an WithIt user, do not include them
+    return NO;
+}
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     NSMutableString *text = [[NSMutableString alloc] init];
     
     
+    /*FBFriendPickerViewController *fpc = (FBFriendPickerViewController *)sender;
+    for (id<FBGraphUser> user in fpc.selection) {
+        NSLog(@"Friend selected: %@", user.name);
+    }
+    [self dismissModalViewControllerAnimated:YES];*/
+    User * u;
+    
+    
     // we pick up the users from the selection, and create a string that we use to update the text view
     // at the bottom of the display; note that self.selection is a property inherited from our base class
-    for (id<FBGraphUser> user in self.friendPickerController.selection) {
+    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+    [f setNumberStyle:NSNumberFormatterDecimalStyle];
+    /*for (id<FBGraphUser> user in self.friendPickerController.selection) {
         if(![_selectedFriends containsObject:user]){
-            [_selectedFriends addObject:user];  }
-        /*if ([text length]) {
-            [text appendString:@", "];
-        }
-        [text appendString:user.name];*/
-    }
+            u = [self.userDataController.masterFriendsList objectForKey:user.id];//get members WithIt id
+            if(u != nil){
+                
+                [self.poll.members addObject:[f numberFromString:u.ID]];    }
+            [_selectedFriends addObject:user];  }*/
+    _selectedFriends = [self.friendPickerController.selection copy];
+  
+    
     
     [self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];
     
@@ -328,7 +356,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     PollDataController *dataController = [PollDataController sharedInstance];
     self.poll.creatorID = appDelegate.ID;
+    [self.poll.members addObject:appDelegate.ID];//add creator to poll members
     [dataController addPollCreatedWithPoll:self.poll];
+    
     
     [appDelegate.masterViewController.pollTableView reloadData];
     

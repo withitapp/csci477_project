@@ -444,6 +444,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDate *currentDate=[NSDate date];
     NSDate *pollEndDate;
 
+
     for(int d = 0; d < [_masterPollsList count];d++)
     {
         pollEndDate = [self objectInListAtIndex:d].endDate;
@@ -467,8 +468,63 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         {
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];
             [self deleteObjectInCreatedListAtIndex:d];
+            d--;
         }
     }
+}
+
+- (NSUInteger)countAttending:(Poll *)poll{
+    NSUInteger attending = 0;
+    Membership *m1;
+    
+  /*  if(!poll.attending){
+        poll.attending = [[NSMutableArray alloc] init];
+    }
+    if([poll.attending count]>0){
+        [poll.attending removeAllObjects];
+    }*/
+    for(Membership *m in poll.memberships){
+        m1 = [poll.memberships objectForKeyedSubscript:m];
+        
+        if([m1.response  isEqual: @(YES)]){
+            attending++;
+           // [poll.attending addObject:m1.user_id];
+            
+        }
+        else{
+           // [poll.notAttending addObject:m1.user_id];
+            
+        }
+        
+    }
+    return attending;//[poll.attending count];
+}
+
+- (NSUInteger)countNotAttending:(Poll *)poll{
+    NSUInteger notAttending = 0;
+    Membership *m1;
+    
+  /*  if(!poll.notAttending){
+        poll.notAttending = [[NSMutableArray alloc] init];
+    }
+    if([poll.notAttending count]>0){
+        [poll.notAttending removeAllObjects];
+    }*/
+    for(Membership *m in poll.memberships){
+        m1 = [poll.memberships objectForKeyedSubscript:m];
+        
+        if([m1.response  isEqual: @(YES)]){
+            
+        }
+        else{
+            //[poll.notAttending addObject:m1.user_id];
+            notAttending++;
+            
+        }
+        
+    }
+    NSLog(@"Not attending rows is %lu", (unsigned long)notAttending);
+    return notAttending;//[poll.notAttending count];
 }
 
 + (NSString*)differenceBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime

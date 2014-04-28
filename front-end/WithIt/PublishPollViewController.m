@@ -285,15 +285,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // at the bottom of the display; note that self.selection is a property inherited from our base class
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
     [f setNumberStyle:NSNumberFormatterDecimalStyle];
-    /*for (id<FBGraphUser> user in self.friendPickerController.selection) {
-        if(![_selectedFriends containsObject:user]){
-            u = [self.userDataController.masterFriendsList objectForKey:user.id];//get members WithIt id
-            if(u != nil){
+    for (id<FBGraphUser> user in self.friendPickerController.selection) {
+        
+        u = [self.userDataController.masterFriendsList objectForKey:user.id];//get members WithIt id
+        if(![self.poll.members containsObject:[f numberFromString:u.ID]]){
+        if(u != nil){
                 
-                [self.poll.members addObject:[f numberFromString:u.ID]];    }
-            [_selectedFriends addObject:user];  }*/
-    _selectedFriends = [self.friendPickerController.selection copy];
-  
+            [self.poll.members addObject:[f numberFromString:u.ID]];    }}}
+    
+   
+        _selectedFriends = [self.friendPickerController.selection copy];
+    
     
     
     [self fillTextBoxAndDismiss:text.length > 0 ? text : @"<None>"];

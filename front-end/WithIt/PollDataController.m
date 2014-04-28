@@ -445,6 +445,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDate *currentDate=[NSDate date];
     NSDate *pollEndDate;
 
+
     for(int d = 0; d < [_masterPollsList count];d++)
     {
         pollEndDate = [self objectInListAtIndex:d].endDate;
@@ -468,6 +469,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         {
             [self addPollExpiredWithPoll:[self objectInCreatedListAtIndex:d]];
             [self deleteObjectInCreatedListAtIndex:d];
+            d--;
         }
     }
 }

@@ -474,6 +474,60 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     }
 }
 
+- (NSUInteger)countAttending:(Poll *)poll{
+    NSUInteger attending = 0;
+    Membership *m1;
+    
+  /*  if(!poll.attending){
+        poll.attending = [[NSMutableArray alloc] init];
+    }
+    if([poll.attending count]>0){
+        [poll.attending removeAllObjects];
+    }*/
+    for(Membership *m in poll.memberships){
+        m1 = [poll.memberships objectForKeyedSubscript:m];
+        
+        if([m1.response  isEqual: @(YES)]){
+            attending++;
+           // [poll.attending addObject:m1.user_id];
+            
+        }
+        else{
+           // [poll.notAttending addObject:m1.user_id];
+            
+        }
+        
+    }
+    return attending;//[poll.attending count];
+}
+
+- (NSUInteger)countNotAttending:(Poll *)poll{
+    NSUInteger notAttending = 0;
+    Membership *m1;
+    
+  /*  if(!poll.notAttending){
+        poll.notAttending = [[NSMutableArray alloc] init];
+    }
+    if([poll.notAttending count]>0){
+        [poll.notAttending removeAllObjects];
+    }*/
+    for(Membership *m in poll.memberships){
+        m1 = [poll.memberships objectForKeyedSubscript:m];
+        
+        if([m1.response  isEqual: @(YES)]){
+            
+        }
+        else{
+            //[poll.notAttending addObject:m1.user_id];
+            notAttending++;
+            
+        }
+        
+    }
+    NSLog(@"Not attending rows is %lu", (unsigned long)notAttending);
+    return notAttending;//[poll.notAttending count];
+}
+
 
 - (void)toggleChanged:(Poll *)poll:(Boolean) IsOn
 {

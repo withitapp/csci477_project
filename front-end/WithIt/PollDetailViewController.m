@@ -48,6 +48,7 @@ const NSInteger ALIGN = 10;
 
 - (void)viewDidLoad
 {
+    self.pollDataController = [PollDataController sharedInstance];
     NSLog(@"Loading detail view for poll %@.", self.poll.title);
     self.userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
@@ -240,7 +241,7 @@ const NSInteger ALIGN = 10;
     NSString *sectionName;
     NSUInteger notAttendingRows = 0;
     NSUInteger attendingRows = 0;
-    Membership *m1;
+   /* Membership *m1;
     for(Membership *m in self.poll.memberships){
         m1 = [self.poll.memberships objectForKeyedSubscript:m];
         
@@ -252,7 +253,10 @@ const NSInteger ALIGN = 10;
             notAttendingRows++;
         }
         
-    }
+    }*/
+    attendingRows = [self.pollDataController countAttending:self.poll];
+    
+    notAttendingRows = [self.pollDataController countNotAttending:self.poll];
     
     
     switch (section){
@@ -273,6 +277,7 @@ const NSInteger ALIGN = 10;
     NSUInteger notAttendingRows = 0;
     NSUInteger attendingRows = 0;
     Membership *m1;
+   
     if(!self.poll.attending){
         self.poll.attending = [[NSMutableArray alloc] init];
     }
@@ -298,6 +303,9 @@ const NSInteger ALIGN = 10;
         }
         
     }
+    //attendingRows = [self.pollDataController countAttending:self.poll];
+    
+    //notAttendingRows = [self.pollDataController countNotAttending:self.poll];
     
     
     
@@ -543,7 +551,7 @@ const NSInteger ALIGN = 10;
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(Edit)];
     self.navigationItem.rightBarButtonItem = editButton;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    self.pollDataController = [PollDataController sharedInstance];
+    
     [self.pollDataController updatePoll:self.poll];
     [appDelegate.masterViewController.pollTableView reloadData];
 }

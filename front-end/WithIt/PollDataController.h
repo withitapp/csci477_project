@@ -48,6 +48,8 @@
 - (void)addPollExpiredWithPoll:(Poll *)poll;
 - (void)deleteObjectInExpiredListAtIndex:(NSUInteger)theIndex;
 
+- (NSUInteger)countAttending:(Poll *)poll;
+- (NSUInteger)countNotAttending:(Poll *)poll;
 
 - (void)loadData;
 + (PollDataController*)sharedInstance;

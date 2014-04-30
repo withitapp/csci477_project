@@ -294,7 +294,7 @@
 }
 
 -(void)retrieveMemberships:(Poll *) poll{
-   // NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
+   NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
    
     NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?poll_id=%@",poll.pollID];
  

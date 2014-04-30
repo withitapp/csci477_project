@@ -162,6 +162,8 @@ const NSInteger ALIGN = 10;
     self.memberTableView.delegate = self;
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
+    // Add empty footer to hide cells with no content
+    self.memberTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.memberTableView];
     
     

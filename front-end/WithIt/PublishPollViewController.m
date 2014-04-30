@@ -103,6 +103,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.memberTableView.delegate = self;
     self.memberTableView.dataSource = self;
     [self.memberTableView setSeparatorInset:UIEdgeInsetsZero];
+    // Add empty footer to hide cells with no content
+    self.memberTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.memberTableView];
 }
 

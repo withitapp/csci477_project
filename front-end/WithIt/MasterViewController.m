@@ -65,8 +65,28 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.pollTableView.bounces = NO;
     self.pollTableView.scrollEnabled = YES;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
-    
+    // Add empty footer to hide cells with no content
+    self.pollTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.pollTableView];
+    
+    UserDataController* userDataController = [UserDataController sharedInstance];
+    
+    //retrieves members in poll from database
+    for (Poll* poll in self.dataController.masterPollsCreatedList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
+    for (Poll* poll in self.dataController.masterPollsList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
+    for (Poll* poll in self.dataController.masterPollsExpiredList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
     
     
     // Add swipeGestures

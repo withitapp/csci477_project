@@ -48,7 +48,8 @@ const NSInteger ALIGN = 10;
 
 - (void)viewDidLoad
 {
-    //NSLog(@"Loading detail view for poll %@.", self.poll.title);
+    self.pollDataController = [PollDataController sharedInstance];
+    NSLog(@"Loading detail view for poll %@.", self.poll.title);
     self.userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
     [self.userDataController retrieveMembers:self.poll];

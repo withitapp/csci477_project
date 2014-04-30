@@ -17,7 +17,6 @@
 @property (strong, nonatomic) UILabel *refreshLabel;
 
 
-
 + (MasterViewController*)sharedInstance;
 
 @end

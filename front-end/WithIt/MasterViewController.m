@@ -169,6 +169,42 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     return numRows;
 }
 
+-(void)setCellImage:(UITableViewCell *)cell usingPoll:(Poll *)poll
+{
+    // TODO: add some code to figure out what percentage of members are attending and choose an image
+    NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)[self.dataController countAttending:poll]);
+    if ([self.dataController countAttending:poll] > 0)
+    {
+        float percentageAttending = ([self.dataController countAttending:poll]/([self.dataController countNotAttending:poll] + [self.dataController countAttending:poll]));
+        NSLog(@"ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", (unsigned long)[poll.attending count], (unsigned long)[poll.notAttending count], percentageAttending);
+        if (percentageAttending >= 0.9)
+        {
+            cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
+        }
+        else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
+        {
+            cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
+        }
+        else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
+        {
+            cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
+        }
+        else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
+        {
+            cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
+        }
+        else
+        {
+            cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+        }
+    }
+    else
+    {
+        cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+    }
+
+}
+
 //Return each "poll" into corresponding section of the table
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -207,37 +243,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
-            
-            // TODO: add some code to figure out what percentage of members are attending and choose an image
-            if ([pollAtIndex.members count] > 0)
-            {
-                float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
-                if (percentageAttending >= 0.9)
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
-                }
-                else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
-                }
-                else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
-                }
-                else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
-                }
-                else
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
-                }
-            }
-            else
-            {
-                cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
-            }
-
+            [self setCellImage:cell usingPoll:pollAtIndex];
             
             break;
             
@@ -245,73 +251,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
             [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
-            
-            // TODO: add some code to figure out what percentage of members are attending and choose an image
-            if ([pollAtIndex.members count] > 0)
-            {
-                float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
-                if (percentageAttending >= 0.9)
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
-                }
-                else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
-                }
-                else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
-                }
-                else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
-                }
-                else
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
-                }
-            }
-            else
-            {
-                cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
-            }
+            [self setCellImage:cell usingPoll:pollAtIndex];
             
             break;
             
         case 2:
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            
-            // TODO: add some code to figure out what percentage of members are attending and choose an image
-            if ([pollAtIndex.members count] > 0)
-            {
-                float percentageAttending = ([pollAtIndex.attending count]/([pollAtIndex.notAttending count] + [pollAtIndex.attending count]));
-                NSLog(@"ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", (unsigned long)[pollAtIndex.attending count], (unsigned long)[pollAtIndex.notAttending count], percentageAttending);
-                if (percentageAttending >= 0.9)
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
-                }
-                else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
-                }
-                else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
-                }
-                else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
-                }
-                else
-                {
-                    cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
-                }
-            }
-            else
-            {
-                cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
-            }
+            [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
+            [self setCellImage:cell usingPoll:pollAtIndex];
             
             break;
     }

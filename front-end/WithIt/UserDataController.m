@@ -8,7 +8,7 @@
 
 #import "UserDataController.h"
 #import "DataController.h"
-#include "AppDelegate.h"
+#import "AppDelegate.h"
 #import "Membership.h"
 #import "Poll.h"
 #import "User.h"

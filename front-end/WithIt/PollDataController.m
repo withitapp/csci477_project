@@ -477,22 +477,22 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSUInteger attending = 0;
     Membership *m1;
     
-  /*  if(!poll.attending){
-        poll.attending = [[NSMutableArray alloc] init];
-    }
-    if([poll.attending count]>0){
-        [poll.attending removeAllObjects];
-    }*/
+    /* if(!poll.attending){
+     poll.attending = [[NSMutableArray alloc] init];
+     }
+     if([poll.attending count]>0){
+     [poll.attending removeAllObjects];
+     }*/
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
-        if([m1.response  isEqual: @(YES)]){
+        if([m1.response isEqual: @(YES)]){
             attending++;
-           // [poll.attending addObject:m1.user_id];
+            // [poll.attending addObject:m1.user_id];
             
         }
         else{
-           // [poll.notAttending addObject:m1.user_id];
+            // [poll.notAttending addObject:m1.user_id];
             
         }
         
@@ -504,16 +504,16 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSUInteger notAttending = 0;
     Membership *m1;
     
-  /*  if(!poll.notAttending){
-        poll.notAttending = [[NSMutableArray alloc] init];
-    }
-    if([poll.notAttending count]>0){
-        [poll.notAttending removeAllObjects];
-    }*/
+    /* if(!poll.notAttending){
+     poll.notAttending = [[NSMutableArray alloc] init];
+     }
+     if([poll.notAttending count]>0){
+     [poll.notAttending removeAllObjects];
+     }*/
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
-        if([m1.response  isEqual: @(YES)]){
+        if([m1.response isEqual: @(YES)]){
             
         }
         else{

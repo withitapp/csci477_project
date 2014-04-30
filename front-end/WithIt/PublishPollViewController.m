@@ -111,9 +111,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     if ([view isKindOfClass: [UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView* castView = (UITableViewHeaderFooterView*) view;
-        castView.contentView.backgroundColor = UIColorFromRGB(0x40BFAC);
-        [castView.textLabel setTextColor:[UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0]];
-        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue" size: 20.0f]];
+        castView.contentView.backgroundColor = UIColorFromRGB(0xCEEEEA);
+        [castView.textLabel setTextColor:[UIColor darkGrayColor]];
+        [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
     }
 }
 ////////
@@ -132,7 +132,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSString *sectionName;
     switch (section){
         case 0:
-            sectionName = NSLocalizedString(@" Friends Invited:", @" Friends Invited:");
+            sectionName = NSLocalizedString(@"   Friends Invited", @"   Friends Invited");
             break;
         case 1:
             sectionName = NSLocalizedString(@" Not attending:", @" Not attending:");

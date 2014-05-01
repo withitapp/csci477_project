@@ -37,7 +37,7 @@
     self.masterEveryoneList = [[NSMutableDictionary alloc] init];
     
     
-    NSLog(@"Init UserDataController");
+    //NSLog(@"Init UserDataController");
     return self;
 }
 

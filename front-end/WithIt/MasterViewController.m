@@ -63,6 +63,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [userDataController retrieveMemberships:poll];
     }
     
+
+    
 }
 
 - (void)viewDidLoad
@@ -106,6 +108,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.view addSubview: self.refreshLabel];
     
 
+    
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -114,6 +118,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.dataController determineExpiredPoll];
     [self.pollTableView reloadData];
     //NSLog(@"viewDidAppear");
+    
+    if(([self.dataController.masterPollsList count]== 0)&& ([self.dataController.masterPollsCreatedList count]== 0))
+    {
+        UIAlertView *theAlert = [[UIAlertView alloc] initWithTitle:@"No Active Poll"
+                                                           message:@"Let's create poll."
+                                                          delegate:self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+        [theAlert show];
+        
+    }
 }
 
 - (IBAction)CreateNewPoll
@@ -197,7 +212,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSUInteger total = attending + notAttending;
     double percentageAttending;
     // TODO: add some code to figure out what percentage of members are attending and choose an image
-   // NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)attending);
+    NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)attending);
     if (attending > 0)
     {
         percentageAttending = (double)attending / (double)total ;

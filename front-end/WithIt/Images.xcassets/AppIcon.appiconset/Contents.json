@@ -15,8 +15,14 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "WithIt_icon_120.png",
+      "filename" : "withit_logo_v1_120.png",
       "scale" : "2x"
+    },
+    {
+      "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "Icon.png",
+      "scale" : "1x"
     }
   ],
   "info" : {

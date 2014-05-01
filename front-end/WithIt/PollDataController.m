@@ -407,7 +407,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 //count the number of members attending poll
 - (NSUInteger)countAttending:(Poll *)poll{
-    NSUInteger attending = 0;
+    NSUInteger attending = 0; // owner of poll is attending by default
     Membership *m1;
     
     for(Membership *m in poll.memberships){
@@ -430,12 +430,14 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
-        if([m1.response isEqual: @(YES)]){
+        if([m1.response isEqual: @(YES)])
+        {
             
         }
-        else{
+        else
+        {
             notAttending++;
-            }
+        }
         
     }
     return notAttending;

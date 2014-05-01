@@ -47,11 +47,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.dataController loadData];
     UserDataController* userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
-  /*  for (Poll* poll in self.dataController.masterPollsCreatedList)
+    for (Poll* poll in self.dataController.masterPollsCreatedList)
     {
-        [userDataController retrieveMembers:poll];
+       // [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
-    }*/
+    }
     for (Poll* poll in self.dataController.masterPollsList)
     {
        // [userDataController retrieveMembers:poll];
@@ -62,6 +62,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
     }*/
+    
+
     
 }
 
@@ -106,6 +108,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.view addSubview: self.refreshLabel];
     
 
+    
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -114,6 +118,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.dataController determineExpiredPoll];
     [self.pollTableView reloadData];
     //NSLog(@"viewDidAppear");
+    
+    if(([self.dataController.masterPollsList count]== 0)&& ([self.dataController.masterPollsCreatedList count]== 0))
+    {
+        UIAlertView *theAlert = [[UIAlertView alloc] initWithTitle:@"No Active Poll"
+                                                           message:@"Let's create poll."
+                                                          delegate:self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil];
+        [theAlert show];
+        
+    }
 }
 
 - (IBAction)CreateNewPoll

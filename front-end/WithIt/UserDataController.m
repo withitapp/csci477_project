@@ -314,16 +314,11 @@
         membership = [[Membership alloc] init];
         NSLog(@"Got membership: %@", mship[@"id"]);
         membership.ID = mship[@"id"];
-        NSLog(@"Got membership: %@", membership.ID);
         //if(mship[@"created_at"]=!nil && mship[@"updated_at"]!=nil){
         membership.created_at = mship[@"created_at"];
-        NSLog(@"Got membership: %@", mship[@"created_at"]);
         membership.updated_at = mship[@"updated_at"];
-        NSLog(@"Got membership: %@", mship[@"updated_at"]);
         membership.user_id = mship[@"user_id"];
-        NSLog(@"Got membership: %@", mship[@"user_id"]);
         membership.poll_id = mship[@"poll_id"];
-        NSLog(@"Got membership: %@", mship[@"poll_id"]);
         membership.response = mship[@"response"];
        /* if(mship[@"response"] == 1){
             membership.response = @"true";

@@ -324,12 +324,9 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
-   // NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
+   
     [request setHTTPMethod:@"DELETE"];
     
-   /* NSString *postString = [NSString stringWithFormat:@"id=%@", poll.pollID];
-    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];*/
     
     NSDictionary *pollFeedback = [[NSDictionary alloc] init];
     pollFeedback = [self makeServerRequestWithRequest:request];
@@ -353,15 +350,6 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     
-    /*// Create the request with an appropriate URL
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
-    [request setHTTPMethod:@"POST"];
-    NSString *postString = [NSString stringWithFormat:@"id=%@", appDelegate.ID];
-    NSData *requestBodyData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:requestBodyData];
-    // Dispatch the request and save the returned data
-    NSDictionary *polls = [self makeServerRequestWithRequest:request];
-    // Copy the creatorID from AppDelegate*/
     [request setHTTPMethod:@"GET"];
     // Dispatch the request and save the returned data
     NSDictionary *polls = [self makeServerRequestWithRequest:request];
@@ -378,24 +366,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         poll.description = thePoll[@"description"];
         poll.creatorID = thePoll[@"user_id"];
         poll.endDate = [self convertJSONDate:thePoll[@"ends_at"]];
-       /* Boolean newPoll = true;
-        for(Poll *pollExist in self.masterPollsCreatedList)
-        {
-            if(poll.pollID == pollExist.pollID)
-                newPoll = false;
-        }
-        for(Poll *pollExist in self.masterPollsList)
-        {
-            if(poll.pollID == pollExist.pollID)
-                newPoll = false;
-        }
-        for(Poll *pollExist in self.masterPollsExpiredList)
-        {
-            if(poll.pollID == pollExist.pollID)
-                newPoll = false;
-        }
-        if(newPoll == true){*/
-            [updatePollsList addObject:poll];
+       
+        [updatePollsList addObject:poll];
     }
     if([updatePollsList count]>0){
         [self.masterPollsCreatedList removeAllObjects];
@@ -404,7 +376,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for( poll in updatePollsList){
         //check if the poll is new or not
         if([creatorID isEqualToNumber:poll.creatorID]){
-           // NSLog(@"Poll %@ added to created list.", poll.title);
+            // NSLog(@"Poll %@ added to created list.", poll.title);
             [self.masterPollsCreatedList addObject:poll];
         }
         else{
@@ -474,43 +446,29 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     }
 }
 
+//count the number of members attending poll
 - (NSUInteger)countAttending:(Poll *)poll{
     NSUInteger attending = 0;
     Membership *m1;
     
-  /*  if(!poll.attending){
-        poll.attending = [[NSMutableArray alloc] init];
-    }
-    if([poll.attending count]>0){
-        [poll.attending removeAllObjects];
-    }*/
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
         if([m1.response  isEqual: @(YES)]){
             attending++;
-           // [poll.attending addObject:m1.user_id];
-            
-        }
-        else{
-           // [poll.notAttending addObject:m1.user_id];
             
         }
         
     }
-    return attending;//[poll.attending count];
+    return attending;
+    
 }
 
+//count the number of members not attending to the poll
 - (NSUInteger)countNotAttending:(Poll *)poll{
     NSUInteger notAttending = 0;
     Membership *m1;
-    
-  /*  if(!poll.notAttending){
-        poll.notAttending = [[NSMutableArray alloc] init];
-    }
-    if([poll.notAttending count]>0){
-        [poll.notAttending removeAllObjects];
-    }*/
+   
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
@@ -518,15 +476,12 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
             
         }
         else{
-            //[poll.notAttending addObject:m1.user_id];
             notAttending++;
-            
-        }
+            }
         
     }
     NSLog(@"Not attending rows is %lu", (unsigned long)notAttending);
-    return notAttending;//[poll.notAttending count];
-}
+    return notAttending;}
 
 
 - (void)toggleChanged:(Poll *)poll:(Boolean) IsOn

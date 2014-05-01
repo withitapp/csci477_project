@@ -9,17 +9,6 @@
 #import "User.h"
 
 @implementation User
-/*
--(id)init:(NSString *)name creatorName:(NSString *)creatorName description:(NSString *)description{
-    self = [super init];
-    if (self) {
-        _title = name;
-        _creatorID = creatorName;
-        _description = description;
-        _createDate = [[NSDate alloc] init];
-        return self;
-    }
-    return nil;
-}*/
+
 
 @end

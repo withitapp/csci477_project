@@ -143,7 +143,7 @@ const NSInteger ALIGN = 10;
     User * u = [self.userDataController.masterEveryoneList objectForKeyedSubscript:self.poll.creatorID];
     [self.creatorNameLabel setText:[NSString stringWithFormat:@"Created by: %@ ", u.full_name]];
    // self.creatorNameLabel.text = [self.creatorNameLabel.text stringByAppendingString:self.poll.creatorID];
-    currentHeight += 10;
+    currentHeight += 12;
     
 
     
@@ -242,19 +242,6 @@ const NSInteger ALIGN = 10;
     NSString *sectionName;
     NSUInteger notAttendingRows = 0;
     NSUInteger attendingRows = 0;
-   /* Membership *m1;
-    for(Membership *m in self.poll.memberships){
-        m1 = [self.poll.memberships objectForKeyedSubscript:m];
-        
-        if([m1.response isEqual:@(YES)]){
-            attendingRows++;
-            
-        }
-        else{
-            notAttendingRows++;
-        }
-        
-    }*/
     attendingRows = [self.pollDataController countAttending:self.poll];
     
     notAttendingRows = [self.pollDataController countNotAttending:self.poll];
@@ -304,20 +291,12 @@ const NSInteger ALIGN = 10;
         }
         
     }
-    //attendingRows = [self.pollDataController countAttending:self.poll];
-    
-    //notAttendingRows = [self.pollDataController countNotAttending:self.poll];
-    
-    
     
     switch (section){
         case 0:
-            //NSLog(@"Number of attendingRows is: %lu", (unsigned long)attendingRows);
             return attendingRows;
         case 1:
-            //NSLog(@"Number of notAttendingRows is: %lu", (unsigned long)notAttendingRows);
-            return notAttendingRows;// same problem
-    }
+            return notAttendingRows;    }
     return attendingRows + notAttendingRows;
 }
 
@@ -332,19 +311,13 @@ const NSInteger ALIGN = 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //NSLog(@"Getting cell information in PollDetailViewController");
+   
     static NSString *CellIdentifier = @"PollMemberCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //UILabel * nameLabel = [[UILabel alloc] initWithFrame: CGRectMake( 0, 15, box.size.width, 19.0f)];
-        //nameLabel.tag = NAME_LABEL_TAG;
-        //[nameLabel setTextColor: [UIColor colorWithRed: 79.0f/255.0f green:79.0f/255.0f blue:79.0f/255.0f alpha:1.0f]];
-        //[nameLabel setFont: [UIFont fontWithName: @"HelveticaNeue-Bold" size: 18.0f]];
-        //[nameLabel setBackgroundColor: [UIColor clearColor]];
-        //nameLabel.textAlignment = NSTextAlignmentCenter;
-        //[cell.contentView addSubview: nameLabel];
+        
     }
     
     NSNumber *userIDAtIndex;
@@ -354,10 +327,7 @@ const NSInteger ALIGN = 10;
         
         case 0:
         { //gets user information
-            //keys = [self.poll.memberships allKeys];
             
-           // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
-           // m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
             userIDAtIndex = [self.poll.attending objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
@@ -367,7 +337,7 @@ const NSInteger ALIGN = 10;
             
             //BezierPath
             UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 50, 50)];
-            
+            UIGraphicsBeginImageContext(CGSizeMake(50, 50));
             // Create an image context containing the original UIImage.
             UIGraphicsBeginImageContext(user.profilePictureView.image.size);
             
@@ -387,10 +357,7 @@ const NSInteger ALIGN = 10;
             break;
         }
         case 1:
-        { // keys = [self.poll.memberships allKeys];
-            
-           // userIDAtIndex = [keys objectAtIndex:(indexPath.row)];
-          //  m = [self.poll.memberships objectForKeyedSubscript:userIDAtIndex];
+        {
             userIDAtIndex = [self.poll.notAttending objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
@@ -401,7 +368,7 @@ const NSInteger ALIGN = 10;
             
             // Create an image context containing the original UIImage.
             UIGraphicsBeginImageContext(user.profilePictureView.image.size);
-            
+            UIGraphicsBeginImageContext(CGSizeMake(50, 50));
             // Clip to the bezier path and clear that portion of the image.
             CGContextRef context = UIGraphicsGetCurrentContext();
             CGContextAddPath(context,bezierPath.CGPath);

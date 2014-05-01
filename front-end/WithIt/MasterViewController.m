@@ -47,21 +47,21 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.dataController loadData];
     UserDataController* userDataController = [UserDataController sharedInstance];
     //retrieves members in poll from database
-  /*  for (Poll* poll in self.dataController.masterPollsCreatedList)
+    for (Poll* poll in self.dataController.masterPollsCreatedList)
     {
-        [userDataController retrieveMembers:poll];
+       // [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
-    }*/
+    }
     for (Poll* poll in self.dataController.masterPollsList)
     {
        // [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
     }
-  /*  for (Poll* poll in self.dataController.masterPollsExpiredList)
+    for (Poll* poll in self.dataController.masterPollsExpiredList)
     {
-        [userDataController retrieveMembers:poll];
+       // [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
-    }*/
+    }
     
 }
 

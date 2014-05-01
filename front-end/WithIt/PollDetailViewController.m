@@ -626,32 +626,36 @@ const NSInteger ALIGN = 10;
 - (void)changeSwitch:(id)sender{
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         Membership * membership;
-    if([sender isOn]){
+    if([sender isOn])
+    {
         self.poll.isAttending = true;
         
-        for(NSNumber * mem_id in self.poll.memberships){
-            
+        for(NSNumber * mem_id in self.poll.memberships)
+        {
             membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
             
-            if([membership.user_id isEqualToNumber: appDelegate.ID]){
+            if([membership.user_id isEqualToNumber: appDelegate.ID])
+            {
                 [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"true"];
-            }}
-        // [appDelegate.masterViewController.dataController toggleChanged:self.poll :true];
-    } else{
+            }
+        }
+    }
+    else
+    {
         self.poll.isAttending = false;
-        for(NSNumber * mem_id in self.poll.memberships){
-            
+        for(NSNumber * mem_id in self.poll.memberships)
+        {
             membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
             
-            if([membership.user_id isEqualToNumber:appDelegate.ID ]){
+            if([membership.user_id isEqualToNumber:appDelegate.ID ])
+            {
                 [self.userDataController updateMembership:(NSNumber *) mem_id Response:@"false"];
                 
-            }}
-        //[appDelegate.masterViewController.dataController toggleChanged:self.poll :false];
+            }
+        }
     }
     
     [self.userDataController retrieveMemberships:self.poll];
-    
     [self.memberTableView reloadData];
 
 }

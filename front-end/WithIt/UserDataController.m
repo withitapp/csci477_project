@@ -26,7 +26,7 @@
 - (void)loadData
 {
     
-    NSLog(@"Loading data for UserDataController");
+    //NSLog(@"Loading data for UserDataController");
     [self retrieveFriends];
 }
 
@@ -40,7 +40,7 @@
     self.masterEveryoneList = [[NSMutableDictionary alloc] init];
     
     
-    NSLog(@"Init UserDataController");
+    //NSLog(@"Init UserDataController");
     return self;
 }
 
@@ -90,7 +90,7 @@
                                dispatch_semaphore_signal(semaphore_users);
                            }];
     
-    NSLog(@"Sempaphore dispatched");
+    //NSLog(@"Sempaphore dispatched");
     dispatch_semaphore_wait(semaphore_users, DISPATCH_TIME_FOREVER);
     return dataDictionary;
 }
@@ -98,7 +98,7 @@
 
 - (void)retrieveMembers:(Poll *) poll
 {
-    NSLog(@"Retrieving members with URL: %@", membersURL);
+    //NSLog(@"Retrieving members with URL: %@", membersURL);
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membersURL];
     [request setHTTPMethod:@"POST"];
@@ -131,7 +131,7 @@
       //  NSString *userid = [user.ID stringValue];
      //   user.ID = userid;
         if([poll.members containsObject:user.ID]){
-            NSLog(@"1Poll already contains user: %@", user.first_name);
+            //NSLog(@"1Poll already contains user: %@", user.first_name);
         }
         else{
             [poll.members addObject:user.ID];
@@ -139,7 +139,7 @@
         
         if([self.masterEveryoneList objectForKey: user.ID]){
             
-             NSLog(@"1Master everyone list already contains user - %@ -", user.first_name);
+             //NSLog(@"1Master everyone list already contains user - %@ -", user.first_name);
         }
         else{
             
@@ -160,17 +160,17 @@
             }
             NSString * name = [user.first_name stringByAppendingString:@" "];
             user.full_name = [name stringByAppendingString:user.last_name];
-        NSLog(@"User [%@] added to everyone list.", user.first_name);
+        //NSLog(@"User [%@] added to everyone list.", user.first_name);
         [self.masterEveryoneList setObject:user forKey:user.ID];
         }}
-    NSLog(@"Number of members in poll: %lu", (unsigned long)[poll.members count]);
+    //NSLog(@"Number of members in poll: %lu", (unsigned long)[poll.members count]);
     [updateMembersList removeAllObjects];
 
 }
 
 - (void)retrieveFriends{
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSLog(@"Retrieving friends with URL: %@  User id: %@", friendsURL, appDelegate.ID);
+    //NSLog(@"Retrieving friends with URL: %@  User id: %@", friendsURL, appDelegate.ID);
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:friendsURL];
     [request setHTTPMethod:@"POST"];
@@ -205,11 +205,11 @@
         //add all friends to local dictionary storage
         if([self.masterFriendsList objectForKey: user.fb_id]){
             
-            NSLog(@"Master friends list already contains user - %@ -", user.first_name);
+            //NSLog(@"Master friends list already contains user - %@ -", user.first_name);
         }
         else{
             
-            NSLog(@"User [%@] added to friends list. ID: %@", user.first_name, user.fb_id);
+            //NSLog(@"User [%@] added to friends list. ID: %@", user.first_name, user.fb_id);
             NSString * name = [user.first_name stringByAppendingString:@" "];
             user.full_name = [name stringByAppendingString:user.last_name];
             
@@ -218,7 +218,7 @@
         }
         //make sure all friends are in everyone list... may want to remove later, not sure now 4/11
         if([self.masterEveryoneList objectForKey: user.ID]){
-            NSLog(@"Master everyone list already contains user - %@ -", user.first_name);
+            //NSLog(@"Master everyone list already contains user - %@ -", user.first_name);
             
         }
         else{
@@ -249,7 +249,7 @@
 
 - (void)postMembership:(Poll *)poll user:(NSNumber *)userid Response:(NSString *)response
 {
-    NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
+    //NSLog(@"Posting MEMBERSHIP for URL: %@ and userid: %@", membershipURL, userid);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
     [request setHTTPMethod:@"POST"];
     //dummy data, need to implement correct data
@@ -260,13 +260,13 @@
     membershipFeedback  = [self makeServerRequestWithRequest:request];
     //TODO: retrieve full membership info here
   //  [poll.memberships setObject: membershipFeedback[@"id"]];
-    NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
+    //NSLog(@"Membership feedback: %@", membershipFeedback[@"id"]);
 }
 
 -(void)updateMembership:(NSNumber *) mem_id Response:(NSString *) response{
     
     NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?id=%@&response=%@", mem_id, response];
-    NSLog(@"Updating membership with mem_id: %@ and response: %@", mem_id, response);
+    //NSLog(@"Updating membership with mem_id: %@ and response: %@", mem_id, response);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     // Create the request with an appropriate URL
   //  NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:membershipURL];
@@ -281,7 +281,7 @@
 -(void)deleteMembership:(NSNumber *) mem_id{
     
     NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?id=%@", mem_id];
-    NSLog(@"Deleting membership with mem_id: %@", mem_id);
+    //NSLog(@"Deleting membership with mem_id: %@", mem_id);
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
     [request setHTTPMethod:@"DELETE"];
@@ -297,15 +297,15 @@
 }
 
 -(void)retrieveMemberships:(Poll *) poll{
-   NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
+   //NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
    
     NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?poll_id=%@",poll.pollID];
  
-    NSLog(@"Sending to this endpoint: %@", s);
+    //NSLog(@"Sending to this endpoint: %@", s);
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:s]];
     
     if(!poll.memberships){
-        NSLog(@"memberships count is 0, init alloc");
+        //NSLog(@"memberships count is 0, init alloc");
         poll.memberships = [[NSMutableDictionary alloc] init]; //becomes immutable here
     }
     NSDictionary *memberships = [self makeServerRequestWithRequest:request];
@@ -334,13 +334,13 @@
     }
     for(int i=0; i<[updateMembershipsList count]; i++){
         m = [updateMembershipsList objectAtIndex: i];
-        NSLog(@"mem_id = %@", m.ID);
+        //NSLog(@"mem_id = %@", m.ID);
     }
     for(m in updateMembershipsList){
     
-        NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
+        //NSLog(@"Poll %@, doesnt contain membership %@ , adding it now", poll.pollID, m.ID);
         [poll.memberships setObject:m forKey:m.ID];
-        NSLog(@"Memberships in the pollid %@: %lu", poll.pollID, (unsigned long)[poll.memberships count]);
+        //NSLog(@"Memberships in the pollid %@: %lu", poll.pollID, (unsigned long)[poll.memberships count]);
     }
     
     

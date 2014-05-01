@@ -447,7 +447,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 //count the number of members attending poll
 - (NSUInteger)countAttending:(Poll *)poll{
-    NSUInteger attending = 0;
+    NSUInteger attending = 0; // owner of poll is attending by default
     Membership *m1;
     
     /* if(!poll.attending){
@@ -456,6 +456,11 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
      if([poll.attending count]>0){
      [poll.attending removeAllObjects];
      }*/
+    if(poll.isAttending)
+    {
+        attending++;
+    }
+    
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
@@ -488,15 +493,17 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
-        if([m1.response isEqual: @(YES)]){
+        if([m1.response isEqual: @(YES)])
+        {
             
         }
-        else{
+        else
+        {
             notAttending++;
-            }
+        }
         
     }
-    NSLog(@"Not attending rows is %lu", (unsigned long)notAttending);
+    //NSLog(@"Not attending rows is %lu", (unsigned long)notAttending);
     return notAttending;}
 
 + (NSString*)differenceBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime

@@ -197,7 +197,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSUInteger total = attending + notAttending;
     double percentageAttending;
     // TODO: add some code to figure out what percentage of members are attending and choose an image
-   // NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)attending);
+    NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)attending);
     if (attending > 0)
     {
         percentageAttending = (double)attending / (double)total ;

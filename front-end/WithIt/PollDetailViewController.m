@@ -85,25 +85,29 @@ const NSInteger ALIGN = 10;
     // Add poll description label
     self.descriptionLabel = [[UITextView alloc] initWithFrame:CGRectMake(ALIGN, currentHeight, (self.screenWidth - ALIGN), self.screenHeight)];
     self.descriptionLabel.font = [UIFont fontWithName:@"Ariel" size:14.0];
-    self.descriptionLabel.textColor = [UIColor darkGrayColor];
+   // self.descriptionLabel.textColor = [UIColor darkGrayColor];
     [self.descriptionLabel setEditable:FALSE];
     currentHeight += self.descriptionLabel.frame.size.height;
     
     // Add time remaining for poll label
     self.timeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake((ALIGN+20), currentHeight, 300, 20)];
     self.timeRemainingLabel.font = [UIFont systemFontOfSize:10.0];
-    [self.timeRemainingLabel setTextAlignment: NSTextAlignmentLeft];
+    [self.timeRemainingLabel setTextAlignment: NSTextAlignmentCenter];
+    self.timeRemainingLabel.textColor = [UIColor darkGrayColor];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    [self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
+    NSString *end = @"End Date: ";
+    //[self.timeRemainingLabel setText:@"End Date: "]; // FIX ME... to time remaining?!
     
     if(self.poll.endDate != nil)
     {
         @try {
+            NSDate* today = [NSDate date];
+            NSString *dateString = [PollDataController differenceBetweenDate:today andDate:self.poll.endDate];
        // self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:[dateFormatter stringFromDate:self.poll.endDate]];
-            NSString *dateString = [dateFormatter stringFromDate:self.poll.endDate];
-            self.timeRemainingLabel.text = [self.timeRemainingLabel.text stringByAppendingString:dateString];}
+           // NSString *dateString = [dateFormatter stringFromDate:self.poll.endDate];
+            self.timeRemainingLabel.text = [end stringByAppendingString:dateString];}
         @catch (NSException *NSInvalidArgumentException){
             NSLog(@"Caught invalid argument exception on end date label");
         }
@@ -506,7 +510,6 @@ const NSInteger ALIGN = 10;
     self.descriptionLabel.text = self.editPollDescription.text;
     self.poll.title = self.titleLabel.text;
     self.poll.description = self.descriptionLabel.text;
-    //self.pollAtIndex.title = self.poll.title;
     //hide the editable versions and show the uneditable versions
 
     [self viewDidAppear:YES];

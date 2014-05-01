@@ -216,7 +216,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     if (attending > 0)
     {
         percentageAttending = (double)attending / (double)total ;
-        NSLog(@"POLL: %@ ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", poll.title, (unsigned long)attending, (unsigned long)notAttending, percentageAttending);
+      //  NSLog(@"POLL: %@ ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", poll.title, (unsigned long)attending, (unsigned long)notAttending, percentageAttending);
         if (percentageAttending >=0.9)
         {
             cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
@@ -386,17 +386,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     poll = [self.dataController.masterPollsList objectAtIndex: index];
     [self.dataController.userDataController retrieveMemberships:poll];
-    //NSLog(@"APP ID: %@", appDelegate.ID);
+    
     for(NSNumber * mem_id in poll.memberships){
         membership = [poll.memberships objectForKeyedSubscript:mem_id];
-        //NSLog(@"mem_id: %@", membership.user_id);
+        
         if([membership.user_id isEqualToNumber:appDelegate.ID]){
             [self.dataController.userDataController deleteMembership:mem_id];
             
-            //NSLog(@"Leaving poll with membership ID: %@", mem_id);
         }
         
-            //needs to be first called
         }
     
     [self.dataController deleteObjectInListAtIndex:index];
@@ -405,7 +403,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) deletePollFunction:(NSUInteger)index
 {
-    //NSLog(@"Inside delete Poll function!!");
     [self.dataController deletePoll:[self.dataController.masterPollsCreatedList objectAtIndex: index]]; //needs to be first called
     [self.dataController deleteObjectInCreatedListAtIndex:index];
     [self.pollTableView reloadData];
@@ -413,7 +410,22 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) erasePollFunction:(NSUInteger)index
 {
-    //NSLog(@"Inside erase Poll function!!");
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    Poll * poll;
+    Membership * membership;
+    
+    poll = [self.dataController.masterPollsExpiredList objectAtIndex: index];
+    [self.dataController.userDataController retrieveMemberships:poll];
+    
+    for(NSNumber * mem_id in poll.memberships){
+        membership = [poll.memberships objectForKeyedSubscript:mem_id];
+        
+        if([membership.user_id isEqualToNumber:appDelegate.ID]){
+            [self.dataController.userDataController deleteMembership:mem_id];
+            
+        }
+        
+    }
     [self.dataController deleteObjectInExpiredListAtIndex:index];
     [self.pollTableView reloadData];
 }

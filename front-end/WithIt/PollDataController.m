@@ -265,8 +265,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
     NSString *endDate = [dateFormatter stringFromDate:poll.endDate];
-    NSString *createDate = [dateFormatter stringFromDate:poll.endDate];
-    NSString *updateDate = [dateFormatter stringFromDate:poll.endDate];
+    NSString *createDate = [dateFormatter stringFromDate:poll.createDate];
+    NSString *updateDate = [dateFormatter stringFromDate:poll.updatedAt];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"POST"];
     NSString *postString = [NSString stringWithFormat:@"id=%@&created_at=%@&updated_at=%@&title=%@&description=%@&user_id=%@&ends_at=%@", poll.pollID,createDate, updateDate, poll.title, poll.description, poll.creatorID, endDate];
@@ -447,19 +447,16 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 {
     NSString* returnStr;
     
-    NSDate *fromDate;
-    NSDate *toDate;
-    
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
-    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&fromDate
+  /*  [calendar rangeOfUnit:NSDayCalendarUnit startDate:&fromDate
                  interval:NULL forDate:fromDateTime];
     [calendar rangeOfUnit:NSDayCalendarUnit startDate:&toDate
                  interval:NULL forDate:toDateTime];
-    
-    if ([fromDate compare:toDate] == NSOrderedDescending)
+   */
+    if ([fromDateTime compare:toDateTime] == NSOrderedDescending)
     {
-        NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:toDate toDate:fromDate options:0];
+        NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:toDateTime toDate:fromDateTime options:0];
         
         if ([difference year] > 1)
         {
@@ -513,12 +510,12 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         return returnStr;
         
     }
-    else if ([fromDate compare:toDate] != NSOrderedAscending) {
+   /* else if ([fromDate compare:toDate] != NSOrderedAscending) {
         return [[NSString alloc] initWithFormat:@"Happening now"];
         
-    }
+    }*/
     
-    NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:fromDate toDate:toDate options:0];
+    NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:fromDateTime toDate:toDateTime options:0];
     
     if ([difference year] > 1)
     {

@@ -251,7 +251,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //[self.friendPickerController clearSelection];
     
     [self presentViewController:self.friendPickerController animated:YES completion:nil];
-    NSLog(@"Returning from Pick Friends Button Click");
+   
     
     
 
@@ -263,7 +263,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //go through our users and determine if they should be included in friendPicker
         if ([self.userDataController.masterFriendsList objectForKey:user.id]) {
             // Friend is an WithIt user, include them in the display
-            NSLog(@"Deciding if I should include user: %@ and result is YES!", user.id);
             return YES;
         }
     

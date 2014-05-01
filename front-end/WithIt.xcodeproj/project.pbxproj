@@ -16,6 +16,7 @@
 		1D809F291905992B00889833 /* half_full_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D809F241905992B00889833 /* half_full_circle.png */; };
 		1DA5DB3018EF49CF00BCD3AA /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */; };
 		1DA5DB3118EF49CF00BCD3AA /* UserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */; };
+		1DA7C3301912FAE500F1436A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DA7C32F1912FAE500F1436A /* Icon.png */; };
 		1DA892BD1863846D00904F8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BC1863846C00904F8F /* Foundation.framework */; };
 		1DA892BF1863846D00904F8F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892BE1863846D00904F8F /* CoreGraphics.framework */; };
 		1DA892C11863846D00904F8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DA892C01863846D00904F8F /* UIKit.framework */; };
@@ -45,7 +46,6 @@
 		7C826E1518F87E8300967AFD /* UserDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C826E1418F87E8300967AFD /* UserDataController.m */; };
 		7CA93938190840C0007BC77A /* Membership.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CA93937190840C0007BC77A /* Membership.m */; };
 		7CC0B01D18998C280051C36E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0B01C18998C280051C36E /* User.m */; };
-		B604DC5C190ED56A006C8656 /* WithIt_icon_120.png in Resources */ = {isa = PBXBuildFile; fileRef = B604DC5B190ED569006C8656 /* WithIt_icon_120.png */; };
 		B609471118C16D9C00200524 /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B609471018C16D9C00200524 /* UserSettingViewController.m */; };
 		B609471218C16D9C00200524 /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B609471018C16D9C00200524 /* UserSettingViewController.m */; };
 		B6136DC11890D46B0081B2AB /* PublishPollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6136DC01890D46B0081B2AB /* PublishPollViewController.m */; };
@@ -74,6 +74,7 @@
 		1D809F241905992B00889833 /* half_full_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = half_full_circle.png; path = WithIt/Images.xcassets/half_full_circle.png; sourceTree = "<group>"; };
 		1DA5DB2E18EF49CF00BCD3AA /* UserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettings.h; sourceTree = "<group>"; };
 		1DA5DB2F18EF49CF00BCD3AA /* UserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettings.m; sourceTree = "<group>"; };
+		1DA7C32F1912FAE500F1436A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = WithIt/Images.xcassets/Icon.png; sourceTree = "<group>"; };
 		1DA892B91863846C00904F8F /* WithIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DA892BC1863846C00904F8F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1DA892BE1863846D00904F8F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -112,7 +113,6 @@
 		7CAC373B18F8C3C000C1CF74 /* Membership.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Membership.h; sourceTree = "<group>"; };
 		7CC0B01B18998C280051C36E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		7CC0B01C18998C280051C36E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		B604DC5B190ED569006C8656 /* WithIt_icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WithIt_icon_120.png; path = WithIt/Images.xcassets/AppIcon.appiconset/WithIt_icon_120.png; sourceTree = "<group>"; };
 		B609470F18C16D9C00200524 /* UserSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserSettingViewController.h; path = ../UserSettingViewController.h; sourceTree = "<group>"; };
 		B609471018C16D9C00200524 /* UserSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserSettingViewController.m; path = ../UserSettingViewController.m; sourceTree = "<group>"; };
 		B6136DBF1890D46B0081B2AB /* PublishPollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishPollViewController.h; sourceTree = "<group>"; };
@@ -161,8 +161,8 @@
 				1D809F211905992B00889833 /* almost_full_circle.png */,
 				1D809F221905992B00889833 /* empty_circle.png */,
 				1D809F231905992B00889833 /* full_circle.png */,
-				B604DC5B190ED569006C8656 /* WithIt_icon_120.png */,
 				1D809F241905992B00889833 /* half_full_circle.png */,
+				1DA7C32F1912FAE500F1436A /* Icon.png */,
 				1D16751B186828C100A839D3 /* placeholder.png */,
 				1DA892C21863846D00904F8F /* WithIt */,
 				1DA892E11863846D00904F8F /* WithItTests */,
@@ -342,10 +342,10 @@
 			files = (
 				1DA892D51863846D00904F8F /* Images.xcassets in Resources */,
 				1D16751C186828C100A839D3 /* placeholder.png in Resources */,
+				1DA7C3301912FAE500F1436A /* Icon.png in Resources */,
 				1D809F261905992B00889833 /* almost_full_circle.png in Resources */,
 				1D809F251905992B00889833 /* almost_empty_circle.png in Resources */,
 				1D809F291905992B00889833 /* half_full_circle.png in Resources */,
-				B604DC5C190ED56A006C8656 /* WithIt_icon_120.png in Resources */,
 				1D809F271905992B00889833 /* empty_circle.png in Resources */,
 				1DA892C71863846D00904F8F /* InfoPlist.strings in Resources */,
 				1D809F281905992B00889833 /* full_circle.png in Resources */,

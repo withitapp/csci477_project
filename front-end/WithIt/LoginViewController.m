@@ -48,7 +48,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //Add icon
     UIImageView *iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(((self.screenWidth/2) -60), 100, 120, 120)];
     
-    iconImage.image = [UIImage imageNamed:@"WithIt_icon_120.png"];
+    iconImage.image = [UIImage imageNamed:@"Icon.png"];
 
     
     [self.view addSubview:iconImage];

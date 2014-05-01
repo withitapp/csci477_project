@@ -52,45 +52,49 @@
     
     //Add input text field for Poll Title
     self.PollTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 60, (self.screenWidth - 40), 30)];
-    self.PollTitleTextField.placeholder = @"Poll Title";
-    self.PollTitleTextField.backgroundColor=[UIColor whiteColor];
+    self.PollTitleTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Poll Title" attributes:@{NSForegroundColorAttributeName:[UIColor lightGrayColor]}];
+    self.PollTitleTextField.font = [UIFont fontWithName: @"HelveticaNeue" size: 16.0f];
+    self.PollTitleTextField.backgroundColor = [UIColor whiteColor];
     self.PollTitleTextField.textColor = [UIColor blackColor];
+    [[self.PollTitleTextField layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
+    [[self.PollTitleTextField layer] setBorderWidth:1.2];
+    self.PollTitleTextField.layer.cornerRadius = 5.0f;
     self.PollTitleTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.PollTitleTextField.returnKeyType = UIReturnKeyDone;
     self.PollTitleTextField.borderStyle = UITextBorderStyleRoundedRect;
-
     self.PollTitleTextField.tag= 2;
     self.PollTitleTextField.delegate = self;
     [self.detailsView addSubview:self.PollTitleTextField];
     
     //Add input text field for Poll Description
-    self.PollDescriptionTextField = [[UITextView alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 150)];
+    self.PollDescriptionTextField = [[UITextView alloc] initWithFrame:CGRectMake(20, 100, (self.screenWidth - 40), 100)];
     self.PollDescriptionTextField.textColor = [UIColor lightGrayColor];
     [self.PollDescriptionTextField setText: @"Poll Description"];
     self.PollDescriptionTextField.backgroundColor=[UIColor whiteColor];
-    self.PollDescriptionTextField.returnKeyType = UIReturnKeyDone;
     self.PollDescriptionTextField.layer.cornerRadius = 5.0f;
     [[self.PollDescriptionTextField layer] setBorderColor: [[UIColor lightGrayColor] CGColor]];
     [[self.PollDescriptionTextField layer] setBorderWidth:1.2];
     self.PollDescriptionTextField.font = [UIFont fontWithName: @"HelveticaNeue" size: 16.0f];
     self.PollDescriptionTextField.tag= 2;
+    self.PollDescriptionTextField.returnKeyType = UIReturnKeyDefault;
     self.PollDescriptionTextField.textAlignment = NSTextAlignmentLeft;
     self.PollDescriptionTextField.delegate = self;
     [self.detailsView addSubview:self.PollDescriptionTextField];
     
     //Add date selection label for Poll Expiration
-    self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 260, 300, 30)];
+    self.PollExpirationDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 225, 300, 15)];
     self.PollExpirationDateLabel.textColor = [UIColor lightGrayColor];
     self.PollExpirationDateLabel.backgroundColor = [UIColor whiteColor];
-    self.PollExpirationDateLabel.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:(16.0)];
+    self.PollExpirationDateLabel.font = [UIFont fontWithName: @"HelveticaNeue" size: 16.0f];
     [self.detailsView addSubview:self.PollExpirationDateLabel];
-    self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"Poll End Date : "];
+    self.PollExpirationDateLabel.text = [NSString stringWithFormat: @"End Date"];
     
     //Add date selection datepicker for Poll Expiration
-    self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(10, 280, (self.screenWidth - 20), 60)];
+    self.PollExpirationDatePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 240, self.screenWidth, 60)];
     self.PollExpirationDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     self.PollExpirationDatePicker.date = [NSDate date];
     [self.PollExpirationDatePicker setMinimumDate: [NSDate dateWithTimeIntervalSinceNow:86400]];
+    
     
     [self.detailsView addSubview:self.PollExpirationDatePicker];
 }
@@ -113,12 +117,15 @@
     [textView resignFirstResponder];
 }
 
--(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+/*-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if([text isEqualToString:@"\n"])
-        [textView resignFirstResponder];
+    {
+        
+    }
+        //[textView resignFirstResponder];
     return YES;
-}
+}*/
 
 - (IBAction)Cancel
 {

@@ -180,7 +180,6 @@ const NSInteger ALIGN = 10;
                                                       action:@selector(oneFingerSwipeRight:)];
     [oneFingerSwipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.view addGestureRecognizer:oneFingerSwipeRight];
-    
 
     
 }

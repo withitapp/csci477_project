@@ -361,7 +361,8 @@ const NSInteger ALIGN = 10;
             userIDAtIndex = [self.poll.attending objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
-            cell.imageView.image = user.profilePictureView.image;
+            if(user.profilePictureView.image != nil)
+                cell.imageView.image = user.profilePictureView.image;
 
             
             //BezierPath
@@ -393,7 +394,8 @@ const NSInteger ALIGN = 10;
             userIDAtIndex = [self.poll.notAttending objectAtIndex:(indexPath.row)];
             user = [self.userDataController getUser:userIDAtIndex];
             [[cell textLabel] setText:user.full_name];
-            cell.imageView.image = user.profilePictureView.image;
+            if(user.profilePictureView.image != nil)
+                cell.imageView.image = user.profilePictureView.image;
             //BezierPath
             UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 50, 50)];
             

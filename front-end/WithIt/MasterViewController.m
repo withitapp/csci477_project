@@ -45,6 +45,23 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     // Use sharedInstance instead of init to ensure use of singleton
     self.dataController = [PollDataController sharedInstance];
     [self.dataController loadData];
+    UserDataController* userDataController = [UserDataController sharedInstance];
+    //retrieves members in poll from database
+  /*  for (Poll* poll in self.dataController.masterPollsCreatedList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }*/
+    for (Poll* poll in self.dataController.masterPollsList)
+    {
+       // [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
+  /*  for (Poll* poll in self.dataController.masterPollsExpiredList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }*/
     
 }
 
@@ -69,25 +86,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.pollTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.pollTableView];
     
-    UserDataController* userDataController = [UserDataController sharedInstance];
     
-    //retrieves members in poll from database
-    for (Poll* poll in self.dataController.masterPollsCreatedList)
-    {
-        [userDataController retrieveMembers:poll];
-        [userDataController retrieveMemberships:poll];
-    }
-    for (Poll* poll in self.dataController.masterPollsList)
-    {
-        [userDataController retrieveMembers:poll];
-        [userDataController retrieveMemberships:poll];
-    }
-    for (Poll* poll in self.dataController.masterPollsExpiredList)
-    {
-        [userDataController retrieveMembers:poll];
-        [userDataController retrieveMemberships:poll];
-    }
     
+   
     
     // Add swipeGestures
     UISwipeGestureRecognizer *oneFingerSwipeDown = [[UISwipeGestureRecognizer alloc]
@@ -191,13 +192,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 -(void)setCellImage:(UITableViewCell *)cell usingPoll:(Poll *)poll
 {
+    NSUInteger attending = [self.dataController countAttending:poll];
+    NSUInteger notAttending = [self.dataController countNotAttending:poll];
+    NSUInteger total = attending + notAttending;
+    double percentageAttending;
     // TODO: add some code to figure out what percentage of members are attending and choose an image
-    NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)[self.dataController countAttending:poll]);
-    if ([self.dataController countAttending:poll] > 0)
+   // NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)attending);
+    if (attending > 0)
     {
-        float percentageAttending = ([self.dataController countAttending:poll]/([self.dataController countNotAttending:poll] + [self.dataController countAttending:poll]));
-        NSLog(@"ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", (unsigned long)[poll.attending count], (unsigned long)[poll.notAttending count], percentageAttending);
-        if (percentageAttending >= 0.9)
+        percentageAttending = (double)attending / (double)total ;
+        NSLog(@"POLL: %@ ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", poll.title, (unsigned long)attending, (unsigned long)notAttending, percentageAttending);
+        if (percentageAttending >=0.9)
         {
             cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
         }

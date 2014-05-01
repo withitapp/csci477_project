@@ -144,7 +144,8 @@
         else{
             
             // Add user profile picture
-            user.profilePictureView = [[UIImageView alloc] init];
+            if(user.profilePictureView.image == nil){
+            user.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
             dispatch_async(dispatch_get_global_queue(0,0), ^{
                 NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.fb_id]]];
                 if (!imageData){
@@ -152,10 +153,11 @@
                     return;
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    user.profilePictureView.image = [UIImage imageWithData: imageData];
+                    if(imageData!=nil)
+                        user.profilePictureView.image = [UIImage imageWithData: imageData];
                 });
             });
-           
+            }
             NSString * name = [user.first_name stringByAppendingString:@" "];
             user.full_name = [name stringByAppendingString:user.last_name];
         NSLog(@"User [%@] added to everyone list.", user.first_name);
@@ -222,6 +224,7 @@
         else{
             // Add user profile picture
             //user.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
+            if(user.profilePictureView == nil){
             dispatch_async(dispatch_get_global_queue(0,0), ^{
                 NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.fb_id]]];
                 if (!imageData){
@@ -233,7 +236,7 @@
                     user.profilePictureView.image = [UIImage imageWithData: imageData];
                 });
             });
-            
+            }
             NSString * name = [user.first_name stringByAppendingString:@" "];
             user.full_name = [name stringByAppendingString:user.last_name];
     
@@ -351,7 +354,7 @@
         
     }
     if(user.profilePictureView.image == nil){
-      //  user.profilePictureView.image = [[UIImage alloc] init];
+        user.profilePictureView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
         dispatch_async(dispatch_get_global_queue(0,0), ^{
             NSData *imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=square", user.fb_id]]];
             if (!imageData){
@@ -359,7 +362,8 @@
                 return;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                user.profilePictureView.image = [UIImage imageWithData: imageData];
+                if(imageData!=nil)
+                    user.profilePictureView.image = [UIImage imageWithData: imageData];
             });
         });
     }

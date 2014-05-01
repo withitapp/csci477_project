@@ -322,8 +322,8 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
    
     // Create the request with an appropriate URL
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:s]];
-    NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
-   
+    //NSLog(@"Deleting poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    // NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pollDataURL];
     [request setHTTPMethod:@"DELETE"];
     
     
@@ -368,7 +368,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
        
         [updatePollsList addObject:poll];
     }
-    if([updatePollsList count]>0){
+    if([updatePollsList count]>0 && updatePollsList!=nil){
         [self.masterPollsCreatedList removeAllObjects];
         [self.masterPollsList removeAllObjects];
         [self.masterPollsExpiredList removeAllObjects];
@@ -450,11 +450,22 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSUInteger attending = 0;
     Membership *m1;
     
+    /* if(!poll.attending){
+     poll.attending = [[NSMutableArray alloc] init];
+     }
+     if([poll.attending count]>0){
+     [poll.attending removeAllObjects];
+     }*/
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
         if([m1.response isEqual: @(YES)]){
             attending++;
+            // [poll.attending addObject:m1.user_id];
+            
+        }
+        else{
+            // [poll.notAttending addObject:m1.user_id];
             
         }
         
@@ -467,7 +478,13 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 - (NSUInteger)countNotAttending:(Poll *)poll{
     NSUInteger notAttending = 0;
     Membership *m1;
-   
+    
+    /* if(!poll.notAttending){
+     poll.notAttending = [[NSMutableArray alloc] init];
+     }
+     if([poll.notAttending count]>0){
+     [poll.notAttending removeAllObjects];
+     }*/
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DataController.h"
 #import "PollDataController.h"
-#include "AppDelegate.h"
+#import "AppDelegate.h"
 #import "Poll.h"
 #import "User.h"
 #import <FacebookSDK/FBSessionTokenCachingStrategy.h>
@@ -48,11 +48,11 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     FBSessionTokenCachingStrategy *tokenCachingStrategy = [[FBSessionTokenCachingStrategy alloc] init];
     FBAccessTokenData * fbtoken = [tokenCachingStrategy fetchFBAccessTokenData];
-    NSLog(@"FB token string %@", fbtoken.accessToken);
+    //NSLog(@"FB token string %@", fbtoken.accessToken);
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterFullStyle];
-    NSLog(@"FB token expiration date %@", [formatter stringFromDate:fbtoken.expirationDate]);
-    NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
+    //NSLog(@"FB token expiration date %@", [formatter stringFromDate:fbtoken.expirationDate]);
+    //NSLog(@"FB token refresh date %@", [formatter stringFromDate:fbtoken.permissionsRefreshDate]);
     self.userDataController = [UserDataController sharedInstance];
     [self postUser:fbtoken.accessToken fbID:appDelegate.userID];
     [self retrievePolls];
@@ -99,8 +99,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     
     NSMutableArray *expiredPollsList = [[NSMutableArray alloc] init];
     self.masterPollsExpiredList = expiredPollsList;
-    
-    NSLog(@"Init polldatacontroller");
+
     return self;
 }
 
@@ -127,7 +126,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 - (void)addPollCreatedWithPoll:(Poll *)poll {
     Poll *responsePoll = [self postPoll:poll];
-    NSLog(@"Adding responsePoll to Master pollList");
+    //NSLog(@"Adding responsePoll to Master pollList");
     [self.masterPollsCreatedList addObject:responsePoll];
 }
 
@@ -155,10 +154,10 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
             willSendRequest:(NSURLRequest *)request
            redirectResponse:(NSURLResponse *)redirectResponse
 {
-    NSLog(@"Redirect Response!!");
+    //NSLog(@"Redirect Response!!");
     NSURLRequest *newRequest = request;
     
-    NSLog(@"Redirect!");
+    //NSLog(@"Redirect!");
     if (redirectResponse)
     {
         newRequest = nil;
@@ -212,7 +211,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
                                dispatch_semaphore_signal(semaphore);
                            }];
     
-    NSLog(@"Sempaphore dispatched");
+    //NSLog(@"Sempaphore dispatched");
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     return dataDictionary;
 }
@@ -221,7 +220,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
+    //NSLog(@"Posting user token to session with URL: %@", dummyPostURL);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:dummyPostURL];
     [request setHTTPMethod:@"POST"];
     NSString *postString = [NSString stringWithFormat:@"fb_id=%@&fb_token=%@",fbID,fbToken];
@@ -240,7 +239,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     user.username = users[@"username"];
     user.email = users[@"email"];
     user.first_name = users[@"first_name"];
-    NSLog(@"user name: %@", user.first_name);
+    //NSLog(@"user name: %@", user.first_name);
     user.last_name = users[@"last_name"];
     user.fb_id = users[@"fb_id"];
     user.fb_token = users[@"fb_token"];
@@ -254,7 +253,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 
 - (Poll *)postPoll:(Poll *)poll
 {
-    NSLog(@"Posting poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    //NSLog(@"Posting poll with URL: %@ and title: %@", pollDataURL, poll.title);
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
@@ -285,13 +284,13 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         else
             [self.userDataController postMembership:poll user:n Response:@"false"];}
     
-    NSLog(@"Got return in postPoll: %@", poll.pollID);
+    //NSLog(@"Got return in postPoll: %@", poll.pollID);
     return poll;
 }
 
 - (void)updatePoll:(Poll *)poll
 {
-    NSLog(@"Updating poll with URL: %@ and title: %@", pollDataURL, poll.title);
+    //NSLog(@"Updating poll with URL: %@ and title: %@", pollDataURL, poll.title);
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'SS'Z'"];
@@ -313,7 +312,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     pollFeedback = [self makeServerRequestWithRequest:request];
     poll.pollID = pollFeedback[@"id"];
     
-    NSLog(@"Got return in updatePoll: %@", poll.pollID);
+    //NSLog(@"Got return in updatePoll: %@", poll.pollID);
     //return poll;
 }
 
@@ -335,7 +334,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
         [self.userDataController deleteMembership:n];
     }
     if(pollFeedback!=nil){
-        NSLog(@"Got return in deletePoll: %@", pollFeedback);
+        //NSLog(@"Got return in deletePoll: %@", pollFeedback);
     }
    
 }
@@ -344,7 +343,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
 - (void)retrievePolls
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
+    //NSLog(@"Retrieving poll data with URL: %@ User ID: %@", pollDataURL, appDelegate.ID);
     NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/mypolls?user_id=%@", appDelegate.ID];
     
     // Create the request with an appropriate URL
@@ -392,13 +391,13 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     // so that we can append data to it in the didReceiveData method
     // Furthermore, this method is called each time there is a redirect so reinitializing it
     // also serves to clear it
-    NSLog(@"Got response in delegate method");
+    //NSLog(@"Got response in delegate method");
     _responseData = [[NSMutableData alloc] init];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     // Append the new data to the instance variable you declared
-    NSLog(@"Got recieveData");
+    //NSLog(@"Got recieveData");
     [_responseData appendData:data];
 }
 
@@ -454,7 +453,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
-        if([m1.response  isEqual: @(YES)]){
+        if([m1.response isEqual: @(YES)]){
             attending++;
             
         }
@@ -472,7 +471,7 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     for(Membership *m in poll.memberships){
         m1 = [poll.memberships objectForKeyedSubscript:m];
         
-        if([m1.response  isEqual: @(YES)]){
+        if([m1.response isEqual: @(YES)]){
             
         }
         else{
@@ -483,13 +482,144 @@ static const NSInteger EXPIRE_TIME_DEBUG = 0;
     NSLog(@"Not attending rows is %lu", (unsigned long)notAttending);
     return notAttending;}
 
-
-- (void)toggleChanged:(Poll *)poll:(Boolean) IsOn
++ (NSString*)differenceBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime
 {
-    if(IsOn == true)
-    NSLog(@"datacontroller got switch at %@ is true ", poll.title);
+    NSString* returnStr;
+    
+    NSDate *fromDate;
+    NSDate *toDate;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&fromDate
+                 interval:NULL forDate:fromDateTime];
+    [calendar rangeOfUnit:NSDayCalendarUnit startDate:&toDate
+                 interval:NULL forDate:toDateTime];
+    
+    if ([fromDate compare:toDate] == NSOrderedDescending)
+    {
+        NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:toDate toDate:fromDate options:0];
+        
+        if ([difference year] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu years ago",(long)[difference year]];
+        }
+        else if ([difference year] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 year ago"];
+        }
+        
+        else if ([difference month] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu months ago",(long)[difference month]];
+        }
+        else if ([difference month] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 month ago"];
+        }
+        
+        else if ([difference day] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu days ago",(long)[difference day]];
+        }
+        else if ([difference day] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 day ago"];
+        }
+        
+        else if ([difference hour] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu hours ago",(long)[difference hour]];
+        }
+        else if ([difference hour] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 hour ago"];
+        }
+        
+        else if ([difference minute] > 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired %lu minutes ago",(long)[difference minute]];
+        }
+        else if ([difference minute] == 1)
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Expired 1 minute ago"];
+        }
+        else
+        {
+            returnStr = [[NSString alloc] initWithFormat:@"Happening now"];
+        }
+        
+        return returnStr;
+        
+    }
+    else if ([fromDate compare:toDate] != NSOrderedAscending) {
+        return [[NSString alloc] initWithFormat:@"Happening now"];
+        
+    }
+    
+    NSDateComponents *difference = [calendar components:(NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit) fromDate:fromDate toDate:toDate options:0];
+    
+    if ([difference year] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu years",(long)[difference year]];
+    }
+    else if ([difference year] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 year"];
+    }
+    
+    else if ([difference month] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu months",(long)[difference month]];
+    }
+    else if ([difference month] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 month"];
+    }
+    
+    else if ([difference day] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu days",(long)[difference day]];
+    }
+    else if ([difference day] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 day"];
+    }
+    
+    else if ([difference hour] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu hours",(long)[difference hour]];
+    }
+    else if ([difference hour] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 hour"];
+    }
+    
+    else if ([difference minute] > 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In %lu minutes",(long)[difference minute]];
+    }
+    else if ([difference minute] == 1)
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"In 1 minute"];
+    }
     else
-        NSLog(@"datacontroller got switch at %@ is false", poll.title);
+    {
+        returnStr = [[NSString alloc] initWithFormat:@"Happening now"];
+    }
+    
+    return returnStr;
+}
+
+- (void)toggleChanged:(Poll *)poll isOn:(Boolean)isOn
+{
+    if(isOn){
+        //NSLog(@"datacontroller got switch at %@ is true ", poll.title);
+    }
+    else
+    {
+        //NSLog(@"datacontroller got switch at %@ is false", poll.title);
+    }
 }
 
 @end

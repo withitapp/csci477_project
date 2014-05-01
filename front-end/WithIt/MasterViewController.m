@@ -65,8 +65,28 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.pollTableView.bounces = NO;
     self.pollTableView.scrollEnabled = YES;
     [self.pollTableView setSeparatorInset:UIEdgeInsetsZero];
-    
+    // Add empty footer to hide cells with no content
+    self.pollTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.pollTableView];
+    
+    UserDataController* userDataController = [UserDataController sharedInstance];
+    
+    //retrieves members in poll from database
+    for (Poll* poll in self.dataController.masterPollsCreatedList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
+    for (Poll* poll in self.dataController.masterPollsList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
+    for (Poll* poll in self.dataController.masterPollsExpiredList)
+    {
+        [userDataController retrieveMembers:poll];
+        [userDataController retrieveMemberships:poll];
+    }
     
     
     // Add swipeGestures
@@ -92,7 +112,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self loadData];
     [self.dataController determineExpiredPoll];
     [self.pollTableView reloadData];
-    NSLog(@"viewDidAppear");
+    //NSLog(@"viewDidAppear");
 }
 
 - (IBAction)CreateNewPoll
@@ -113,7 +133,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     return 3;
 }
-////////
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
@@ -124,8 +143,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [castView.textLabel setFont:[UIFont fontWithName: @"HelveticaNeue-BOLD" size: 16.0f]];
     }
 }
-
-/////////
 
 // HACK - instead of figuring out how to indent the headings properly, I just added a space to the front of the title
 //Set the Names of Sections of the table
@@ -158,18 +175,54 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     switch (section){
         case 0:
             numRows = [self.dataController.masterPollsList count];
-            NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
+            //NSLog(@"Number of friends' polls: %lu.", (unsigned long)numRows);
             break;
         case 1:
             numRows = [self.dataController.masterPollsCreatedList count];
-            NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
+            //NSLog(@"Number of created polls: %lu.", (unsigned long)numRows);
             break;
         case 2:
             numRows = [self.dataController.masterPollsExpiredList count];
-            NSLog(@"Number of expired polls: %lu.", (unsigned long)numRows);
+            //NSLog(@"Number of expired polls: %lu.", (unsigned long)numRows);
             break;
     }
     return numRows;
+}
+
+-(void)setCellImage:(UITableViewCell *)cell usingPoll:(Poll *)poll
+{
+    // TODO: add some code to figure out what percentage of members are attending and choose an image
+    NSLog(@"POLL: %@ ATTENDING: %lu", poll.title, (unsigned long)[self.dataController countAttending:poll]);
+    if ([self.dataController countAttending:poll] > 0)
+    {
+        float percentageAttending = ([self.dataController countAttending:poll]/([self.dataController countNotAttending:poll] + [self.dataController countAttending:poll]));
+        NSLog(@"ATTENDING: %lu NOT ATTENDING: %lu percentage: %f", (unsigned long)[poll.attending count], (unsigned long)[poll.notAttending count], percentageAttending);
+        if (percentageAttending >= 0.9)
+        {
+            cell.imageView.image = [UIImage imageNamed:@"full_circle.png"];
+        }
+        else if ((percentageAttending < 0.9) && (percentageAttending >= 0.6))
+        {
+            cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
+        }
+        else if ((percentageAttending < 0.6) && (percentageAttending >= 0.4))
+        {
+            cell.imageView.image = [UIImage imageNamed:@"half_full_circle.png"];
+        }
+        else if ((percentageAttending < 0.4) && (percentageAttending >= 0.1))
+        {
+            cell.imageView.image = [UIImage imageNamed:@"almost_empty_circle.png"];
+        }
+        else
+        {
+            cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+        }
+    }
+    else
+    {
+        cell.imageView.image = [UIImage imageNamed:@"empty_circle.png"];
+    }
+
 }
 
 //Return each "poll" into corresponding section of the table
@@ -191,68 +244,45 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     
     // Only create the date formatter once
-    static NSDateFormatter *formatter = nil;
+    static NSDateFormatter *formatter;
+    if (!formatter) {
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+    }
+    
+    // Add toggle switch to polls the user did not create
+    [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
+    [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
+    
     Poll *pollAtIndex;
     
 
-    
+    NSDate* today = [NSDate date];
     switch (indexPath.section) {
         case 0:
-            if (!formatter) {
-                formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterMediumStyle];
-            }
-            
             pollAtIndex = [self.dataController objectInListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            
-            // Add toggle switch to polls the user did not create
-            /////
-            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
-            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
-            /////
-            cell.accessoryView = nil;
-            //[[UIView alloc] initWithFrame:toggleSwitch.frame];
-            //[cell.accessoryView addSubview:toggleSwitch];
+            [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
+            [self setCellImage:cell usingPoll:pollAtIndex];
             
             break;
             
         case 1:
-            if (!formatter) {
-                formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterMediumStyle];
-            }
-            
             pollAtIndex = [self.dataController objectInCreatedListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
-            /////
-            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
-            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
-            /////
-            cell.accessoryView = nil; //avoid toggleswitch show after removing rows in section 0
-            break;
-        case 2:
-            if (!formatter) {
-                formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterMediumStyle];
-            }
+            [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
+            [self setCellImage:cell usingPoll:pollAtIndex];
             
+            break;
+            
+        case 2:
             pollAtIndex = [self.dataController  objectInExpiredListAtIndex:(indexPath.row)];
             [[cell textLabel] setText:pollAtIndex.title];
-            //[[cell detailTextLabel] setText:[formatter stringFromDate:(NSDate *)pollAtIndex.dateCreated]];
+            [[cell detailTextLabel] setText:[PollDataController differenceBetweenDate:today andDate:pollAtIndex.endDate]];
+            [self setCellImage:cell usingPoll:pollAtIndex];
             
-            /////
-            [[cell textLabel] setTextColor:UIColorFromRGB(0x297A6E)];
-            [[cell textLabel] setFont: [UIFont fontWithName: @"HelveticaNeue" size: 18.0f]];
-            /////
-            cell.accessoryView = nil;//avoid toggleswitch show after removing rows in section 0
             break;
     }
-    
-    // TODO: add some code to figure out what percentage of members are attending and choose an image
-    cell.imageView.image = [UIImage imageNamed:@"almost_full_circle.png"];
 
     return cell;
 }
@@ -274,7 +304,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Selected row %ld in section %ld.", (long)indexPath.row, (long)indexPath.section);
+    //NSLog(@"Selected row %ld in section %ld.", (long)indexPath.row, (long)indexPath.section);
     Poll *pollAtIndex;
     switch (indexPath.section) {
         case 0:
@@ -294,7 +324,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             return;
     }
     
-    NSLog(@"Selected poll: %@.", pollAtIndex.title);
+    //NSLog(@"Selected poll: %@.", pollAtIndex.title);
     
     [self.pollTableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -336,14 +366,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     poll = [self.dataController.masterPollsList objectAtIndex: index];
     [self.dataController.userDataController retrieveMemberships:poll];
-    NSLog(@"APP ID: %@", appDelegate.ID);
+    //NSLog(@"APP ID: %@", appDelegate.ID);
     for(NSNumber * mem_id in poll.memberships){
         membership = [poll.memberships objectForKeyedSubscript:mem_id];
-        NSLog(@"mem_id: %@", membership.user_id);
+        //NSLog(@"mem_id: %@", membership.user_id);
         if([membership.user_id isEqualToNumber:appDelegate.ID]){
             [self.dataController.userDataController deleteMembership:mem_id];
             
-            NSLog(@"Leaving poll with membership ID: %@", mem_id);
+            //NSLog(@"Leaving poll with membership ID: %@", mem_id);
         }
         
             //needs to be first called
@@ -355,7 +385,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) deletePollFunction:(NSUInteger)index
 {
-    NSLog(@"Inside delete Poll function!!");
+    //NSLog(@"Inside delete Poll function!!");
     [self.dataController deletePoll:[self.dataController.masterPollsCreatedList objectAtIndex: index]]; //needs to be first called
     [self.dataController deleteObjectInCreatedListAtIndex:index];
     [self.pollTableView reloadData];
@@ -363,7 +393,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void) erasePollFunction:(NSUInteger)index
 {
-    NSLog(@"Inside erase Poll function!!");
+    //NSLog(@"Inside erase Poll function!!");
     [self.dataController deleteObjectInExpiredListAtIndex:index];
     [self.pollTableView reloadData];
 }
@@ -377,24 +407,24 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"Inside leave Poll function!!");
+    //NSLog(@"Inside leave Poll function!!");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete a poll?" message:@"Do you really want to delete this poll?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
     
     
     //TODO::: function for delete a poll / leave a poll
      switch (indexPath.section) {
      case 0:
-             NSLog(@"leavePoll pressed");
+             //NSLog(@"leavePoll pressed");
              alert.tag = (indexPath.row * 10) + 1;
              break;
      
      case 1:
-             NSLog(@"DeletePoll pressed");
+             //NSLog(@"DeletePoll pressed");
              alert.tag = (indexPath.row * 10) + 2;
              break;
      
      case 2:
-             NSLog(@"ErasePoll pressed");
+             //NSLog(@"ErasePoll pressed");
              alert.tag = (indexPath.row * 10) + 3;
              break;
      
@@ -442,7 +472,7 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
             NSLog(@"Something went wrong!");
             return @"Something went wrong!";
 
-}
+    }
 }
 
 - (void)oneFingerSwipeDown:(UITapGestureRecognizer *)recognizer {

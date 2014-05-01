@@ -29,7 +29,6 @@
 @property NSString *dummyURL;
 @property NSString *serverURL;
 
-//@property (nonatomic, copy) NSMutableArray *updatePollsList; //maybe make this a local array in datacontroller retrieve polls
 @property (nonatomic, copy) NSMutableArray *masterPollsList;
 @property (nonatomic, copy) NSMutableArray *masterPollsCreatedList;
 @property (nonatomic, copy) NSMutableArray *masterPollsExpiredList;
@@ -66,6 +65,9 @@
 
 
 - (void)determineExpiredPoll;
+
+// Summarize the difference between 2 dates
++ (NSString*)differenceBetweenDate:(NSDate*)fromDateTime andDate:(NSDate*)toDateTime;
 
     
 @end

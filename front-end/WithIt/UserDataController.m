@@ -8,7 +8,7 @@
 
 #import "UserDataController.h"
 #import "DataController.h"
-#include "AppDelegate.h"
+#import "AppDelegate.h"
 #import "Membership.h"
 #import "Poll.h"
 #import "User.h"
@@ -294,7 +294,7 @@
 }
 
 -(void)retrieveMemberships:(Poll *) poll{
-   // NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
+   NSLog(@"Attempting to retrieve Memberships from URL %@ *** id: %@", membershipURL, poll.pollID);
    
     NSString *s = [NSString stringWithFormat:@"http://withitapp.com:3000/memberships?poll_id=%@",poll.pollID];
  
@@ -312,7 +312,7 @@
     //[poll.memberships addObject:membership];
     for(NSDictionary *mship in memberships){
         membership = [[Membership alloc] init];
-        NSLog(@"Got membership: %@", mship[@"id"]);
+        //NSLog(@"Got membership: %@", mship[@"id"]);
         membership.ID = mship[@"id"];
         //if(mship[@"created_at"]=!nil && mship[@"updated_at"]!=nil){
         membership.created_at = mship[@"created_at"];

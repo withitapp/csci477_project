@@ -57,11 +57,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
        // [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
     }
-  /*  for (Poll* poll in self.dataController.masterPollsExpiredList)
+    for (Poll* poll in self.dataController.masterPollsExpiredList)
     {
-        [userDataController retrieveMembers:poll];
+       // [userDataController retrieveMembers:poll];
         [userDataController retrieveMemberships:poll];
-    }*/
+    }
     
 
     

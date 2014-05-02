@@ -563,9 +563,23 @@ const NSInteger ALIGN = 10;
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
+    Membership * membership;
+    
+    [self.userDataController retrieveMemberships:self.poll];
+    
+    for(NSNumber * mem_id in self.poll.memberships){
+        membership = [self.poll.memberships objectForKeyedSubscript:mem_id];
+        
+        if([membership.user_id isEqualToNumber:appDelegate.ID]){
+            [self.userDataController deleteMembership:mem_id];
+            
+        }
+        
+    }
+    
     if(self.pollSection == 0)
     {
-    [appDelegate.masterViewController.dataController deleteObjectInListAtIndex:self.pollIndex];
+        [appDelegate.masterViewController.dataController deleteObjectInListAtIndex:self.pollIndex];
     }
     else if (self.pollSection == 2){
         [appDelegate.masterViewController.dataController deleteObjectInExpiredListAtIndex:self.pollIndex];
@@ -579,6 +593,7 @@ const NSInteger ALIGN = 10;
 - (void)deletePoll
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [self.pollDataController deletePoll:self.poll];
     if(self.pollSection == 1){
     [appDelegate.masterViewController.dataController  deleteObjectInCreatedListAtIndex:self.pollIndex];
     }

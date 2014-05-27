@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "WIViewController.h"
+#import "BTPaymentViewController.h"
 
 @interface UserSettingViewController :  WIViewController <UITableViewDataSource, UITableViewDelegate>
 
@@ -16,6 +17,8 @@
 @property (strong, nonatomic) UITableView *InfoTableView;
 
 @property (nonatomic, strong) UIButton *LogoutButton;
+
+@property (nonatomic, strong) UIButton *addCard;
 
 
 

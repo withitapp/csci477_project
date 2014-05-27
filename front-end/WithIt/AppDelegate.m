@@ -48,7 +48,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"Launching WithItApp.");
     
-    
+    [VTClient startWithMerchantID:BT_SANDBOX_MERCHANT_ID customerEmail:@"jpatdalton@gmail.com" braintreeClientSideEncryptionKey:BT_SANDBOX_CLIENT_SIDE_ENCRYPTION_KEY environment:VTEnvironmentSandbox];
     
     
     // Initialize FBLoginView

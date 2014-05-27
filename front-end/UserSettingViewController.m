@@ -62,15 +62,57 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.detailsView addSubview:self.LogoutButton];
     
     */
+    
+    self.addCard = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.addCard.frame = CGRectMake(50, 180, 220, 50);
+    [self.addCard setTitle:@"Add Card" forState:UIControlStateNormal];
+    [self.detailsView addSubview:self.addCard];
+    [self.addCard addTarget:self action:@selector(addCardTapped) forControlEvents:UIControlEventTouchUpInside];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Logout"
     style:UIBarButtonItemStyleBordered
     target:self
     action:@selector(logoutButtonWasPressed:)];
 }
 
+-(void)addCardTapped
+{
+    BTPaymentViewController *paymentViewController = [BTPaymentViewController paymentViewControllerWithVenmoTouchEnabled:YES];
+    
+    [self.navigationController pushViewController:paymentViewController animated:YES];
+}
 
--(void)logoutButtonWasPressed:(id)sender {
+- (void)paymentViewController:(BTPaymentViewController *)paymentViewController
+        didSubmitCardWithInfo:(NSDictionary *)cardInfo
+         andCardInfoEncrypted:(NSDictionary *)cardInfoEncrypted {
+    NSLog(@"didSubmitCardWithInfo %@ andCardInfoEncrypted %@", cardInfo, cardInfoEncrypted);
+    
+    // Make a network request to send the cardInfoEncrypted dictionary from your app to the server.
+    // (Sample implementation of this method is below)
+    //[self savePaymentInfoToServer:cardInfoEncrypted];
+    NSLog(@"$$$ PAYMENT unencrypted$$$ %@", cardInfo);
+    NSLog(@"$$$ PAYMENT encrypted$$$ %@", cardInfoEncrypted);
+}
+
+- (void)paymentViewController:(BTPaymentViewController *)paymentViewController
+didAuthorizeCardWithPaymentMethodCode:(NSString *)paymentMethodCode {
+    NSLog(@"didAuthorizeCardWithPaymentMethodCode %@", paymentMethodCode);
+    // Create a dictionary of POST data of the format
+    // {"payment_method_code": "[encrypted payment_method_code data from Venmo Touch client]"}
+    NSMutableDictionary *paymentInfo = [NSMutableDictionary dictionaryWithObject:paymentMethodCode
+                                                                          forKey:@"venmo_sdk_payment_method_code"];
+    //[BTPaymentViewController showErrorWithTitle:@"payment error" message:@"BAD CARD INFO"];
+    // Make a network request to send the paymentInfo from your app to the server.
+    // (Sample implementation of this method is below)
+    // [self savePaymentInfoToServer:paymentInfo];
+}
+
+
+-(void)logoutButtonWasPressed:(id)sender
+{
     [FBSession.activeSession closeAndClearTokenInformation];
+    [FBSession.activeSession close];
+    [FBSession setActiveSession:nil];
 }
 
 

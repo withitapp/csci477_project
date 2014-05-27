@@ -13,6 +13,8 @@
 #import "PollDetailViewController.h"
 #import "PublishPollViewController.h"
 #import "UserDataController.h"
+#import "BTPaymentViewController.h"
+#import "VenmoTouch/VenmoTouch.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
